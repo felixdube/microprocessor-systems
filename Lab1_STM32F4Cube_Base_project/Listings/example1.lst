@@ -1,0 +1,45 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000                 AREA             text, CODE, READONLY
+    2 00000000                 EXPORT           example1
+    3 00000000         example1
+    4 00000000 EEF0 0A04       VLDR.f32         S1, =2.5
+    5 00000004 EEB1 1A0E       VLDR.f32         S2, =7.5
+    6 00000008 EE71 0A20       VADD.f32         S1, S2, S1
+    7 0000000C 4770            BX               LR          ;
+    8 0000000E                 END
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
+erwork --depend=.\objects\example1.d -o.\objects\example1.o -I\\psf\Home\Docume
+nts\workspace\ecse426\git\Lab1_STM32F4Cube_Base_project\RTE -IC:\Keil_v5\ARM\PA
+CK\ARM\CMSIS\4.5.0\CMSIS\Include -IC:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.7.0
+\Drivers\CMSIS\Device\ST\STM32F4xx\Include --predefine="__EVAL SETA 1" --predef
+ine="__UVISION_VERSION SETA 517" --predefine="_RTE_ SETA 1" --predefine="STM32F
+407xx SETA 1" --list=.\listings\example1.lst example1.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+example1 00000000
+
+Symbol: example1
+   Definitions
+      At line 3 in file example1.s
+   Uses
+      At line 2 in file example1.s
+Comment: example1 used once
+text 00000000
+
+Symbol: text
+   Definitions
+      At line 1 in file example1.s
+   Uses
+      None
+Comment: text unused
+2 symbols
+337 symbols in table

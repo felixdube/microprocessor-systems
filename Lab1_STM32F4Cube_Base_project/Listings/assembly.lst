@@ -1,0 +1,15 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+                       
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
+erwork --depend=.\objects\assembly.d -o.\objects\assembly.o -I\\psf\Home\Docume
+nts\workspace\ecse426\git\Lab1_STM32F4Cube_Base_project\RTE -IC:\Keil_v5\ARM\PA
+CK\ARM\CMSIS\4.5.0\CMSIS\Include -IC:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.7.0
+\Drivers\CMSIS\Device\ST\STM32F4xx\Include --predefine="__EVAL SETA 1" --predef
+ine="__UVISION_VERSION SETA 517" --predefine="_RTE_ SETA 1" --predefine="STM32F
+407xx SETA 1" --list=.\listings\assembly.lst Sources\Assembly.s
+334 symbols in table
