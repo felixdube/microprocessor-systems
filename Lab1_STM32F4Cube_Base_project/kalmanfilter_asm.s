@@ -1,7 +1,7 @@
-	AREA kalmanfilter, CODE, READONLY
+	AREA kalmanfilter_asm, CODE, READONLY
 	EXPORT kalmanfilter
 kalmanfilter
-l:
+	lopp:
 		;R0 pointer to input array
 		;R1 pointer to filtered data
 		;R2 array's length
@@ -11,28 +11,28 @@ l:
 		LDR R11, #1		;array offset
 		
 		;load data
-		LDR R4, [R0, R10] 	;measurement
-		LDR R5,	[R3, #32]			;noise covariance q
-		LDR R6, [R3, #64]			;estimated value x
-		LDR R7, [R3, #96]			;estimation error covariance p
-		LDR R8, [R3, #128]			;adaptive kalman filter k
+		VLDR.f32 S1, [R0, R10] 			;measurement
+		VLDR.f32 S2, [R3, #32]			;noise covariance q
+		VLDR.f32 S3, [R3, #64]			;estimated value x
+		VLDR.f32 S4, [R3, #96]			;estimation error covariance p
+		VLDR.f32 S5, [R3, #128]			;adaptive kalman filter k
 		
 
 		;P = P + Q
-		VADD.f32 R7, R7, R5
+		VADD.f32 S4, S4, S2
 		
 		;k = p/ (p + q)
-		VADD.f32 R9, R7, R5
-		VDIV.f32 R8, R7, R9
+		VADD.f32 S6, S4, S2
+		VDIV.f32 S5, S4, S6
 		
 		;x = x + k * (measurement - x)
-		VSUB.f32 R9, R4, R6
-		VMUL.f32 R9, R9, R8
-		VADD.f32 R6, R6, R9
+		VSUB.f32 S6, S1, S3
+		VMUL.f32 S6, S6, S5
+		VADD.f32 S3, S3, S6
 		
 		;p = (1 - k) * p
-		VSUB.f32 R9, =1.0, R8
-		VMUL.f32 R7, R7, R9
+		VSUB.f32 S6, =1.0, S5
+		VMUL.f32 S4, S4, S6
 		
 		;store the output
 		STR RX, [R1, R10]

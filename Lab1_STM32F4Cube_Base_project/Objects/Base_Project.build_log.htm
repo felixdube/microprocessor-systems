@@ -28,18 +28,11 @@ Project File Date:  01/29/2016
 *** Using Compiler 'V5.06 update 1 (build 61)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Build target 'Lab 1'
 assembling kalmanfilter_asm.s...
-kalmanfilter_asm.s(3): error: A1108E: Multiply defined symbol 'kalmanfilter'
-kalmanfilter_asm.s(4): error: A1167E: Invalid line start 
+kalmanfilter_asm.s(4): error: A1163E: Unknown opcode lopp: , expecting opcode or Macro
 kalmanfilter_asm.s(10): error: A1152E: Unexpected operator
 kalmanfilter_asm.s(11): error: A1152E: Unexpected operator
-kalmanfilter_asm.s(22): error: A1696E: Expected either 32-bit, 64-bit or 128-bit register expression
-kalmanfilter_asm.s(25): error: A1696E: Expected either 32-bit, 64-bit or 128-bit register expression
-kalmanfilter_asm.s(26): error: A1697E: Expected either 32-bit or 64-bit VFP register expression
-kalmanfilter_asm.s(29): error: A1696E: Expected either 32-bit, 64-bit or 128-bit register expression
-kalmanfilter_asm.s(30): error: A1696E: Expected either 32-bit, 64-bit or 128-bit register expression
-kalmanfilter_asm.s(31): error: A1696E: Expected either 32-bit, 64-bit or 128-bit register expression
-kalmanfilter_asm.s(34): error: A1696E: Expected either 32-bit, 64-bit or 128-bit register expression
-kalmanfilter_asm.s(35): error: A1696E: Expected either 32-bit, 64-bit or 128-bit register expression
+kalmanfilter_asm.s(14): error: A1110E: Expected constant expression
+kalmanfilter_asm.s(34): error: A1698E: Expected 32-bit VFP register expression
 kalmanfilter_asm.s(38): error: A1647E: Bad register name symbol, expected Integer register
 kalmanfilter_asm.s(48): error: A1268E: Unmatched conditional or macro
 assembling kalmanFilterTest.s...
@@ -49,7 +42,7 @@ kalmanFilterTest.s(8): error: A1163E: Unknown opcode datao , expecting opcode or
 kalmanFilterTest.s(10): error: A1647E: Bad register name symbol, expected Integer register
 kalmanFilterTest.s(11): error: A1647E: Bad register name symbol, expected Integer register
 kalmanFilterTest.s(12): error: A1152E: Unexpected operator
-".\Objects\Base_Project.axf" - 20 Error(s), 0 Warning(s).
+".\Objects\Base_Project.axf" - 13 Error(s), 0 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -86,7 +79,7 @@ Package Vendor: Keil
       Source file:   Drivers\CMSIS\Device\ST\STM32F4xx\Source\Templates\arm\startup_stm32f407xx.s
       Source file:   Drivers\CMSIS\Device\ST\STM32F4xx\Source\Templates\system_stm32f4xx.c
 Target not created.
-Build Time Elapsed:  00:00:00
+Build Time Elapsed:  00:00:01
 </pre>
 </body>
 </html>

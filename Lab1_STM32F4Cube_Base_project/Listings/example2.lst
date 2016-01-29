@@ -21,12 +21,13 @@ ARM Macro Assembler    Page 1
                                                             n R2
    10 00000008 4770            BX               LR
    11 0000000A         
-   12 0000000A 00 00           ALIGN
-   13 0000000C 01 02 03 
+   12 0000000A         
+   13 0000000A 00 00           ALIGN
+   14 0000000C 01 02 03 
               04       myString3
                                DCB              1, 2, 3, 4
-   14 00000010         
-   15 00000010                 END
+   15 00000010         
+   16 00000010                 END
               00000000 
               00000000 
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
@@ -54,7 +55,7 @@ myString3 0000000C
 
 Symbol: myString3
    Definitions
-      At line 13 in file example2.s
+      At line 14 in file example2.s
    Uses
       At line 6 in file example2.s
 Comment: myString3 used once
