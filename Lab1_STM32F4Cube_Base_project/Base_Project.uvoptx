@@ -199,6 +199,38 @@
           <ExecCommand></ExecCommand>
           <Expression>0x080002FC</Expression>
         </Bp>
+        <Bp>
+          <Number>1</Number>
+          <Type>0</Type>
+          <LineNumber>4</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>134218496</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>\\psf\Home\psf\Home\Documents\workspace\ecse426\git\Lab1_STM32F4Cube_Base_project\psf\Home\Documents\workspace\ecse426\git\Lab1_STM32F4Cube_Base_project\example1.s</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\Base_Project\/psf/Home/Documents/workspace/ecse426/git/Lab1_STM32F4Cube_Base_project/example1.s\4</Expression>
+        </Bp>
+        <Bp>
+          <Number>2</Number>
+          <Type>0</Type>
+          <LineNumber>7</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>134218508</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>\\psf\Home\psf\Home\Documents\workspace\ecse426\git\Lab1_STM32F4Cube_Base_project\psf\Home\Documents\workspace\ecse426\git\Lab1_STM32F4Cube_Base_project\example1.s</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\Base_Project\/psf/Home/Documents/workspace/ecse426/git/Lab1_STM32F4Cube_Base_project/example1.s\7</Expression>
+        </Bp>
       </Breakpoint>
       <MemoryWindow1>
         <Mm>
@@ -324,6 +356,42 @@
       <bDave2>0</bDave2>
       <PathWithFileName>.\myData.s</PathWithFileName>
       <FilenameWithoutPath>myData.s</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>1</GroupNumber>
+      <FileNumber>7</FileNumber>
+      <FileType>2</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\kalmanfilter_asm.s</PathWithFileName>
+      <FilenameWithoutPath>kalmanfilter_asm.s</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>1</GroupNumber>
+      <FileNumber>8</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\kalmanFilterState.c</PathWithFileName>
+      <FilenameWithoutPath>kalmanFilterState.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>1</GroupNumber>
+      <FileNumber>9</FileNumber>
+      <FileType>2</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\kalmanFilterTest.s</PathWithFileName>
+      <FilenameWithoutPath>kalmanFilterTest.s</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>

@@ -188,6 +188,7 @@ Reset_Handler    PROC
         ;IMPORT  __main
 		IMPORT example1
 		IMPORT example2
+		IMPORT kalmanfiltertest
 				 LDR.W R0, =0xE000ED88
 				 LDR R1, [R0]
 				 ORR R1, R1, #(0xF << 20)
@@ -197,9 +198,7 @@ Reset_Handler    PROC
                  ;LDR     R0, =SystemInit
                  ;BLX     R0
                  ;LDR     R0, =__main
-				 LDR	 R0, =example2
-				 BLX	 R0
-				 LDR	 R0, =example1
+				 LDR	 R0, =kalmanfiltertest
                  BX      R0
 				 NOP
                  ENDP
