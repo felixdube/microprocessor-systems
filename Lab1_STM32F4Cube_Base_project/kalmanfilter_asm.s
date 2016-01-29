@@ -1,14 +1,13 @@
 	AREA kalmanfilter_asm, CODE, READONLY
 	EXPORT kalmanfilter
 kalmanfilter
-	lopp:
 		;R0 pointer to input array
 		;R1 pointer to filtered data
 		;R2 array's length
 		;R3 pointer to kalmen filter state
 		
-		LDR R10, #0		;data addr offset
-		LDR R11, #1		;array offset
+		MOV R10, #0		;data addr offset
+		MOV R11, #1		;array offset
 		
 		;load data
 		VLDR.f32 S1, [R0, R10] 			;measurement
@@ -31,18 +30,16 @@ kalmanfilter
 		VADD.f32 S3, S3, S6
 		
 		;p = (1 - k) * p
-		VSUB.f32 S6, =1.0, S5
+		VLDR.f32 S7, =1.0
+		VSUB.f32 S6, S7, S5
 		VMUL.f32 S4, S4, S6
 		
 		;store the output
-		STR RX, [R1, R10]
+		VSTR.f32 S3, [R1, R10]
 		ADD R10, R10, #32
 		
 		;check of the loop should be executed again
 		IF R11 < R2
 			ADD R10, R10, #1
-			B loop
-		
-		
-		BX LR;
-		END
+			B kalmanfilter
+	END
