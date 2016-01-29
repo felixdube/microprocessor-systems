@@ -7,10 +7,8 @@ kalmanfilter
 		;R3 pointer to kalmen filter state
 		
 		MOV R4, #0		;data addr offset
-		MOV R5, #1		;array offset
 		
 		;load data
-		ADD R0, R0, R4
 		VLDR.f32 S1, [R0] 			;measurement
 		VLDR.f32 S2, [R3, #32]			;noise covariance q
 		VLDR.f32 S3, [R3, #64]			;estimated value x
@@ -38,11 +36,13 @@ kalmanfilter
 		;store the output
 		ADD R1, R1, R4
 		VSTR.f32 S3, [R1]
-		ADD R4, R4, #32
 		
-		;update counter
-		ADD R4, R4, #32
-		ADD R5, R5, #1
+		;update array pointer
+		ADD R0, R0, #32
+		ADD R1, R1, #32
+		
+		;update the loop counter
+		ADD R4, R4, #1
 		
 		;check if all the data have been filtered
 		CMP R2, R4

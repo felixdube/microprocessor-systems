@@ -17,5 +17,3 @@ kalmanfiltertest
 datai DCB 1, 2
 datao DCB 2, 3
 	END
-		
-		

@@ -14,53 +14,53 @@ Y
     7 00000000         ;R3 pointer to kalmen filter state
     8 00000000         
     9 00000000 F04F 0400       MOV              R4, #0      ;data addr offset
-   10 00000004 F04F 0501       MOV              R5, #1      ;array offset
-   11 00000008         
-   12 00000008         ;load data
-   13 00000008 4420            ADD              R0, R0, R4
-   14 0000000A EDD0 0A00       VLDR.f32         S1, [R0]    ;measurement
-   15 0000000E ED93 1A08       VLDR.f32         S2, [R3, #32] 
+   10 00000004         
+   11 00000004         ;load data
+   12 00000004 EDD0 0A00       VLDR.f32         S1, [R0]    ;measurement
+   13 00000008 ED93 1A08       VLDR.f32         S2, [R3, #32] 
                                                             ;noise covariance q
                                                             
-   16 00000012 EDD3 1A10       VLDR.f32         S3, [R3, #64] 
+   14 0000000C EDD3 1A10       VLDR.f32         S3, [R3, #64] 
                                                             ;estimated value x
-   17 00000016 ED93 2A18       VLDR.f32         S4, [R3, #96] ;estimation error
+   15 00000010 ED93 2A18       VLDR.f32         S4, [R3, #96] ;estimation error
                                                              covariance p
-   18 0000001A EDD3 2A20       VLDR.f32         S5, [R3, #128] ;adaptive kalman
+   16 00000014 EDD3 2A20       VLDR.f32         S5, [R3, #128] ;adaptive kalman
                                                              filter k
-   19 0000001E         
-   20 0000001E         
-   21 0000001E         ;P = P + Q
-   22 0000001E EE32 2A01       VADD.f32         S4, S4, S2
-   23 00000022         
-   24 00000022         ;k = p/ (p + q)
-   25 00000022 EE32 3A01       VADD.f32         S6, S4, S2
-   26 00000026 EEC2 2A03       VDIV.f32         S5, S4, S6
-   27 0000002A         
-   28 0000002A         ;x = x + k * (measurement - x)
-   29 0000002A EE30 3AE1       VSUB.f32         S6, S1, S3
-   30 0000002E EE23 3A22       VMUL.f32         S6, S6, S5
-   31 00000032 EE71 1A83       VADD.f32         S3, S3, S6
-   32 00000036         
-   33 00000036         ;p = (1 - k) * p
-   34 00000036 EEF7 3A00       VLDR.f32         S7, =1.0
-   35 0000003A EE33 3AE2       VSUB.f32         S6, S7, S5
-   36 0000003E EE22 2A03       VMUL.f32         S4, S4, S6
-   37 00000042         
-   38 00000042         ;store the output
-   39 00000042 4421            ADD              R1, R1, R4
-   40 00000044 EDC1 1A00       VSTR.f32         S3, [R1]
-   41 00000048 F104 0420       ADD              R4, R4, #32
-   42 0000004C         
-   43 0000004C         ;update counter
-   44 0000004C F104 0420       ADD              R4, R4, #32
-   45 00000050 F105 0501       ADD              R5, R5, #1
-   46 00000054         
-   47 00000054         ;check if all the data have been filtered
-   48 00000054 42A2            CMP              R2, R4
-   49 00000056 D1FE            BNE              kalmanfilter
-   50 00000058         
-   51 00000058                 END
+   17 00000018         
+   18 00000018         
+   19 00000018         ;P = P + Q
+   20 00000018 EE32 2A01       VADD.f32         S4, S4, S2
+   21 0000001C         
+   22 0000001C         ;k = p/ (p + q)
+   23 0000001C EE32 3A01       VADD.f32         S6, S4, S2
+   24 00000020 EEC2 2A03       VDIV.f32         S5, S4, S6
+   25 00000024         
+   26 00000024         ;x = x + k * (measurement - x)
+   27 00000024 EE30 3AE1       VSUB.f32         S6, S1, S3
+   28 00000028 EE23 3A22       VMUL.f32         S6, S6, S5
+   29 0000002C EE71 1A83       VADD.f32         S3, S3, S6
+   30 00000030         
+   31 00000030         ;p = (1 - k) * p
+   32 00000030 EEF7 3A00       VLDR.f32         S7, =1.0
+   33 00000034 EE33 3AE2       VSUB.f32         S6, S7, S5
+   34 00000038 EE22 2A03       VMUL.f32         S4, S4, S6
+   35 0000003C         
+   36 0000003C         ;store the output
+   37 0000003C 4421            ADD              R1, R1, R4
+   38 0000003E EDC1 1A00       VSTR.f32         S3, [R1]
+   39 00000042         
+   40 00000042         ;update array pointer
+   41 00000042 F100 0020       ADD              R0, R0, #32
+   42 00000046 F101 0120       ADD              R1, R1, #32
+   43 0000004A         
+   44 0000004A         ;update the loop counter
+   45 0000004A F104 0401       ADD              R4, R4, #1
+   46 0000004E         
+   47 0000004E         ;check if all the data have been filtered
+   48 0000004E 42A2            CMP              R2, R4
+   49 00000050 D1FE            BNE              kalmanfilter
+   50 00000052         
+   51 00000052                 END
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
 erwork --depend=.\objects\kalmanfilter_asm.d -o.\objects\kalmanfilter_asm.o -I\
 
