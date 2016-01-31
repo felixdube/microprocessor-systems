@@ -4,6 +4,7 @@
 *.obj
 *.elf
 */Objects
+*/Listings
 
 # Precompiled Headers
 *.gch
@@ -34,4 +35,3 @@
 
 # Display files
 *.uvguix.*
-*.uvoptx
