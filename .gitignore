@@ -3,6 +3,7 @@
 *.ko
 *.obj
 *.elf
+*/Objects
 
 # Precompiled Headers
 *.gch
@@ -30,3 +31,7 @@
 
 # Debug files
 *.dSYM/
+
+# Display files
+*.uvguix.*
+*.uvoptx
