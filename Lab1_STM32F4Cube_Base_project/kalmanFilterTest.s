@@ -14,6 +14,6 @@ kalmanfiltertest
 	BLX R4
 	
 	ALIGN
-datai DCB 1, 2
-datao DCB 2, 3
+datai DCB 1, 2, 3, 4
+datao DCB 2, 3, 4, 5
 	END

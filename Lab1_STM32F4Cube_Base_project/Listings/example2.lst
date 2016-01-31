@@ -1,0 +1,95 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000                 AREA             test, CODE, READONLY
+    2 00000000                 export           example2
+    3 00000000                 import           myString1
+    4 00000000                 import           myString2
+    5 00000000         example2
+    6 00000000 4803            LDR              R0, =myString3 ;load the addr o
+                                                            f myString3 in R0
+    7 00000002 6801            LDR              R1, [R0]    ;load the content o
+                                                            f the addr in R0 to
+                                                             R1
+    8 00000004 4A03            LDR              R2, =myString1 ;load the addr o
+                                                            f myString1 to R2
+    9 00000006 6011            STR              R1, [R2]    ;Store the content 
+                                                            in R1 to the addr i
+                                                            n R2
+   10 00000008 4770            BX               LR
+   11 0000000A         
+   12 0000000A         
+   13 0000000A 00 00           ALIGN
+   14 0000000C 01 02 03 
+              04       myString3
+                               DCB              1, 2, 3, 4
+   15 00000010         
+   16 00000010                 END
+              00000000 
+              00000000 
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
+erwork --depend=.\objects\example2.d -o.\objects\example2.o -IC:\Users\juan-\Do
+cuments\University\University6\MicroP\Lab_1_team\microprocessor-systems\Lab1_ST
+M32F4Cube_Base_project\RTE -IC:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include 
+-IC:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.7.0\Drivers\CMSIS\Device\ST\STM32F4x
+x\Include --predefine="__EVAL SETA 1" --predefine="__UVISION_VERSION SETA 517" 
+--predefine="_RTE_ SETA 1" --predefine="STM32F407xx SETA 1" --list=.\listings\e
+xample2.lst example2.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+example2 00000000
+
+Symbol: example2
+   Definitions
+      At line 5 in file example2.s
+   Uses
+      At line 2 in file example2.s
+Comment: example2 used once
+myString3 0000000C
+
+Symbol: myString3
+   Definitions
+      At line 14 in file example2.s
+   Uses
+      At line 6 in file example2.s
+Comment: myString3 used once
+test 00000000
+
+Symbol: test
+   Definitions
+      At line 1 in file example2.s
+   Uses
+      None
+Comment: test unused
+3 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+External symbols
+
+myString1 00000000
+
+Symbol: myString1
+   Definitions
+      At line 3 in file example2.s
+   Uses
+      At line 8 in file example2.s
+Comment: myString1 used once
+myString2 00000000
+
+Symbol: myString2
+   Definitions
+      At line 4 in file example2.s
+   Uses
+      None
+Comment: myString2 unused
+2 symbols
+342 symbols in table

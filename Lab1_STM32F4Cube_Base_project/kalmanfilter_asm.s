@@ -5,22 +5,22 @@ kalmanfilter
 		;R1 pointer to filtered data
 		;R2 array's length
 		;R3 pointer to kalmen filter state
-		POP {R3}
+		;POP {R3}
 		;LDR R7, =instance1
 		
 		;find a way to do these 2 lines only once
 		MOV R4, R0		;input data addr with offset
 		MOV R5, R1		;filtered data addr with offset
 		MOV R6, #0		;counter of input array element's filtered
-		
+		SUB SP, SP, #20
 loop		
 		;load filter state data
 		VLDR.f32 S0, [R4] 				;measurement/ initial value
-		VLDR.f32 S1, [R3]				;noise covariance q
-		VLDR.f32 S2, [R3, #4]			;noise covariance r
-		VLDR.f32 S3, [R3, #8]			;estimated value x
-		VLDR.f32 S4, [R3, #12]			;estimation error covariance p
-		VLDR.f32 S5, [R3, #16]			;adaptive kalman filter k
+		VLDR.f32 S1, [sp]				;noise covariance q
+		VLDR.f32 S2, [sp, #4]			;noise covariance r
+		VLDR.f32 S3, [sp, #8]			;estimated value x
+		VLDR.f32 S4, [sp, #12]			;estimation error covariance p
+		VLDR.f32 S5, [sp, #16]			;adaptive kalman filter k
 		; S6 scratch register
 		
 

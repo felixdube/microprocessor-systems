@@ -1,0 +1,94 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000                 AREA             kalmanfiltertest_asm, CODE, REA
+DONLY
+    2 00000000                 EXPORT           kalmanfiltertest
+    3 00000000         ;IMPORT __kalmanFilterState
+    4 00000000                 IMPORT           kalmanfilter
+    5 00000000         
+    6 00000000         kalmanfiltertest
+    7 00000000         
+    8 00000000 4804            LDR              R0, =datai
+    9 00000002 4905            LDR              R1, =datao
+   10 00000004 F04F 0204       MOV              R2, #4
+   11 00000008         ;R3, =__kalmanFilterState
+   12 00000008         
+   13 00000008 4C04            LDR              R4, =kalmanfilter
+   14 0000000A 47A0            BLX              R4
+   15 0000000C         
+   16 0000000C                 ALIGN
+   17 0000000C 01 02 03 
+              04       datai   DCB              1, 2, 3, 4
+   18 00000010 02 03 04 
+              05       datao   DCB              2, 3, 4, 5
+   19 00000014                 END
+              00000000 
+              00000000 
+              00000000 
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
+erwork --depend=.\objects\kalmanfiltertest.d -o.\objects\kalmanfiltertest.o -IC
+:\Users\juan-\Documents\University\University6\MicroP\Lab_1_team\microprocessor
+-systems\Lab1_STM32F4Cube_Base_project\RTE -IC:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.
+0\CMSIS\Include -IC:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.7.0\Drivers\CMSIS\De
+vice\ST\STM32F4xx\Include --predefine="__EVAL SETA 1" --predefine="__UVISION_VE
+RSION SETA 517" --predefine="_RTE_ SETA 1" --predefine="STM32F407xx SETA 1" --l
+ist=.\listings\kalmanfiltertest.lst kalmanFilterTest.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+datai 0000000C
+
+Symbol: datai
+   Definitions
+      At line 17 in file kalmanFilterTest.s
+   Uses
+      At line 8 in file kalmanFilterTest.s
+Comment: datai used once
+datao 00000010
+
+Symbol: datao
+   Definitions
+      At line 18 in file kalmanFilterTest.s
+   Uses
+      At line 9 in file kalmanFilterTest.s
+Comment: datao used once
+kalmanfiltertest 00000000
+
+Symbol: kalmanfiltertest
+   Definitions
+      At line 6 in file kalmanFilterTest.s
+   Uses
+      At line 2 in file kalmanFilterTest.s
+Comment: kalmanfiltertest used once
+kalmanfiltertest_asm 00000000
+
+Symbol: kalmanfiltertest_asm
+   Definitions
+      At line 1 in file kalmanFilterTest.s
+   Uses
+      None
+Comment: kalmanfiltertest_asm unused
+4 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+External symbols
+
+kalmanfilter 00000000
+
+Symbol: kalmanfilter
+   Definitions
+      At line 4 in file kalmanFilterTest.s
+   Uses
+      At line 13 in file kalmanFilterTest.s
+Comment: kalmanfilter used once
+1 symbol
+342 symbols in table
