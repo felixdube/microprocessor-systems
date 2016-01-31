@@ -417,11 +417,6 @@
           <GroupName>Sources</GroupName>
           <Files>
             <File>
-              <FileName>main.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Sources\main.c</FilePath>
-            </File>
-            <File>
               <FileName>Assembly.s</FileName>
               <FileType>2</FileType>
               <FilePath>.\Sources\Assembly.s</FilePath>

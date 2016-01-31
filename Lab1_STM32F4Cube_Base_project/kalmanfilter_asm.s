@@ -5,13 +5,15 @@ kalmanfilter
 		;R1 pointer to filtered data
 		;R2 array's length
 		;R3 pointer to kalmen filter state
-		
+		POP {R3}
+		;LDR R7, =instance1
 		
 		;find a way to do these 2 lines only once
 		MOV R4, R0		;input data addr with offset
 		MOV R5, R1		;filtered data addr with offset
 		MOV R6, #0		;counter of input array element's filtered
 		
+loop		
 		;load filter state data
 		VLDR.f32 S0, [R4] 				;measurement/ initial value
 		VLDR.f32 S1, [R3]				;noise covariance q
@@ -34,20 +36,20 @@ kalmanfilter
 		;x = x + k * (measurement - x)
 		VSUB.f32 S6, S0, S3
 		;VMUL.f32 S6, S6, S5
-		;VADD.f32 S3, S3, S6 simplyfied these two with one command
-		VLMA.f32 S3, S5, S6 ; multiply and accumulate into x
+		;VADD.f32 S3, S3, S6 ;simplyfied these two with one command
+		;VLMA.f32 S3, S5, S6 ; multiply and accumulate into x
 		
 		;p = (1 - k) * p = p-pk
 		VLDR.f32 S7, =1.0 ; don't know if you can declare a floating point this way
-		;VSUB.f32 S6, S7, S5
-		;VMUL.f32 S4, S4, S6
-		VLMS.f32 S4, S4, S5
+		VSUB.f32 S6, S7, S5
+		VMUL.f32 S4, S4, S6
+		;VLMS.f32 S4, S4, S5
 		
 		
 
 		
 		;store the output
-		VSTR.f32 S3, [R5]
+		;VSTR.f32 S3, [R5]
 		ADD R5, R5, #4
 		
 		;update counter
@@ -58,7 +60,7 @@ kalmanfilter
 		
 		;check if all the data has been filtered
 		CMP R2, R6
-		BNE kalmanfilter
+		BNE loop
 		
 		;Store the new state variables
 		;TODO

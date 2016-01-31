@@ -1,6 +1,6 @@
 	AREA kalmanfiltertest_asm, CODE, READONLY
 	EXPORT kalmanfiltertest
-	IMPORT __kalmanFilterState
+	;IMPORT __kalmanFilterState
 	IMPORT kalmanfilter
 	
 kalmanfiltertest
@@ -8,10 +8,10 @@ kalmanfiltertest
 	LDR R0, =datai
 	LDR R1, =datao
 	MOV R2, #4
-	LDR R3, =__kalmanFilterState
+	;R3, =__kalmanFilterState
 	
 	LDR R4, =kalmanfilter
-	BX R4
+	BLX R4
 	
 	ALIGN
 datai DCB 1, 2

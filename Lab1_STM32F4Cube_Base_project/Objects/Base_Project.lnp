@@ -1,5 +1,4 @@
 --cpu Cortex-M4.fp
-".\objects\main.o"
 ".\objects\assembly.o"
 ".\objects\fput_debug.o"
 ".\objects\example1.o"

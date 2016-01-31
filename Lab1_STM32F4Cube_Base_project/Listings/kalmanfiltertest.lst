@@ -7,42 +7,41 @@ ARM Macro Assembler    Page 1
     1 00000000                 AREA             kalmanfiltertest_asm, CODE, REA
 DONLY
     2 00000000                 EXPORT           kalmanfiltertest
-    3 00000000                 IMPORT           __kalmanFilterState
+    3 00000000         ;IMPORT __kalmanFilterState
     4 00000000                 IMPORT           kalmanfilter
     5 00000000         
     6 00000000         kalmanfiltertest
     7 00000000         
-    8 00000000 4804            LDR              R0, =datai
-    9 00000002 4905            LDR              R1, =datao
+    8 00000000 4803            LDR              R0, =datai
+    9 00000002 4904            LDR              R1, =datao
    10 00000004 F04F 0204       MOV              R2, #4
-   11 00000008 4B04            LDR              R3, =__kalmanFilterState
-   12 0000000A         
-   13 0000000A 4C05            LDR              R4, =kalmanfilter
-   14 0000000C 4720            BX               R4
-   15 0000000E         
-   16 0000000E 00 00           ALIGN
-   17 00000010 01 02   datai   DCB              1, 2
-   18 00000012 02 03   datao   DCB              2, 3
-   19 00000014                 END
-              00000000 
+   11 00000008         ;LDR R3, =__kalmanFilterState
+   12 00000008         
+   13 00000008 4C03            LDR              R4, =kalmanfilter
+   14 0000000A 47A0            BLX              R4
+   15 0000000C         
+   16 0000000C                 ALIGN
+   17 0000000C 01 02   datai   DCB              1, 2
+   18 0000000E 02 03   datao   DCB              2, 3
+   19 00000010                 END
               00000000 
               00000000 
               00000000 
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
-erwork --depend=.\objects\kalmanfiltertest.d -o.\objects\kalmanfiltertest.o -I\
-\psf\Home\Documents\workspace\ecse426\git\Lab1_STM32F4Cube_Base_project\RTE -IC
-:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include -IC:\Keil_v5\ARM\PACK\Keil\STM
-32F4xx_DFP\2.7.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include --predefine="__EVAL 
-SETA 1" --predefine="__UVISION_VERSION SETA 517" --predefine="_RTE_ SETA 1" --p
-redefine="STM32F407xx SETA 1" --list=.\listings\kalmanfiltertest.lst kalmanFilt
-erTest.s
+erwork --depend=.\objects\kalmanfiltertest.d -o.\objects\kalmanfiltertest.o -IC
+:\Users\juan-\Documents\University\University6\MicroP\Lab_1_team\microprocessor
+-systems\Lab1_STM32F4Cube_Base_project\RTE -IC:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.
+0\CMSIS\Include -IC:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.7.0\Drivers\CMSIS\De
+vice\ST\STM32F4xx\Include --predefine="__EVAL SETA 1" --predefine="__UVISION_VE
+RSION SETA 517" --predefine="_RTE_ SETA 1" --predefine="STM32F407xx SETA 1" --l
+ist=.\listings\kalmanfiltertest.lst kalmanFilterTest.s
 
 
 
 ARM Macro Assembler    Page 1 Alphabetic symbol ordering
 Relocatable symbols
 
-datai 00000010
+datai 0000000C
 
 Symbol: datai
    Definitions
@@ -50,7 +49,7 @@ Symbol: datai
    Uses
       At line 8 in file kalmanFilterTest.s
 Comment: datai used once
-datao 00000012
+datao 0000000E
 
 Symbol: datao
    Definitions
@@ -81,14 +80,6 @@ Comment: kalmanfiltertest_asm unused
 ARM Macro Assembler    Page 1 Alphabetic symbol ordering
 External symbols
 
-__kalmanFilterState 00000000
-
-Symbol: __kalmanFilterState
-   Definitions
-      At line 3 in file kalmanFilterTest.s
-   Uses
-      At line 11 in file kalmanFilterTest.s
-Comment: __kalmanFilterState used once
 kalmanfilter 00000000
 
 Symbol: kalmanfilter
@@ -97,5 +88,5 @@ Symbol: kalmanfilter
    Uses
       At line 13 in file kalmanFilterTest.s
 Comment: kalmanfilter used once
-2 symbols
-343 symbols in table
+1 symbol
+342 symbols in table

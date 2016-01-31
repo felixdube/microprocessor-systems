@@ -185,9 +185,9 @@ __Vectors_Size  EQU  __Vectors_End - __Vectors
 Reset_Handler    PROC
                  EXPORT  Reset_Handler             [WEAK]
         ;IMPORT  SystemInit
-        ;IMPORT  __main
-		IMPORT example1
-		IMPORT example2
+        IMPORT  main
+		;IMPORT example1
+		;IMPORT example2
 		IMPORT kalmanfiltertest
 				 LDR.W R0, =0xE000ED88
 				 LDR R1, [R0]
@@ -196,8 +196,9 @@ Reset_Handler    PROC
 				 DSB
 				 ISB
                  ;LDR     R0, =SystemInit
-                 ;BLX     R0
-                 ;LDR     R0, =__main
+
+                 LDR     R0, =main
+                 BLX     R0				 
 				 LDR	 R0, =kalmanfiltertest
                  BX      R0
 				 NOP

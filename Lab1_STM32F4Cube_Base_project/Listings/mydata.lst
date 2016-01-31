@@ -11,12 +11,13 @@ ARM Macro Assembler    Page 1
     5 00000000         myString2
     6 00000000                 END
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
-erwork --depend=.\objects\mydata.d -o.\objects\mydata.o -I\\psf\Home\Documents\
-workspace\ecse426\git\Lab1_STM32F4Cube_Base_project\RTE -IC:\Keil_v5\ARM\PACK\A
-RM\CMSIS\4.5.0\CMSIS\Include -IC:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.7.0\Dri
-vers\CMSIS\Device\ST\STM32F4xx\Include --predefine="__EVAL SETA 1" --predefine=
-"__UVISION_VERSION SETA 517" --predefine="_RTE_ SETA 1" --predefine="STM32F407x
-x SETA 1" --list=.\listings\mydata.lst myData.s
+erwork --depend=.\objects\mydata.d -o.\objects\mydata.o -IC:\Users\juan-\Docume
+nts\University\University6\MicroP\Lab_1_team\microprocessor-systems\Lab1_STM32F
+4Cube_Base_project\RTE -IC:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include -IC:
+\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.7.0\Drivers\CMSIS\Device\ST\STM32F4xx\In
+clude --predefine="__EVAL SETA 1" --predefine="__UVISION_VERSION SETA 517" --pr
+edefine="_RTE_ SETA 1" --predefine="STM32F407xx SETA 1" --list=.\listings\mydat
+a.lst myData.s
 
 
 
