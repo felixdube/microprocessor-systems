@@ -1,6 +1,7 @@
 	AREA myData, DATA, READWRITE
-	export myString1
-	export myString2
-myString1
-myString2
+	export datai
+	export datao	
+	ALIGN
+datai DCFS 0.0, 0.0, 0.0, 0.0
+datao DCFS 0.0, 0.0, 0.0, 0.0
 	END

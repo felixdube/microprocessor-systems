@@ -427,16 +427,6 @@
               <FilePath>.\Sources\fput_debug.c</FilePath>
             </File>
             <File>
-              <FileName>example1.s</FileName>
-              <FileType>2</FileType>
-              <FilePath>.\example1.s</FilePath>
-            </File>
-            <File>
-              <FileName>example2.s</FileName>
-              <FileType>2</FileType>
-              <FilePath>.\example2.s</FilePath>
-            </File>
-            <File>
               <FileName>myData.s</FileName>
               <FileType>2</FileType>
               <FilePath>.\myData.s</FilePath>

@@ -27,11 +27,9 @@ Project File Date:  01/31/2016
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 1 (build 61)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Rebuild target 'Lab 1'
-assembling example1.s...
+assembling myData.s...
 assembling Assembly.s...
 Sources\Assembly.s(1): warning: A1313W: Missing END directive at end of file
-assembling example2.s...
-assembling myData.s...
 assembling kalmanfilter_asm.s...
 compiling kalmanFilterState.c...
 kalmanFilterState.c(19): warning:  #1-D: last line of file ends without a newline
@@ -39,12 +37,12 @@ kalmanFilterState.c(19): warning:  #1-D: last line of file ends without a newlin
 kalmanFilterState.c(12): warning:  #550-D: variable "instance1" was set but never used
    struct state instance1;
 kalmanFilterState.c: 2 warnings, 0 errors
-compiling fput_debug.c...
 assembling kalmanFilterTest.s...
 assembling startup_stm32f407xx.s...
+compiling fput_debug.c...
 compiling system_stm32f4xx.c...
 linking...
-Program Size: Code=520 RO-data=408 RW-data=0 ZI-data=1632  
+Program Size: Code=584 RO-data=424 RW-data=32 ZI-data=1632  
 ".\Objects\Base_Project.axf" - 0 Error(s), 3 Warning(s).
 
 <h2>Software Packages used:</h2>
@@ -70,17 +68,17 @@ Package Vendor: Keil
 <h2>Collection of Component Files used:</h2>
 
    * Component: ARM::CMSIS:DSP:1.4.6
-      Include file:  CMSIS\Include\arm_math.h
       Library file:  CMSIS\Lib\ARM\arm_cortexM4lf_math.lib
+      Include file:  CMSIS\Include\arm_math.h
 
    * Component: ARM::CMSIS:CORE:4.3.0
 
    * Component: Keil::Device:Startup:2.4.2
-      Source file:   MDK\Device\Source\ARM\STM32F40xxx_41xxx_OPT.s
-      Source file:   Drivers\CMSIS\Device\ST\STM32F4xx\Source\Templates\system_stm32f4xx.c
-      Source file:   Drivers\CMSIS\Device\ST\STM32F4xx\Source\Templates\arm\startup_stm32f407xx.s
       Include file:  Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h
+      Source file:   MDK\Device\Source\ARM\STM32F40xxx_41xxx_OPT.s
       Source file:   MDK\Device\Source\ARM\STM32F4xx_OTP.s
+      Source file:   Drivers\CMSIS\Device\ST\STM32F4xx\Source\Templates\arm\startup_stm32f407xx.s
+      Source file:   Drivers\CMSIS\Device\ST\STM32F4xx\Source\Templates\system_stm32f4xx.c
 Build Time Elapsed:  00:00:01
 </pre>
 </body>

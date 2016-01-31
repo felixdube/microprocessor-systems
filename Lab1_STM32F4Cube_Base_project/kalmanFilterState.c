@@ -10,7 +10,7 @@ struct state {
 
 int main(){
  struct state instance1;
-	instance1.q = (float) 1;
+	instance1.q = 1.0;
 	instance1.r = 2.0;
 	instance1.x = 3.0;
 	instance1.p = 5.0;

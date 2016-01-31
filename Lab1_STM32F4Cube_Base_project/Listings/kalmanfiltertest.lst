@@ -9,23 +9,33 @@ DONLY
     2 00000000                 EXPORT           kalmanfiltertest
     3 00000000         ;IMPORT __kalmanFilterState
     4 00000000                 IMPORT           kalmanfilter
-    5 00000000         
-    6 00000000         kalmanfiltertest
+    5 00000000                 IMPORT           datai
+    6 00000000                 IMPORT           datao
     7 00000000         
-    8 00000000 4804            LDR              R0, =datai
-    9 00000002 4905            LDR              R1, =datao
-   10 00000004 F04F 0204       MOV              R2, #4
-   11 00000008         ;R3, =__kalmanFilterState
-   12 00000008         
-   13 00000008 4C04            LDR              R4, =kalmanfilter
-   14 0000000A 47A0            BLX              R4
+    8 00000000         kalmanfiltertest
+    9 00000000         
+   10 00000000 480A            LDR              R0, =datai
+   11 00000002 490B            LDR              R1, =datao
+   12 00000004         
+   13 00000004 EEB7 0A00       VLDR.f32         S0, =1.0
+   14 00000008 ED80 0A00       VSTR.f32         S0, [R0]
    15 0000000C         
-   16 0000000C                 ALIGN
-   17 0000000C 01 02 03 
-              04       datai   DCB              1, 2, 3, 4
-   18 00000010 02 03 04 
-              05       datao   DCB              2, 3, 4, 5
-   19 00000014                 END
+   16 0000000C EEB0 0A00       VLDR.f32         S0, =2.0
+   17 00000010 ED80 0A01       VSTR.f32         S0, [R0, #4]
+   18 00000014         
+   19 00000014 EEB0 0A08       VLDR.f32         S0, =3.0
+   20 00000018 ED80 0A02       VSTR.f32         S0, [R0, #8]
+   21 0000001C         
+   22 0000001C EEB1 0A00       VLDR.f32         S0, =4.0
+   23 00000020 ED80 0A03       VSTR.f32         S0, [R0, #12]
+   24 00000024         
+   25 00000024 F04F 0204       MOV              R2, #4
+   26 00000028         ;R3, =__kalmanFilterState
+   27 00000028         
+   28 00000028 4C02            LDR              R4, =kalmanfilter
+   29 0000002A 47A0            BLX              R4
+   30 0000002C         
+   31 0000002C                 END
               00000000 
               00000000 
               00000000 
@@ -43,27 +53,11 @@ ist=.\listings\kalmanfiltertest.lst kalmanFilterTest.s
 ARM Macro Assembler    Page 1 Alphabetic symbol ordering
 Relocatable symbols
 
-datai 0000000C
-
-Symbol: datai
-   Definitions
-      At line 17 in file kalmanFilterTest.s
-   Uses
-      At line 8 in file kalmanFilterTest.s
-Comment: datai used once
-datao 00000010
-
-Symbol: datao
-   Definitions
-      At line 18 in file kalmanFilterTest.s
-   Uses
-      At line 9 in file kalmanFilterTest.s
-Comment: datao used once
 kalmanfiltertest 00000000
 
 Symbol: kalmanfiltertest
    Definitions
-      At line 6 in file kalmanFilterTest.s
+      At line 8 in file kalmanFilterTest.s
    Uses
       At line 2 in file kalmanFilterTest.s
 Comment: kalmanfiltertest used once
@@ -75,20 +69,36 @@ Symbol: kalmanfiltertest_asm
    Uses
       None
 Comment: kalmanfiltertest_asm unused
-4 symbols
+2 symbols
 
 
 
 ARM Macro Assembler    Page 1 Alphabetic symbol ordering
 External symbols
 
+datai 00000000
+
+Symbol: datai
+   Definitions
+      At line 5 in file kalmanFilterTest.s
+   Uses
+      At line 10 in file kalmanFilterTest.s
+Comment: datai used once
+datao 00000000
+
+Symbol: datao
+   Definitions
+      At line 6 in file kalmanFilterTest.s
+   Uses
+      At line 11 in file kalmanFilterTest.s
+Comment: datao used once
 kalmanfilter 00000000
 
 Symbol: kalmanfilter
    Definitions
       At line 4 in file kalmanFilterTest.s
    Uses
-      At line 13 in file kalmanFilterTest.s
+      At line 28 in file kalmanFilterTest.s
 Comment: kalmanfilter used once
-1 symbol
+3 symbols
 342 symbols in table

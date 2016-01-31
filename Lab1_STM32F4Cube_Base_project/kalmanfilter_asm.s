@@ -35,8 +35,8 @@ loop
 		
 		;x = x + k * (measurement - x)
 		VSUB.f32 S6, S0, S3
-		;VMUL.f32 S6, S6, S5
-		;VADD.f32 S3, S3, S6 ;simplyfied these two with one command
+		VMUL.f32 S6, S6, S5
+		VADD.f32 S3, S3, S6 ;simplyfied these two with one command
 		;VLMA.f32 S3, S5, S6 ; multiply and accumulate into x
 		
 		;p = (1 - k) * p = p-pk
@@ -49,14 +49,15 @@ loop
 
 		
 		;store the output
-		;VSTR.f32 S3, [R5]
+		VSTR.f32 S3, [R5]
 		ADD R5, R5, #4
+		ADD R4, R4, #4
 		
 		;update counter
 		ADD R6, R6, #1
 		
 		;Output on S0, maybe not necessary
-		VMOV.f32 S0, S3
+		;VMOV.f32 S0, S3
 		
 		;check if all the data has been filtered
 		CMP R2, R6

@@ -5,11 +5,18 @@ ARM Macro Assembler    Page 1
 
 
     1 00000000                 AREA             myData, DATA, READWRITE
-    2 00000000                 export           myString1
-    3 00000000                 export           myString2
-    4 00000000         myString1
-    5 00000000         myString2
-    6 00000000                 END
+    2 00000000                 export           datai
+    3 00000000                 export           datao
+    4 00000000                 ALIGN
+    5 00000000 00000000 
+              00000000 
+              00000000 
+              00000000 datai   DCFS             0.0, 0.0, 0.0, 0.0
+    6 00000010 00000000 
+              00000000 
+              00000000 
+              00000000 datao   DCFS             0.0, 0.0, 0.0, 0.0
+    7 00000020                 END
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
 erwork --depend=.\objects\mydata.d -o.\objects\mydata.o -IC:\Users\juan-\Docume
 nts\University\University6\MicroP\Lab_1_team\microprocessor-systems\Lab1_STM32F
@@ -24,6 +31,22 @@ a.lst myData.s
 ARM Macro Assembler    Page 1 Alphabetic symbol ordering
 Relocatable symbols
 
+datai 00000000
+
+Symbol: datai
+   Definitions
+      At line 5 in file myData.s
+   Uses
+      At line 2 in file myData.s
+Comment: datai used once
+datao 00000010
+
+Symbol: datao
+   Definitions
+      At line 6 in file myData.s
+   Uses
+      At line 3 in file myData.s
+Comment: datao used once
 myData 00000000
 
 Symbol: myData
@@ -32,21 +55,5 @@ Symbol: myData
    Uses
       None
 Comment: myData unused
-myString1 00000000
-
-Symbol: myString1
-   Definitions
-      At line 4 in file myData.s
-   Uses
-      At line 2 in file myData.s
-Comment: myString1 used once
-myString2 00000000
-
-Symbol: myString2
-   Definitions
-      At line 5 in file myData.s
-   Uses
-      At line 3 in file myData.s
-Comment: myString2 used once
 3 symbols
 337 symbols in table

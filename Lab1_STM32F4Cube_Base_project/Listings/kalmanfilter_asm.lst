@@ -53,48 +53,50 @@ Y
    35 0000002E         
    36 0000002E         ;x = x + k * (measurement - x)
    37 0000002E EE30 3A61       VSUB.f32         S6, S0, S3
-   38 00000032         ;VMUL.f32 S6, S6, S5
-   39 00000032         ;VADD.f32 S3, S3, S6 ;simplyfied these two with one comm
-                       and
-   40 00000032         ;VLMA.f32 S3, S5, S6 ; multiply and accumulate into x
-   41 00000032         
-   42 00000032         ;p = (1 - k) * p = p-pk
-   43 00000032 EEF7 3A00       VLDR.f32         S7, =1.0    ; don't know if you
+   38 00000032 EE23 3A22       VMUL.f32         S6, S6, S5
+   39 00000036 EE71 1A83       VADD.f32         S3, S3, S6  ;simplyfied these t
+                                                            wo with one command
+                                                            
+   40 0000003A         ;VLMA.f32 S3, S5, S6 ; multiply and accumulate into x
+   41 0000003A         
+   42 0000003A         ;p = (1 - k) * p = p-pk
+   43 0000003A EEF7 3A00       VLDR.f32         S7, =1.0    ; don't know if you
                                                              can declare a floa
                                                             ting point this way
-                                                            
 
 
 
 ARM Macro Assembler    Page 2 
 
 
-   44 00000036 EE33 3AE2       VSUB.f32         S6, S7, S5
-   45 0000003A EE22 2A03       VMUL.f32         S4, S4, S6
-   46 0000003E         ;VLMS.f32 S4, S4, S5
-   47 0000003E         
-   48 0000003E         
-   49 0000003E         
-   50 0000003E         
-   51 0000003E         ;store the output
-   52 0000003E         ;VSTR.f32 S3, [R5]
-   53 0000003E F105 0504       ADD              R5, R5, #4
-   54 00000042         
-   55 00000042         ;update counter
-   56 00000042 F106 0601       ADD              R6, R6, #1
-   57 00000046         
-   58 00000046         ;Output on S0, maybe not necessary
-   59 00000046 EEB0 0A61       VMOV.f32         S0, S3
-   60 0000004A         
-   61 0000004A         ;check if all the data has been filtered
-   62 0000004A 42B2            CMP              R2, R6
-   63 0000004C D1DD            BNE              loop
-   64 0000004E         
-   65 0000004E         ;Store the new state variables
-   66 0000004E         ;TODO
-   67 0000004E         
-   68 0000004E 4770            BX               LR
-   69 00000050                 END
+                                                            
+   44 0000003E EE33 3AE2       VSUB.f32         S6, S7, S5
+   45 00000042 EE22 2A03       VMUL.f32         S4, S4, S6
+   46 00000046         ;VLMS.f32 S4, S4, S5
+   47 00000046         
+   48 00000046         
+   49 00000046         
+   50 00000046         
+   51 00000046         ;store the output
+   52 00000046 EDC5 1A00       VSTR.f32         S3, [R5]
+   53 0000004A F105 0504       ADD              R5, R5, #4
+   54 0000004E F104 0404       ADD              R4, R4, #4
+   55 00000052         
+   56 00000052         ;update counter
+   57 00000052 F106 0601       ADD              R6, R6, #1
+   58 00000056         
+   59 00000056         ;Output on S0, maybe not necessary
+   60 00000056         ;VMOV.f32 S0, S3
+   61 00000056         
+   62 00000056         ;check if all the data has been filtered
+   63 00000056 42B2            CMP              R2, R6
+   64 00000058 D1D7            BNE              loop
+   65 0000005A         
+   66 0000005A         ;Store the new state variables
+   67 0000005A         ;TODO
+   68 0000005A         
+   69 0000005A 4770            BX               LR
+   70 0000005C                 END
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
 erwork --depend=.\objects\kalmanfilter_asm.d -o.\objects\kalmanfilter_asm.o -IC
 :\Users\juan-\Documents\University\University6\MicroP\Lab_1_team\microprocessor
@@ -131,7 +133,7 @@ Symbol: loop
    Definitions
       At line 16 in file kalmanfilter_asm.s
    Uses
-      At line 63 in file kalmanfilter_asm.s
+      At line 64 in file kalmanfilter_asm.s
 Comment: loop used once
 3 symbols
 338 symbols in table
