@@ -1,12 +1,5 @@
 #include <stdlib.h>
-
-struct kalman_state {
-	float q; //process noise covariance
-	float r; //measurement noise covariance
-	float x; //estimated value
-	float p; //estimation error covariance
-	float k; //adapive Kalman filter gain
-};
+#include "KalmanFilter.h"
 
 int Kalmanfilter_C(float* InputArray, float* OutputArray, struct kalman_state* kstate,int Length) {
 	int i;
