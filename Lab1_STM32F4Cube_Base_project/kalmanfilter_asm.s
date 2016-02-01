@@ -16,7 +16,7 @@ kalmanFilter_asm
 		;SUB SP, SP, #18
 		
 		;load filter state data
-		VLDR.f32 S0, [R0] 				;measurement/ initial value
+
 		VLDR.f32 S1, [R3]				;noise covariance q
 		VLDR.f32 S2, [R3, #4]			;noise covariance r
 		VLDR.f32 S3, [R3, #8]			;estimated value x
@@ -27,7 +27,8 @@ kalmanFilter_asm
 		
 		
 		
-loop				
+loop
+		VLDR.f32 S0, [R0] 				;measurement/ initial value
 		;P = P + Q
 		VADD.f32 S4, S4, S1
 		
