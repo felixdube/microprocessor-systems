@@ -1,5 +1,4 @@
 --cpu Cortex-M4.fp
-".\objects\assembly.o"
 ".\objects\fput_debug.o"
 ".\objects\mydata.o"
 ".\objects\kalmanfilter_asm.o"

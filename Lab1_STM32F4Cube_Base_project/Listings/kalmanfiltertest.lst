@@ -7,35 +7,44 @@ ARM Macro Assembler    Page 1
     1 00000000                 AREA             kalmanfiltertest_asm, CODE, REA
 DONLY
     2 00000000                 EXPORT           kalmanfiltertest
-    3 00000000         ;IMPORT __kalmanFilterState
-    4 00000000                 IMPORT           kalmanfilter
-    5 00000000                 IMPORT           datai
-    6 00000000                 IMPORT           datao
-    7 00000000         
-    8 00000000         kalmanfiltertest
-    9 00000000         
-   10 00000000 480A            LDR              R0, =datai
-   11 00000002 490B            LDR              R1, =datao
-   12 00000004         
-   13 00000004 EEB7 0A00       VLDR.f32         S0, =1.0
+    3 00000000                 IMPORT           kalmanfilter
+    4 00000000                 IMPORT           datai
+    5 00000000                 IMPORT           datao
+    6 00000000         
+    7 00000000         kalmanfiltertest
+    8 00000000         ; input and output data array pointers 
+    9 00000000 4814            LDR              R0, =datai
+   10 00000002 4915            LDR              R1, =datao
+   11 00000004         
+   12 00000004         ;input data
+   13 00000004 EEBA 0A04       VLDR.f32         S0, =-10.0
    14 00000008 ED80 0A00       VSTR.f32         S0, [R0]
-   15 0000000C         
-   16 0000000C EEB0 0A00       VLDR.f32         S0, =2.0
-   17 00000010 ED80 0A01       VSTR.f32         S0, [R0, #4]
-   18 00000014         
-   19 00000014 EEB0 0A08       VLDR.f32         S0, =3.0
-   20 00000018 ED80 0A02       VSTR.f32         S0, [R0, #8]
-   21 0000001C         
-   22 0000001C EEB1 0A00       VLDR.f32         S0, =4.0
-   23 00000020 ED80 0A03       VSTR.f32         S0, [R0, #12]
-   24 00000024         
-   25 00000024 F04F 0204       MOV              R2, #4
-   26 00000028         ;R3, =__kalmanFilterState
-   27 00000028         
-   28 00000028 4C02            LDR              R4, =kalmanfilter
-   29 0000002A 47A0            BLX              R4
-   30 0000002C         
-   31 0000002C                 END
+   15 0000000C EEB2 0A04       VLDR.f32         S0, =10.0
+   16 00000010 ED80 0A01       VSTR.f32         S0, [R0, #4]
+   17 00000014 EEBA 0A04       VLDR.f32         S0, =-10.0
+   18 00000018 ED80 0A02       VSTR.f32         S0, [R0, #8]
+   19 0000001C EEB2 0A04       VLDR.f32         S0, =10.0
+   20 00000020 ED80 0A03       VSTR.f32         S0, [R0, #12]
+   21 00000024 EEBA 0A04       VLDR.f32         S0, =-10.0
+   22 00000028 ED80 0A04       VSTR.f32         S0, [R0, #16]
+   23 0000002C EEB2 0A04       VLDR.f32         S0, =10.0
+   24 00000030 ED80 0A05       VSTR.f32         S0, [R0, #20]
+   25 00000034 EEBA 0A04       VLDR.f32         S0, =-10.0
+   26 00000038 ED80 0A06       VSTR.f32         S0, [R0, #24]
+   27 0000003C EEB2 0A04       VLDR.f32         S0, =10.0
+   28 00000040 ED80 0A07       VSTR.f32         S0, [R0, #28]
+   29 00000044         
+   30 00000044         ;number of element in the input array
+   31 00000044 F04F 0208       MOV              R2, #8
+   32 00000048         ;for the C code to work, we might need to put the right 
+                       address in R3 before calling this
+   33 00000048 F1AD 0D12       SUB              SP, #18
+   34 0000004C 466B            MOV              R3, SP
+   35 0000004E 4C03            LDR              R4, =kalmanfilter
+   36 00000050 47A0            BLX              R4
+   37 00000052         
+   38 00000052 4770            BX               LR
+   39 00000054                 END
               00000000 
               00000000 
               00000000 
@@ -57,7 +66,7 @@ kalmanfiltertest 00000000
 
 Symbol: kalmanfiltertest
    Definitions
-      At line 8 in file kalmanFilterTest.s
+      At line 7 in file kalmanFilterTest.s
    Uses
       At line 2 in file kalmanFilterTest.s
 Comment: kalmanfiltertest used once
@@ -80,25 +89,25 @@ datai 00000000
 
 Symbol: datai
    Definitions
-      At line 5 in file kalmanFilterTest.s
+      At line 4 in file kalmanFilterTest.s
    Uses
-      At line 10 in file kalmanFilterTest.s
+      At line 9 in file kalmanFilterTest.s
 Comment: datai used once
 datao 00000000
 
 Symbol: datao
    Definitions
-      At line 6 in file kalmanFilterTest.s
+      At line 5 in file kalmanFilterTest.s
    Uses
-      At line 11 in file kalmanFilterTest.s
+      At line 10 in file kalmanFilterTest.s
 Comment: datao used once
 kalmanfilter 00000000
 
 Symbol: kalmanfilter
    Definitions
-      At line 4 in file kalmanFilterTest.s
+      At line 3 in file kalmanFilterTest.s
    Uses
-      At line 28 in file kalmanFilterTest.s
+      At line 35 in file kalmanFilterTest.s
 Comment: kalmanfilter used once
 3 symbols
 342 symbols in table

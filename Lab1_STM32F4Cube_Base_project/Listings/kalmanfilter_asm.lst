@@ -15,88 +15,88 @@ Y
     8 00000000         ;POP {R3}
     9 00000000         ;LDR R7, =instance1
    10 00000000         
-   11 00000000         ;find a way to do these 2 lines only once
-   12 00000000 4604            MOV              R4, R0      ;input data addr wi
-                                                            th offset
-   13 00000002 460D            MOV              R5, R1      ;filtered data addr
-                                                             with offset
-   14 00000004 F04F 0600       MOV              R6, #0      ;counter of input a
+   11 00000000         ;initialize R6 at 0
+   12 00000000 F04F 0600       MOV              R6, #0      ;counter of input a
                                                             rray element's filt
                                                             ered
-   15 00000008 B085            SUB              SP, SP, #20
-   16 0000000A         loop
-   17 0000000A         ;load filter state data
-   18 0000000A ED94 0A00       VLDR.f32         S0, [R4]    ;measurement/ initi
+   13 00000004         ;adjustment to the stack pointer
+   14 00000004         ;SUB SP, SP, #18
+   15 00000004         loop
+   16 00000004         ;load filter state data
+   17 00000004 ED90 0A00       VLDR.f32         S0, [R0]    ;measurement/ initi
                                                             al value
-   19 0000000E EDDD 0A00       VLDR.f32         S1, [sp]    ;noise covariance q
+   18 00000008 EDD3 0A00       VLDR.f32         S1, [R3]    ;noise covariance q
                                                             
-   20 00000012 ED9D 1A01       VLDR.f32         S2, [sp, #4] 
+   19 0000000C ED93 1A01       VLDR.f32         S2, [R3, #4] 
                                                             ;noise covariance r
                                                             
-   21 00000016 EDDD 1A02       VLDR.f32         S3, [sp, #8] ;estimated value x
+   20 00000010 EDD3 1A02       VLDR.f32         S3, [R3, #8] ;estimated value x
                                                             
-   22 0000001A ED9D 2A03       VLDR.f32         S4, [sp, #12] ;estimation error
+   21 00000014 ED93 2A03       VLDR.f32         S4, [R3, #12] ;estimation error
                                                              covariance p
-   23 0000001E EDDD 2A04       VLDR.f32         S5, [sp, #16] ;adaptive kalman 
+   22 00000018 EDD3 2A04       VLDR.f32         S5, [R3, #16] ;adaptive kalman 
                                                             filter k
-   24 00000022         ; S6 scratch register
-   25 00000022         
-   26 00000022         
-   27 00000022         ;P = P + Q
-   28 00000022 EE32 2A20       VADD.f32         S4, S4, S1
-   29 00000026         
-   30 00000026         ; maybe can optimise
-   31 00000026         ;also check if we have to use updated p or initial p
-   32 00000026         ;k = p/ (p + r)
-   33 00000026 EE32 3A01       VADD.f32         S6, S4, S2
-   34 0000002A EEC2 2A03       VDIV.f32         S5, S4, S6
-   35 0000002E         
-   36 0000002E         ;x = x + k * (measurement - x)
-   37 0000002E EE30 3A61       VSUB.f32         S6, S0, S3
-   38 00000032 EE23 3A22       VMUL.f32         S6, S6, S5
-   39 00000036 EE71 1A83       VADD.f32         S3, S3, S6  ;simplyfied these t
+   23 0000001C         ; S6 scratch register
+   24 0000001C         
+   25 0000001C         
+   26 0000001C         ;P = P + Q
+   27 0000001C EE32 2A20       VADD.f32         S4, S4, S1
+   28 00000020         
+   29 00000020         ; maybe can optimise
+   30 00000020         ;also check if we have to use updated p or initial p
+   31 00000020         ;k = p/ (p + r)
+   32 00000020 EE32 3A01       VADD.f32         S6, S4, S2
+   33 00000024 EEC2 2A03       VDIV.f32         S5, S4, S6
+   34 00000028         
+   35 00000028         ;x = x + k * (measurement - x)
+   36 00000028 EE30 3A61       VSUB.f32         S6, S0, S3
+   37 0000002C EE23 3A22       VMUL.f32         S6, S6, S5
+   38 00000030 EE71 1A83       VADD.f32         S3, S3, S6  ;simplyfied these t
                                                             wo with one command
                                                             
-   40 0000003A         ;VLMA.f32 S3, S5, S6 ; multiply and accumulate into x
-   41 0000003A         
-   42 0000003A         ;p = (1 - k) * p = p-pk
-   43 0000003A EEF7 3A00       VLDR.f32         S7, =1.0    ; don't know if you
-                                                             can declare a floa
-                                                            ting point this way
+   39 00000034         ;VLMA.f32 S3, S5, S6 ; multiply and accumulate into x
+   40 00000034         
+   41 00000034         ;p = (1 - k) * p = p-pk
+   42 00000034 EEF7 3A00       VLDR.f32         S7, =1.0
+   43 00000038 EE33 3AE2       VSUB.f32         S6, S7, S5
+   44 0000003C EE22 2A03       VMUL.f32         S4, S4, S6
+   45 00000040         ;VLMS.f32 S4, S4, S5
+   46 00000040         
+   47 00000040         ;store the output
 
 
 
 ARM Macro Assembler    Page 2 
 
 
+   48 00000040 EDC1 1A00       VSTR.f32         S3, [R1]
+   49 00000044 F101 0104       ADD              R1, R1, #4
+   50 00000048 F100 0004       ADD              R0, R0, #4
+   51 0000004C         
+   52 0000004C         ;update counter
+   53 0000004C F106 0601       ADD              R6, R6, #1
+   54 00000050         
+   55 00000050         ;Store the new state variables
+   56 00000050 EDC3 0A00       VSTR.f32         S1, [R3]    ;noise covariance q
                                                             
-   44 0000003E EE33 3AE2       VSUB.f32         S6, S7, S5
-   45 00000042 EE22 2A03       VMUL.f32         S4, S4, S6
-   46 00000046         ;VLMS.f32 S4, S4, S5
-   47 00000046         
-   48 00000046         
-   49 00000046         
-   50 00000046         
-   51 00000046         ;store the output
-   52 00000046 EDC5 1A00       VSTR.f32         S3, [R5]
-   53 0000004A F105 0504       ADD              R5, R5, #4
-   54 0000004E F104 0404       ADD              R4, R4, #4
-   55 00000052         
-   56 00000052         ;update counter
-   57 00000052 F106 0601       ADD              R6, R6, #1
-   58 00000056         
-   59 00000056         ;Output on S0, maybe not necessary
-   60 00000056         ;VMOV.f32 S0, S3
-   61 00000056         
-   62 00000056         ;check if all the data has been filtered
-   63 00000056 42B2            CMP              R2, R6
-   64 00000058 D1D7            BNE              loop
-   65 0000005A         
-   66 0000005A         ;Store the new state variables
-   67 0000005A         ;TODO
-   68 0000005A         
-   69 0000005A 4770            BX               LR
-   70 0000005C                 END
+   57 00000054 ED83 1A01       VSTR.f32         S2, [R3, #4] 
+                                                            ;noise covariance r
+                                                            
+   58 00000058 EDC3 1A02       VSTR.f32         S3, [R3, #8] ;estimated value x
+                                                            
+   59 0000005C ED83 2A03       VSTR.f32         S4, [R3, #12] ;estimation error
+                                                             covariance p
+   60 00000060 EDC3 2A04       VSTR.f32         S5, [R3, #16] ;adaptive kalman 
+                                                            filter k
+   61 00000064         
+   62 00000064         ;check if all the data has been filtered
+   63 00000064 42B2            CMP              R2, R6
+   64 00000066 D1CD            BNE              loop
+   65 00000068         
+   66 00000068         
+   67 00000068         
+   68 00000068 4770            BX               LR
+   69 0000006A                 END
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
 erwork --depend=.\objects\kalmanfilter_asm.d -o.\objects\kalmanfilter_asm.o -IC
 :\Users\juan-\Documents\University\University6\MicroP\Lab_1_team\microprocessor
@@ -127,11 +127,11 @@ Symbol: kalmanfilter_asm
    Uses
       None
 Comment: kalmanfilter_asm unused
-loop 0000000A
+loop 00000004
 
 Symbol: loop
    Definitions
-      At line 16 in file kalmanfilter_asm.s
+      At line 15 in file kalmanfilter_asm.s
    Uses
       At line 64 in file kalmanfilter_asm.s
 Comment: loop used once

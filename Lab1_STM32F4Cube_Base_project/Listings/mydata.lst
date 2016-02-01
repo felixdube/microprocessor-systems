@@ -8,15 +8,35 @@ ARM Macro Assembler    Page 1
     2 00000000                 export           datai
     3 00000000                 export           datao
     4 00000000                 ALIGN
-    5 00000000 00000000 
-              00000000 
-              00000000 
-              00000000 datai   DCFS             0.0, 0.0, 0.0, 0.0
-    6 00000010 00000000 
-              00000000 
-              00000000 
-              00000000 datao   DCFS             0.0, 0.0, 0.0, 0.0
-    7 00000020                 END
+    5 00000000 00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00    datai   SPACE            32          ; specifies the num
+                                                            ber of bytes of spa
+                                                            ce required to stor
+                                                            e input data 8*4
+    6 00000020 00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00    datao   SPACE            32          ; specifies the num
+                                                            ber of bytes of spa
+                                                            ce required to stor
+                                                            e output data 8*4
+    7 00000040                 END
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
 erwork --depend=.\objects\mydata.d -o.\objects\mydata.o -IC:\Users\juan-\Docume
 nts\University\University6\MicroP\Lab_1_team\microprocessor-systems\Lab1_STM32F
@@ -39,7 +59,7 @@ Symbol: datai
    Uses
       At line 2 in file myData.s
 Comment: datai used once
-datao 00000010
+datao 00000020
 
 Symbol: datao
    Definitions

@@ -8,12 +8,12 @@ struct state {
 	float k; //adapive Kalman filter gain
 };
 
-int main(){
+int kalmanFilterState(void){
  struct state instance1;
 	instance1.q = 1.0;
 	instance1.r = 2.0;
 	instance1.x = 3.0;
 	instance1.p = 5.0;
 	instance1.k = 4.0;
-		
-}
+	return (0);
+		}
