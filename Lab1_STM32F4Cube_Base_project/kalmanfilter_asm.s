@@ -1,8 +1,8 @@
 	; should verify if all the calculations are like the pseudo-code
 	
-	AREA kalmanfilter_asm, CODE, READONLY
-	EXPORT kalmanfilter
-kalmanfilter
+	AREA text, CODE, READONLY
+	EXPORT kalmanFilter_asm
+kalmanFilter_asm
 		;R0 pointer to input array
 		;R1 pointer to filtered data
 		;R2 array's length

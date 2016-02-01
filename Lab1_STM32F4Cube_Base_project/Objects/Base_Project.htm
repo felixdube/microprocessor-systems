@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Objects\Base_Project.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Objects\Base_Project.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Sun Jan 31 19:16:04 2016
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Sun Jan 31 19:33:26 2016
 <BR><P>
 <H3>Maximum Stack Usage =         20 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -13,8 +13,8 @@ kalmanFilterState
 Functions with no stack information
 </H3><UL>
  <LI><a href="#[65]">__user_initial_stackheap</a>
- <LI><a href="#[5d]">kalmanfilter</a>
- <LI><a href="#[5c]">kalmanfiltertest</a>
+ <LI><a href="#[5d]">kalmanFilter_asm</a>
+ <LI><a href="#[5c]">kalmanFilterTestbench</a>
 </UL>
 </UL>
 <P>
@@ -127,8 +127,8 @@ Function Pointers
  <LI><a href="#[5]">UsageFault_Handler</a> from startup_stm32f407xx.o(.text) referenced from startup_stm32f407xx.o(RESET)
  <LI><a href="#[a]">WWDG_IRQHandler</a> from startup_stm32f407xx.o(.text) referenced from startup_stm32f407xx.o(RESET)
  <LI><a href="#[5b]">kalmanFilterState</a> from kalmanfilterstate.o(.text) referenced from startup_stm32f407xx.o(.text)
- <LI><a href="#[5d]">kalmanfilter</a> from kalmanfilter_asm.o(kalmanfilter_asm) referenced from kalmanfiltertest.o(kalmanfiltertest_asm)
- <LI><a href="#[5c]">kalmanfiltertest</a> from kalmanfiltertest.o(kalmanfiltertest_asm) referenced from startup_stm32f407xx.o(.text)
+ <LI><a href="#[5c]">kalmanFilterTestbench</a> from kalmanfiltertest.o(text) referenced from startup_stm32f407xx.o(.text)
+ <LI><a href="#[5d]">kalmanFilter_asm</a> from kalmanfilter_asm.o(text) referenced from kalmanfiltertest.o(text)
 </UL>
 <P>
 <H3>
@@ -478,10 +478,10 @@ Global Symbols
 
 <P><STRONG><a name="[6a]"></a>__rt_heap_expand$2region</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, heapauxi.o(.text), UNUSED)
 
-<P><STRONG><a name="[5d]"></a>kalmanfilter</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, kalmanfilter_asm.o(kalmanfilter_asm))
-<BR>[Address Reference Count : 1]<UL><LI> kalmanfiltertest.o(kalmanfiltertest_asm)
+<P><STRONG><a name="[5d]"></a>kalmanFilter_asm</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, kalmanfilter_asm.o(text))
+<BR>[Address Reference Count : 1]<UL><LI> kalmanfiltertest.o(text)
 </UL>
-<P><STRONG><a name="[5c]"></a>kalmanfiltertest</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, kalmanfiltertest.o(kalmanfiltertest_asm))
+<P><STRONG><a name="[5c]"></a>kalmanFilterTestbench</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, kalmanfiltertest.o(text))
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f407xx.o(.text)
 </UL><P>
 <H3>

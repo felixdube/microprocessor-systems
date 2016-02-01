@@ -1,6 +1,6 @@
 #include <stdlib.h>
 
-struct state {
+struct stateVariables {
 	float q; //process noise covariance
 	float r; //measurement noise covariance
 	float x; //estimated value
@@ -9,11 +9,11 @@ struct state {
 };
 
 int kalmanFilterState(void){
- struct state instance1;
-	instance1.q = 1.0;
-	instance1.r = 2.0;
-	instance1.x = 3.0;
-	instance1.p = 5.0;
-	instance1.k = 4.0;
+ struct stateVariables s;
+	s.q = 0.1;
+	s.r = 0.1;
+	s.x = 0.0;
+	s.p = 0.1;
+	s.k = 0.0;
 	return (0);
 		}

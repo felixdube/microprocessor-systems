@@ -496,7 +496,7 @@ ARM Macro Assembler    Page 8
 ]
   187 00000000         ;IMPORT  SystemInit
   188 00000000                 IMPORT           kalmanFilterState
-  189 00000000                 IMPORT           kalmanfiltertest
+  189 00000000                 IMPORT           kalmanFilterTestbench
   190 00000000         ;IMPORT kalmanfilter
   191 00000000 F8DF 003C       LDR.W            R0, =0xE000ED88
   192 00000004 6801            LDR              R1, [R0]
@@ -508,7 +508,7 @@ ARM Macro Assembler    Page 8
   198 00000014         
   199 00000014 480B            LDR              R0, =kalmanFilterState
   200 00000016 4780            BLX              R0
-  201 00000018 480B            LDR              R0, =kalmanfiltertest
+  201 00000018 480B            LDR              R0, =kalmanFilterTestbench
   202 0000001A 4780            BLX              R0
   203 0000001C BF00            NOP
   204 0000001E                 ENDP
@@ -1994,13 +1994,13 @@ Symbol: kalmanFilterState
    Uses
       At line 199 in file RTE\Device\STM32F407VGTx\startup_stm32f407xx.s
 Comment: kalmanFilterState used once
-kalmanfiltertest 00000000
+kalmanFilterTestbench 00000000
 
-Symbol: kalmanfiltertest
+Symbol: kalmanFilterTestbench
    Definitions
       At line 189 in file RTE\Device\STM32F407VGTx\startup_stm32f407xx.s
    Uses
       At line 201 in file RTE\Device\STM32F407VGTx\startup_stm32f407xx.s
-Comment: kalmanfiltertest used once
+Comment: kalmanFilterTestbench used once
 3 symbols
 449 symbols in table

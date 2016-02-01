@@ -186,7 +186,7 @@ Reset_Handler    PROC
                  EXPORT  Reset_Handler             [WEAK]
         ;IMPORT  SystemInit
         IMPORT  kalmanFilterState
-		IMPORT kalmanfiltertest
+		IMPORT kalmanFilterTestbench
 		;IMPORT kalmanfilter
 				 LDR.W R0, =0xE000ED88
 				 LDR R1, [R0]
@@ -198,7 +198,7 @@ Reset_Handler    PROC
 
                  LDR     R0, =kalmanFilterState
                  BLX     R0				 
-				 LDR	 R0, =kalmanfiltertest
+				 LDR	 R0, =kalmanFilterTestbench
                  BLX     R0
 				 NOP
                  ENDP

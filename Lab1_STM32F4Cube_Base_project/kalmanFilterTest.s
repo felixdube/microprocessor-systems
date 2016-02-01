@@ -1,10 +1,10 @@
-	AREA kalmanfiltertest_asm, CODE, READONLY
-	EXPORT kalmanfiltertest
-	IMPORT kalmanfilter
+	AREA text, CODE, READONLY
+	EXPORT kalmanFilterTestbench
+	IMPORT kalmanFilter_asm
 	IMPORT datai
 	IMPORT datao
 	
-kalmanfiltertest
+kalmanFilterTestbench
 ; input and output data array pointers	
 	LDR R0, =datai
 	LDR R1, =datao
@@ -32,7 +32,7 @@ kalmanfiltertest
 	;for the C code to work, we might need to put the right address in R3 before calling this
 	SUB		 SP, #18
 	MOV		 R3, SP
-	LDR 	 R4, =kalmanfilter
+	LDR 	 R4, =kalmanFilter_asm
 	BLX 	 R4
 	
 	BX 		 LR

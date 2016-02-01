@@ -4,14 +4,13 @@
 ARM Macro Assembler    Page 1 
 
 
-    1 00000000                 AREA             kalmanfiltertest_asm, CODE, REA
-DONLY
-    2 00000000                 EXPORT           kalmanfiltertest
-    3 00000000                 IMPORT           kalmanfilter
+    1 00000000                 AREA             text, CODE, READONLY
+    2 00000000                 EXPORT           kalmanFilterTestbench
+    3 00000000                 IMPORT           kalmanFilter_asm
     4 00000000                 IMPORT           datai
     5 00000000                 IMPORT           datao
     6 00000000         
-    7 00000000         kalmanfiltertest
+    7 00000000         kalmanFilterTestbench
     8 00000000         ; input and output data array pointers 
     9 00000000 4814            LDR              R0, =datai
    10 00000002 4915            LDR              R1, =datao
@@ -40,7 +39,7 @@ DONLY
                        address in R3 before calling this
    33 00000048 F1AD 0D12       SUB              SP, #18
    34 0000004C 466B            MOV              R3, SP
-   35 0000004E 4C03            LDR              R4, =kalmanfilter
+   35 0000004E 4C03            LDR              R4, =kalmanFilter_asm
    36 00000050 47A0            BLX              R4
    37 00000052         
    38 00000052 4770            BX               LR
@@ -62,22 +61,22 @@ ist=.\listings\kalmanfiltertest.lst kalmanFilterTest.s
 ARM Macro Assembler    Page 1 Alphabetic symbol ordering
 Relocatable symbols
 
-kalmanfiltertest 00000000
+kalmanFilterTestbench 00000000
 
-Symbol: kalmanfiltertest
+Symbol: kalmanFilterTestbench
    Definitions
       At line 7 in file kalmanFilterTest.s
    Uses
       At line 2 in file kalmanFilterTest.s
-Comment: kalmanfiltertest used once
-kalmanfiltertest_asm 00000000
+Comment: kalmanFilterTestbench used once
+text 00000000
 
-Symbol: kalmanfiltertest_asm
+Symbol: text
    Definitions
       At line 1 in file kalmanFilterTest.s
    Uses
       None
-Comment: kalmanfiltertest_asm unused
+Comment: text unused
 2 symbols
 
 
@@ -101,13 +100,13 @@ Symbol: datao
    Uses
       At line 10 in file kalmanFilterTest.s
 Comment: datao used once
-kalmanfilter 00000000
+kalmanFilter_asm 00000000
 
-Symbol: kalmanfilter
+Symbol: kalmanFilter_asm
    Definitions
       At line 3 in file kalmanFilterTest.s
    Uses
       At line 35 in file kalmanFilterTest.s
-Comment: kalmanfilter used once
+Comment: kalmanFilter_asm used once
 3 symbols
 342 symbols in table

@@ -27,13 +27,13 @@ Project File Date:  01/31/2016
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 1 (build 61)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Rebuild target 'Lab 1'
-assembling kalmanfilter_asm.s...
 assembling myData.s...
+assembling kalmanfilter_asm.s...
 assembling kalmanFilterTest.s...
 kalmanFilterTest.s(33): warning: A1640E: Offset must be a multiple of four
 compiling kalmanFilterState.c...
-kalmanFilterState.c(12): warning:  #550-D: variable "instance1" was set but never used
-   struct state instance1;
+kalmanFilterState.c(12): warning:  #550-D: variable "s" was set but never used
+   struct stateVariables s;
 kalmanFilterState.c: 1 warning, 0 errors
 assembling startup_stm32f407xx.s...
 compiling fput_debug.c...
@@ -41,7 +41,7 @@ compiling system_stm32f4xx.c...
 linking...
 .\Objects\Base_Project.axf: Warning: L6305W: Image does not have an entry point. (Not specified or not set due to multiple choices.)
 .\Objects\Base_Project.sct(8): warning: L6314W: No section matches pattern *(InRoot$$Sections).
-Program Size: Code=728 RO-data=408 RW-data=68 ZI-data=1540  
+Program Size: Code=736 RO-data=408 RW-data=68 ZI-data=1540  
 Finished: 0 information, 2 warning and 0 error messages.
 ".\Objects\Base_Project.axf" - 0 Error(s), 4 Warning(s).
 
@@ -74,9 +74,9 @@ Package Vendor: Keil
    * Component: ARM::CMSIS:CORE:4.3.0
 
    * Component: Keil::Device:Startup:2.4.2
-      Include file:  Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h
       Source file:   MDK\Device\Source\ARM\STM32F40xxx_41xxx_OPT.s
       Source file:   MDK\Device\Source\ARM\STM32F4xx_OTP.s
+      Include file:  Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h
       Source file:   Drivers\CMSIS\Device\ST\STM32F4xx\Source\Templates\arm\startup_stm32f407xx.s
       Source file:   Drivers\CMSIS\Device\ST\STM32F4xx\Source\Templates\system_stm32f4xx.c
 Build Time Elapsed:  00:00:01
