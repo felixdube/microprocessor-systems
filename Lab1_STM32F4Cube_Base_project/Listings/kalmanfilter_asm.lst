@@ -91,12 +91,13 @@ ARM Macro Assembler    Page 2
    67 00000054 4770            BX               LR
    68 00000056                 END
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
-erwork --depend=.\objects\kalmanfilter_asm.d -o.\objects\kalmanfilter_asm.o -IP
-:\microprocessor-systems\Lab1_STM32F4Cube_Base_project\RTE -IC:\Keil_v5\ARM\PAC
-K\ARM\CMSIS\4.5.0\CMSIS\Include -IC:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.7.0\
-Drivers\CMSIS\Device\ST\STM32F4xx\Include --predefine="__UVISION_VERSION SETA 5
-15" --predefine="_RTE_ SETA 1" --predefine="STM32F407xx SETA 1" --list=.\listin
-gs\kalmanfilter_asm.lst kalmanfilter_asm.s
+erwork --depend=.\objects\kalmanfilter_asm.d -o.\objects\kalmanfilter_asm.o -I\
+\psf\Home\Documents\workspace\ecse426\git\Lab1_STM32F4Cube_Base_project\RTE -IC
+:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include -IC:\Keil_v5\ARM\PACK\Keil\STM
+32F4xx_DFP\2.7.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include --predefine="__EVAL 
+SETA 1" --predefine="__UVISION_VERSION SETA 517" --predefine="_RTE_ SETA 1" --p
+redefine="STM32F407xx SETA 1" --list=.\listings\kalmanfilter_asm.lst kalmanfilt
+er_asm.s
 
 
 
@@ -128,4 +129,4 @@ Symbol: text
       None
 Comment: text unused
 3 symbols
-337 symbols in table
+338 symbols in table

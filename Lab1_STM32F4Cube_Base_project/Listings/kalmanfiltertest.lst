@@ -69,12 +69,13 @@ Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
 ARM Macro Assembler    Page 2 
 
 
-erwork --depend=.\objects\kalmanfiltertest.d -o.\objects\kalmanfiltertest.o -IP
-:\microprocessor-systems\Lab1_STM32F4Cube_Base_project\RTE -IC:\Keil_v5\ARM\PAC
-K\ARM\CMSIS\4.5.0\CMSIS\Include -IC:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.7.0\
-Drivers\CMSIS\Device\ST\STM32F4xx\Include --predefine="__UVISION_VERSION SETA 5
-15" --predefine="_RTE_ SETA 1" --predefine="STM32F407xx SETA 1" --list=.\listin
-gs\kalmanfiltertest.lst kalmanFilterTest.s
+erwork --depend=.\objects\kalmanfiltertest.d -o.\objects\kalmanfiltertest.o -I\
+\psf\Home\Documents\workspace\ecse426\git\Lab1_STM32F4Cube_Base_project\RTE -IC
+:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include -IC:\Keil_v5\ARM\PACK\Keil\STM
+32F4xx_DFP\2.7.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include --predefine="__EVAL 
+SETA 1" --predefine="__UVISION_VERSION SETA 517" --predefine="_RTE_ SETA 1" --p
+redefine="STM32F407xx SETA 1" --list=.\listings\kalmanfiltertest.lst kalmanFilt
+erTest.s
 
 
 
@@ -129,4 +130,4 @@ Symbol: kalmanFilter_asm
       At line 49 in file kalmanFilterTest.s
 Comment: kalmanFilter_asm used once
 3 symbols
-341 symbols in table
+342 symbols in table
