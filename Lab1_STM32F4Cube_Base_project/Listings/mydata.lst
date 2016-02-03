@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 
 
@@ -78,6 +79,86 @@ Symbol: myData
 Comment: myData unused
 3 symbols
 337 symbols in table
+=======
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000                 AREA             myData, DATA, READWRITE
+    2 00000000                 export           datai
+    3 00000000                 export           datao
+    4 00000000                 ALIGN
+    5 00000000 00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00    datai   SPACE            32          ; specifies the num
+                                                            ber of bytes of spa
+                                                            ce required to stor
+                                                            e input data 8*4
+    6 00000020 00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00    datao   SPACE            32          ; specifies the num
+                                                            ber of bytes of spa
+                                                            ce required to stor
+                                                            e output data 8*4
+    7 00000040                 END
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
+erwork --depend=.\objects\mydata.d -o.\objects\mydata.o -I\\psf\Home\Documents\
+workspace\ecse426\git\Lab1_STM32F4Cube_Base_project\RTE -IC:\Keil_v5\ARM\PACK\A
+RM\CMSIS\4.5.0\CMSIS\Include -IC:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.7.0\Dri
+vers\CMSIS\Device\ST\STM32F4xx\Include --predefine="__EVAL SETA 1" --predefine=
+"__UVISION_VERSION SETA 517" --predefine="_RTE_ SETA 1" --predefine="STM32F407x
+x SETA 1" --list=.\listings\mydata.lst myData.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+datai 00000000
+
+Symbol: datai
+   Definitions
+      At line 5 in file myData.s
+   Uses
+      At line 2 in file myData.s
+Comment: datai used once
+datao 00000020
+
+Symbol: datao
+   Definitions
+      At line 6 in file myData.s
+   Uses
+      At line 3 in file myData.s
+Comment: datao used once
+myData 00000000
+
+Symbol: myData
+   Definitions
+      At line 1 in file myData.s
+   Uses
+      None
+Comment: myData unused
+3 symbols
+337 symbols in table
+>>>>>>> 79ba520d274295a40a1a1dce4fc6e0d643e145f4
 =======
 
 

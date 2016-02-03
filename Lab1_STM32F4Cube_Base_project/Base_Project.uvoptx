@@ -198,6 +198,7 @@
           <Filename>\psf\Home\Documents\workspace\ecse426\git\Lab1_STM32F4Cube_Base_project\RTE\Device\STM32F407VGTx\startup_stm32f407xx.s</Filename>
           <ExecCommand></ExecCommand>
           <Expression>\\Base_Project\RTE/Device/STM32F407VGTx/startup_stm32f407xx.s\200</Expression>
+<<<<<<< HEAD
         </Bp>
         <Bp>
           <Number>6</Number>
@@ -214,6 +215,8 @@
           <Filename>.\kalmanfilter_asm.s</Filename>
           <ExecCommand></ExecCommand>
           <Expression></Expression>
+=======
+>>>>>>> 79ba520d274295a40a1a1dce4fc6e0d643e145f4
         </Bp>
       </Breakpoint>
       <MemoryWindow1>
