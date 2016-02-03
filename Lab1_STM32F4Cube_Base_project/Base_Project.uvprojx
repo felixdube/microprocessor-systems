@@ -10,6 +10,7 @@
       <TargetName>Lab 1</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
+      <pCCUsed>5060061::V5.06 update 1 (build 61)::ARMCC</pCCUsed>
       <TargetOption>
         <TargetCommonOption>
           <Device>STM32F407VGTx</Device>
@@ -229,6 +230,7 @@
             <useUlib>0</useUlib>
             <EndSel>0</EndSel>
             <uLtcg>0</uLtcg>
+            <nSecure>0</nSecure>
             <RoSelD>3</RoSelD>
             <RwSelD>3</RwSelD>
             <CodeSel>0</CodeSel>
@@ -365,6 +367,8 @@
             <useXO>0</useXO>
             <v6Lang>0</v6Lang>
             <v6LangP>0</v6LangP>
+            <vShortEn>0</vShortEn>
+            <vShortWch>0</vShortWch>
             <VariousControls>
               <MiscControls></MiscControls>
               <Define>HSE_VALUE=8000000, STM32F407xx, ARM_MATH_CM4, __FPU_PRESENT = 1</Define>
@@ -428,11 +432,6 @@
               <FilePath>.\kalmanfilter_asm.s</FilePath>
             </File>
             <File>
-              <FileName>kalmanFilterState.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\kalmanFilterState.c</FilePath>
-            </File>
-            <File>
               <FileName>kalmanFilterTest.s</FileName>
               <FileType>2</FileType>
               <FilePath>.\kalmanFilterTest.s</FilePath>
@@ -441,6 +440,11 @@
               <FileName>KalmanFilter.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\KalmanFilter.c</FilePath>
+            </File>
+            <File>
+              <FileName>main.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\main.c</FilePath>
             </File>
           </Files>
         </Group>

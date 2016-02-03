@@ -186,6 +186,7 @@ Reset_Handler    PROC
                  EXPORT  Reset_Handler             [WEAK]
          ;IMPORT  SystemInit
 				 IMPORT  kalmanFilterTestbench
+				 IMPORT  main
 				 ;IMPORT  kalmanfilter
 				 LDR.W R0, =0xE000ED88
 				 LDR R1, [R0]
@@ -194,7 +195,7 @@ Reset_Handler    PROC
 				 DSB
 				 ISB
          ;LDR     R0, =SystemInit			 
-				 LDR	   R0, =kalmanFilterTestbench
+				 LDR	   R0, =main;kalmanFilterTestbench
          BLX     R0
 				 NOP
          ENDP
