@@ -1,0 +1,130 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000         ; should verify if all the calculations are like the pse
+                       udo-code
+    2 00000000         
+    3 00000000                 AREA             text, CODE, READONLY
+    4 00000000                 EXPORT           kalmanFilter_asm
+    5 00000000         kalmanFilter_asm
+    6 00000000         ;R0 pointer to input array
+    7 00000000         ;R1 pointer to filtered data
+    8 00000000         ;R2 array's length
+    9 00000000         ;R3 pointer to kalmen filter state
+   10 00000000         ;POP {R3}
+   11 00000000         ;LDR R7, =instance1
+   12 00000000         
+   13 00000000         ;initialize R6 at 0
+   14 00000000 F04F 0600       MOV              R6, #0      ;counter of input a
+                                                            rray element's filt
+                                                            ered
+   15 00000004         ;adjustment to the stack pointer
+   16 00000004         ;SUB SP, SP, #18
+   17 00000004         
+   18 00000004         ;load filter state data
+   19 00000004 ED90 0A00       VLDR.f32         S0, [R0]    ;measurement/ initi
+                                                            al value
+   20 00000008 EDD3 0A00       VLDR.f32         S1, [R3]    ;noise covariance q
+                                                            
+   21 0000000C ED93 1A01       VLDR.f32         S2, [R3, #4] 
+                                                            ;noise covariance r
+                                                            
+   22 00000010 EDD3 1A02       VLDR.f32         S3, [R3, #8] ;estimated value x
+                                                            
+   23 00000014 ED93 2A03       VLDR.f32         S4, [R3, #12] ;estimation error
+                                                             covariance p
+   24 00000018 EDD3 2A04       VLDR.f32         S5, [R3, #16] ;adaptive kalman 
+                                                            filter k
+   25 0000001C         ; S6 scratch register
+   26 0000001C         
+   27 0000001C         
+   28 0000001C         
+   29 0000001C         
+   30 0000001C         loop
+   31 0000001C         ;P = P + Q
+   32 0000001C EE32 2A20       VADD.f32         S4, S4, S1
+   33 00000020         
+   34 00000020         ; maybe can optimise
+   35 00000020         ;also check if we have to use updated p or initial p
+   36 00000020         ;k = p/ (p + r)
+   37 00000020 EE32 3A01       VADD.f32         S6, S4, S2
+   38 00000024 EEC2 2A03       VDIV.f32         S5, S4, S6
+   39 00000028         
+   40 00000028         ;x = x + k * (measurement - x)
+   41 00000028 EE30 3A61       VSUB.f32         S6, S0, S3
+   42 0000002C EE23 3A22       VMUL.f32         S6, S6, S5
+   43 00000030 EE71 1A83       VADD.f32         S3, S3, S6  ;simplyfied these t
+                                                            wo with one command
+                                                            
+   44 00000034         ;VMLA.F32 S3, S5, S6 ; multiply and accumulate into x
+   45 00000034         
+   46 00000034         ;p = (1 - k) * p = p-pk
+   47 00000034 EEF7 3A00       VLDR.f32         S7, =1.0
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+   48 00000038 EE33 3AE2       VSUB.f32         S6, S7, S5
+   49 0000003C EE22 2A03       VMUL.f32         S4, S4, S6
+   50 00000040         ;VLMS.f32 S4, S4, S5
+   51 00000040         
+   52 00000040         ;store the output
+   53 00000040 EDC1 1A00       VSTR.f32         S3, [R1]
+   54 00000044 F101 0104       ADD              R1, R1, #4
+   55 00000048 F100 0004       ADD              R0, R0, #4
+   56 0000004C         
+   57 0000004C         ;update counter
+   58 0000004C F106 0601       ADD              R6, R6, #1
+   59 00000050         
+   60 00000050         ;check if all the data has been filtered
+   61 00000050 42B2            CMP              R2, R6
+   62 00000052 D1E3            BNE              loop
+   63 00000054         
+   64 00000054         
+   65 00000054         
+   66 00000054 4770            BX               LR
+   67 00000056                 END
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
+erwork --depend=.\objects\kalmanfilter_asm.d -o.\objects\kalmanfilter_asm.o -IP
+:\microprocessor-systems\Lab1_STM32F4Cube_Base_project\RTE -IC:\Keil_v5\ARM\PAC
+K\ARM\CMSIS\4.5.0\CMSIS\Include -IC:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.7.0\
+Drivers\CMSIS\Device\ST\STM32F4xx\Include --predefine="__UVISION_VERSION SETA 5
+15" --predefine="_RTE_ SETA 1" --predefine="STM32F407xx SETA 1" --list=.\listin
+gs\kalmanfilter_asm.lst kalmanfilter_asm.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+kalmanFilter_asm 00000000
+
+Symbol: kalmanFilter_asm
+   Definitions
+      At line 5 in file kalmanfilter_asm.s
+   Uses
+      At line 4 in file kalmanfilter_asm.s
+Comment: kalmanFilter_asm used once
+loop 0000001C
+
+Symbol: loop
+   Definitions
+      At line 30 in file kalmanfilter_asm.s
+   Uses
+      At line 62 in file kalmanfilter_asm.s
+Comment: loop used once
+text 00000000
+
+Symbol: text
+   Definitions
+      At line 3 in file kalmanfilter_asm.s
+   Uses
+      None
+Comment: text unused
+3 symbols
+337 symbols in table
