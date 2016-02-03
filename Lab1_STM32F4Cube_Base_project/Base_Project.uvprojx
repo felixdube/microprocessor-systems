@@ -432,11 +432,6 @@
               <FilePath>.\kalmanfilter_asm.s</FilePath>
             </File>
             <File>
-              <FileName>kalmanFilterState.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\kalmanFilterState.c</FilePath>
-            </File>
-            <File>
               <FileName>kalmanFilterTest.s</FileName>
               <FileType>2</FileType>
               <FilePath>.\kalmanFilterTest.s</FilePath>
@@ -445,6 +440,11 @@
               <FileName>KalmanFilter.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\KalmanFilter.c</FilePath>
+            </File>
+            <File>
+              <FileName>main.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\main.c</FilePath>
             </File>
           </Files>
         </Group>
