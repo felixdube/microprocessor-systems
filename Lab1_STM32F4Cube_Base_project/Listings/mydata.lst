@@ -38,12 +38,13 @@ ARM Macro Assembler    Page 1
                                                             e output data 8*4
     7 00000040                 END
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
-erwork --depend=.\objects\mydata.d -o.\objects\mydata.o -IP:\microprocessor-sys
-tems\Lab1_STM32F4Cube_Base_project\RTE -IC:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CM
-SIS\Include -IC:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.7.0\Drivers\CMSIS\Device
-\ST\STM32F4xx\Include --predefine="__UVISION_VERSION SETA 515" --predefine="_RT
-E_ SETA 1" --predefine="STM32F407xx SETA 1" --list=.\listings\mydata.lst myData
-.s
+erwork --depend=.\objects\mydata.d -o.\objects\mydata.o -IC:\Users\juan-\Docume
+nts\University\University6\MicroP\Lab_1_team\microprocessor-systems\Lab1_STM32F
+4Cube_Base_project\RTE -IC:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include -IC:
+\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.7.0\Drivers\CMSIS\Device\ST\STM32F4xx\In
+clude --predefine="__EVAL SETA 1" --predefine="__UVISION_VERSION SETA 517" --pr
+edefine="_RTE_ SETA 1" --predefine="STM32F407xx SETA 1" --list=.\listings\mydat
+a.lst myData.s
 
 
 
@@ -75,4 +76,4 @@ Symbol: myData
       None
 Comment: myData unused
 3 symbols
-336 symbols in table
+337 symbols in table
