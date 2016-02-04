@@ -188,14 +188,14 @@
           <Type>0</Type>
           <LineNumber>200</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134219668</Address>
+          <Address>134219720</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>\psf\Home\Documents\workspace\ecse426\git\Lab1_STM32F4Cube_Base_project\RTE\Device\STM32F407VGTx\startup_stm32f407xx.s</Filename>
+          <Filename>RTE\Device\STM32F407VGTx\startup_stm32f407xx.s</Filename>
           <ExecCommand></ExecCommand>
           <Expression>\\Base_Project\RTE/Device/STM32F407VGTx/startup_stm32f407xx.s\200</Expression>
         </Bp>
@@ -239,7 +239,7 @@
         <aLa>0</aLa>
         <aPa1>0</aPa1>
         <AscS4>0</AscS4>
-        <aSer4>1</aSer4>
+        <aSer4>0</aSer4>
         <StkLoc>0</StkLoc>
         <TrcWin>0</TrcWin>
         <newCpu>0</newCpu>
