@@ -7,8 +7,8 @@ extern void kalmanFilter_asm(float* InputArray, float* OutputArray, int Length, 
 
 int main(void) {
 	int i;
-	int const length = 6;
-	float input[] = {-10, 10, -10, 10, -10, 10};
+	int const length = 5;
+	float input[] = {0, 1, 2, 3, 4};
 	float output[length];
 	
 	// output for substraction
@@ -32,10 +32,11 @@ int main(void) {
 	float home_conv[2*length -1];
 	
 	struct kalman_state s = {0.1, 0.1, 0.0, 0.1, 0.0};
-	
-	Kalmanfilter_C(input, output, &s, length);
-//kalmanFilter_asm(input, output, length, &s);
-	
+	int error_code;	
+	error_code = Kalmanfilter_C(input, output, &s, length);
+	printf("Error Code output of Kalman Filter (15 if overflow or NaN, 10 otherwise) :  %d \n", error_code);
+  //kalmanFilter_asm(input, output, length, &s);
+	//printf("%f, ", arm_sub[i]);
 	/*** PART A ***/
 	// substraction
 	printf("---- Substration ----\n");

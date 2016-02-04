@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <math.h>
 #include "KalmanFilter.h"
+#include <fenv.h>
 
 int Kalmanfilter_C(float* InputArray, float* OutputArray, struct kalman_state* kstate, int Length) {
 	int i;
@@ -14,7 +15,8 @@ int Kalmanfilter_C(float* InputArray, float* OutputArray, struct kalman_state* k
 		OutputArray[i] = kstate->x;
 //		printf("%f\n", kstate->x);
 	}
-	return 0;
+	if (fetestexcept(FE_INVALID) || fetestexcept(FE_OVERFLOW)) return 15;
+	else return 10;
 }
 
 void home_sub_f32 (float *inputA, float *inputB, float *output, int length) {
