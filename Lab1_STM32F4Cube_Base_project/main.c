@@ -1,3 +1,11 @@
+/*************************************************************************************/
+// File: main.c
+// Description: Test assembly kalman filter and c kalman filter, and does substraction,
+//							stadard deviation, average, correlation, convolution
+// Date: February, 2016
+// Author: August Lalande, Juan Morency Trudel, Felix Dube
+/*************************************************************************************/
+
 #include <stdlib.h>
 #include <stdio.h>
 #include "KalmanFilter.h"

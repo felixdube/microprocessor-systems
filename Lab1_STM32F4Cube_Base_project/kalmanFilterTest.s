@@ -1,3 +1,11 @@
+;/*************************************************************************************/
+;// File: kalmanFilterTest.s
+;// Description: Testing file for kalmanfiliter_asm.s
+;// Date: February, 2016
+;// Author: August Lalande, Juan Morency Trudel, Felix Dube
+;/*************************************************************************************/
+
+
 	AREA text, CODE, READONLY
 	EXPORT kalmanFilterTestbench
 	IMPORT kalmanFilter_asm

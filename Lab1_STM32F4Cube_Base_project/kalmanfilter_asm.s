@@ -1,3 +1,9 @@
+;/*************************************************************************************/
+;// File: kalmanfilter_asm.s
+;// Description: Implement a 1D kalman filter
+;// Date: February, 2016
+;// Author: August Lalande, Juan Morency Trudel, Felix Dube
+;/*************************************************************************************/
 	
 	AREA text, CODE, READONLY
 	EXPORT kalmanFilter_asm
