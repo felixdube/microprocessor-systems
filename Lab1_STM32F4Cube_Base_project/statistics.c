@@ -50,9 +50,12 @@ void home_correlate_f32 (float *inputA, float *inputB, int length, float *output
 	int i;
 	int j;
 	
-	for (i = 0; i < (2 * length - 1); i++) {
+	for (i = -length + 1; i < length; i++) {
+		output[i + length - 1] = 0;
 		for (j = 0; j < length; j++){
-			output[i] = inputA[j]*inputB[j-i];
+			if (j - i >= 0 && j - i < length) {
+				output[i + length - 1] += inputA[j] * inputB[j - i];
+			}
 		}
 	}
 }
@@ -65,7 +68,7 @@ void home_conv_f32 (float *inputA, float *inputB, int length, float *output) {
 		output[i] = 0;
 		for (j = 0; j < length; j++){
 			if (i - j >= 0 && i - j < length) {
-				output[i] += inputA[j] * inputB[i-j];
+				output[i] += inputA[j] * inputB[i - j];
 			}
 		}
 	}
