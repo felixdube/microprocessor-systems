@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "KalmanFilter.h"
+#include "statistics.h"
 #include "arm_math.h"
 
 extern void kalmanFilter_asm(float* InputArray, float* OutputArray, int Length, struct kalman_state* kstate);

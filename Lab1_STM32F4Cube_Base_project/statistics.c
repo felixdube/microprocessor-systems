@@ -9,7 +9,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
-#include "KalmanFilter.h"
+#include "statistics.h"
 #include <fenv.h>
 
 void home_sub_f32 (float *inputA, float *inputB, float *output, int length) {
@@ -50,7 +50,7 @@ void home_correlate_f32 (float *inputA, float *inputB, int length, float *output
 	int i;
 	int j;
 	
-	for (i = 0; i < (2*length-1); i++) {
+	for (i = 0; i < (2 * length - 1); i++) {
 		for (j = 0; j < length; j++){
 			output[i] = inputA[j]*inputB[j-i];
 		}
@@ -61,9 +61,12 @@ void home_conv_f32 (float *inputA, float *inputB, int length, float *output) {
 	int i;
 	int j;
 	
-	for (i = 0; i < (2*length-1); i++) {
+	for (i = 0; i < (2 * length - 1); i++) {
+		output[i] = 0;
 		for (j = 0; j < length; j++){
-			output[i] = inputA[j]*inputB[i-j];
+			if (i - j >= 0 && i - j < length) {
+				output[i] += inputA[j] * inputB[i-j];
+			}
 		}
 	}
 }
