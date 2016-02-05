@@ -11,13 +11,13 @@
 #include "KalmanFilter.h"
 #include "statistics.h"
 #include "arm_math.h"
+#include "demo.h"
 
-extern void kalmanFilter_asm(float* InputArray, float* OutputArray, int Length, struct kalman_state* kstate);
+extern int kalmanFilter_asm(float* InputArray, float* OutputArray, int Length, struct kalman_state* kstate);
 
 int main(void) {
 	int i;
-	int const length = 5;
-	float input[] = {0, 1, 2, 3, 4};
+	float input[length];
 	float output[length];
 	
 	// output for substraction
@@ -40,73 +40,91 @@ int main(void) {
 	float arm_conv[2*length -1];
 	float home_conv[2*length -1];
 	
-	struct kalman_state s = {0.1, 0.1, 0.0, 0.1, 0.0};
-	int error_code;	
-	error_code = Kalmanfilter_C(input, output, &s, length);
-	printf("Error Code output of Kalman Filter (15 if overflow or NaN, 10 otherwise) :  %d \n", error_code);
-  //kalmanFilter_asm(input, output, length, &s);
-	//printf("%f, ", arm_sub[i]);
-	/*** PART A ***/
-	// substraction
-	printf("---- Substration ----\n");
-	arm_sub_f32(input, output, arm_sub, length);
+	int error_code_C;
+	int error_code_ASM;
+	
+	struct kalman_state s = {DEF_q, DEF_r, DEF_x, DEF_p, DEF_k};
+		
+	for(i = 0; i < length; i++){
+		input[i] = measurements[i];
+	}
+	
+	error_code_ASM = kalmanFilter_asm(input, output, length, &s);
+	printf("Error Code output of Kalman Filter ASM (21 if overflow or NaN, 16 otherwise) :  %d \n", error_code_ASM);
+	printf("---- output for ASM ----\n");
 	for (i = 0; i < length; i++) {
-		printf("%f, ", arm_sub[i]);
+		printf("%f, ", output[i]);
 	}
-	printf("\n");
-	
-	home_sub_f32(input, output, home_sub, length);
+	error_code_C = Kalmanfilter_C(input, output, &s, length);
+	printf("\n\nError Code output of Kalman Filter C (1 if overflow or NaN, 0 otherwise) :  %d \n", error_code_C);
+	printf("---- output for C ----\n");
 	for (i = 0; i < length; i++) {
-		printf("%f, ", home_sub[i]);
+		printf("%f, ", output[i]);
 	}
-	printf("\n");
 	
-	/*** PART B ***/
-	// standard deviation
-	printf("---- Sandard Deviation ----\n");
-	arm_std_f32(arm_sub, length, &arm_std);
-	printf("%f \n", arm_std);
-	
-	home_std_f32(home_sub, length, &home_std);
-	printf("%f \n", home_std);
-	
-	// average
-	printf("---- Average ----\n");
-	arm_mean_f32(arm_sub, length, &arm_mean);
-	printf("%f \n", arm_mean);
-	
-	home_mean_f32(home_sub, length, &home_mean);
-	printf("%f \n", home_mean);
-	
-		/*** PART C ***/
-	// correlation
-	printf("---- Correlation ----\n");
-	arm_correlate_f32(input, length, output, length, arm_cor);
-	for (i = 0; i < (2*length-1) ; i++) {
-		printf("%f, ", arm_cor[i]);
+	if (error_code_ASM == 16 || error_code_C == 1){
+		/*** PART A ***/
+		// substraction
+		printf("\n\n---- Substration ----\n");
+		arm_sub_f32(input, output, arm_sub, length);
+		for (i = 0; i < length; i++) {
+			printf("%f, ", arm_sub[i]);
+		}
+		printf("\n");
+		
+		home_sub_f32(input, output, home_sub, length);
+		for (i = 0; i < length; i++) {
+			printf("%f, ", home_sub[i]);
+		}
+		printf("\n");
+		
+		/*** PART B ***/
+		// standard deviation
+		printf("\n---- Sandard Deviation ----\n");
+		arm_std_f32(arm_sub, length, &arm_std);
+		printf("%f \n", arm_std);
+		
+		home_std_f32(home_sub, length, &home_std);
+		printf("%f \n", home_std);
+		
+		// average
+		printf("\n---- Average ----\n");
+		arm_mean_f32(arm_sub, length, &arm_mean);
+		printf("%f \n", arm_mean);
+		
+		home_mean_f32(home_sub, length, &home_mean);
+		printf("%f \n", home_mean);
+		
+			/*** PART C ***/
+		// correlation
+		printf("\n---- Correlation ----\n");
+		arm_correlate_f32(input, length, output, length, arm_cor);
+		for (i = 0; i < (2*length-1) ; i++) {
+			printf("%f, ", arm_cor[i]);
+		}
+		printf("\n");
+		
+		home_correlate_f32(input, output, length, home_cor);
+		for (i = 0; i < (2*length-1) ; i++) {
+			printf("%f, ", home_cor[i]);
+		}
+		printf("\n");
+		
+		/*** PART D ***/
+		// convolution
+		printf("\n---- Convolution ----\n");
+		arm_conv_f32(input, length, output, length, arm_conv);
+		for (i = 0; i < (2*length-1) ; i++) {
+			printf("%f, ", arm_conv[i]);
+		}
+		printf("\n");
+		
+		home_conv_f32(input, output, length, home_conv);
+		for (i = 0; i < (2*length-1) ; i++) {
+			printf("%f, ", home_conv[i]);
+		}
+		printf("\n");
+		
+		return 0;
 	}
-	printf("\n");
-	
-	home_correlate_f32(input, output, length, home_cor);
-	for (i = 0; i < (2*length-1) ; i++) {
-		printf("%f, ", home_cor[i]);
-	}
-	printf("\n");
-	
-	/*** PART D ***/
-	// convolution
-	printf("---- Convolution ----\n");
-	arm_conv_f32(input, length, output, length, arm_conv);
-	for (i = 0; i < (2*length-1) ; i++) {
-		printf("%f, ", arm_conv[i]);
-	}
-	printf("\n");
-	
-	home_conv_f32(input, output, length, home_conv);
-	for (i = 0; i < (2*length-1) ; i++) {
-		printf("%f, ", home_conv[i]);
-	}
-	printf("\n");
-	
-	return 0;
 }

@@ -23,5 +23,5 @@ int Kalmanfilter_C(float* InputArray, float* OutputArray, struct kalman_state* k
 //		printf("%f\n", kstate->x);
 	}
 	if (fetestexcept(FE_INVALID) || fetestexcept(FE_OVERFLOW)) return 15;
-	else return 10;
+	else return 0;
 }

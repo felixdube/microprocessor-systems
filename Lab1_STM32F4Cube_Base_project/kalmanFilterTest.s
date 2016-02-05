@@ -24,6 +24,7 @@ kalmanFilterTestbench
 	VLDR.f32 S3, =3.4028235E38
 	VLDR.f32 S4, =-3.4028235E38
 	VSTM.f32 R0, {S0-S4}
+	
 
 	
 	;number of element in the input array

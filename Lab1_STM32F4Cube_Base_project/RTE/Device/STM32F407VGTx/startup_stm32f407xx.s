@@ -184,21 +184,23 @@ __Vectors_Size  EQU  __Vectors_End - __Vectors
 ; Reset handler
 Reset_Handler    PROC
                  EXPORT  Reset_Handler             [WEAK]
-         ;IMPORT  SystemInit
+				 ;IMPORT  SystemInit
 				 IMPORT  kalmanFilterTestbench
 				 IMPORT  main
-				 ;IMPORT  kalmanfilter
+				 IMPORT  kalmanFilterTestbench
 				 LDR.W R0, =0xE000ED88
 				 LDR R1, [R0]
 				 ORR R1, R1, #(0xF << 20)
 				 STR R1, [R0]
 				 DSB
 				 ISB
-         ;LDR     R0, =SystemInit			 
-				 LDR	   R0, =main;kalmanFilterTestbench
-         BLX     R0
+				;LDR     R0, =SystemInit			 
+				 ;LDR R0, =kalmanFilterTestbench
+				 ;BLX R0
+				LDR R0, =main
+				BLX R0
 				 NOP
-         ENDP
+				 ENDP
 
 ; Dummy Exception Handlers (infinite loops which can be modified)
 
