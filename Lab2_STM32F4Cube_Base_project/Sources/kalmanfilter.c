@@ -26,6 +26,7 @@ int kalmanUpdate(kalmanState* kstate, float input) {
 	kstate->x += kstate->k * (input - kstate->x);
 	kstate->p = (1 - kstate->k) * kstate->p;
 	
-	if (fetestexcept(FE_INVALID) || fetestexcept(FE_OVERFLOW)) return 15;
-	else return 0;
+	//if (fetestexcept(FE_INVALID) || fetestexcept(FE_OVERFLOW)) return 15;
+	//else return 0;
+	return 0;
 }

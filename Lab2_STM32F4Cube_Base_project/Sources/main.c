@@ -11,11 +11,21 @@
 	
 	
 /* Includes ------------------------------------------------------------------*/
+#include <stdlib.h>
+
 #include "stm32f4xx_hal.h"
 #include "supporting_functions.h"
+#include "kalmanfilter.h"
+#include "temperature.h"
+#include "main.h"
 
 /* Private variables ---------------------------------------------------------*/
+float adc_val = 0;
+float temp = 0;
+kalmanState *adcState; 
 
+/* Global variables ----------------------------------------------------------*/
+volatile int sysTick = 0;
 
 /* Definition of ADC handle struct */
 ADC_HandleTypeDef ADC1_Handle;
@@ -37,11 +47,25 @@ int main(void)
 	/* configure ADC1 */
 	ADC1_Config();
 	
+	/* Init Kalman Filter */
+	adcState = malloc(sizeof(kalmanState));
+	kalmanInit(adcState, 0.1, 0.1, 1024, 0.1, 0);
+	
 	while (1){
-		
-		//testing ADC
-		HAL_ADC_PollForConversion(&ADC1_Handle, 0x0100);
-		printf("%i\n",HAL_ADC_GetValue(&ADC1_Handle));
+		if (sysTick) {
+			HAL_ADC_Start(&ADC1_Handle);
+			if (HAL_ADC_PollForConversion(&ADC1_Handle, 1000000) == HAL_OK) {
+				adc_val = HAL_ADC_GetValue(&ADC1_Handle);
+				printf("\nadc: %f", adc_val);
+				kalmanUpdate(adcState, adc_val);
+				printf("\nkstate: %f", adcState->x);
+				temp = convertTemp(adcState->x);
+				printf("\ntemp: %f", temp);
+				
+				/* reset sysTick flag */
+				sysTick = 0;
+			}
+		}
 	}
 }
 
@@ -75,7 +99,7 @@ void SystemClock_Config(void){
   if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_5)!= HAL_OK){Error_Handler(RCC_CONFIG_FAIL);};
 	
 	/*Configures SysTick to provide 1ms interval interrupts.*/
-  HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq()/1000);
+  HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq()/100);
 
 	/* This function sets the source clock for the internal SysTick Timer to be the maximum,
 	   in our case, HCLK is now 168MHz*/
@@ -206,7 +230,7 @@ void Display_GPIO_Config(void){
 	sel4.Mode = GPIO_MODE_OUTPUT_PP;	
 	sel4.Pull = GPIO_NOPULL;
 	sel4.Speed = GPIO_SPEED_FREQ_MEDIUM;
-	sel4.Alternate = 
+	//sel4.Alternate = 
 
 	HAL_GPIO_Init(GPIOB, &segA);
 	HAL_GPIO_Init(GPIOB, &segB);
