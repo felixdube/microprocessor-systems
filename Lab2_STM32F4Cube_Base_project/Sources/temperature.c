@@ -7,8 +7,8 @@
 
 #include "temperature.h"
 
-int convertTemp(int adc_output) {
-	float voltage = adc_output / 4096 * VREF;
+float convertTemp(int adc_output) {
+	float voltage = adc_output / 4096.0 * VREF;
 	float temp = 400 * voltage - 279;
 	return temp;
 }
