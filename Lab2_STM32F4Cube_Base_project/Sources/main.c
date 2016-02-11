@@ -17,6 +17,7 @@
 #include "supporting_functions.h"
 #include "kalmanfilter.h"
 #include "temperature.h"
+#include "segment_controller.h"
 #include "main.h"
 
 /* Private variables ---------------------------------------------------------*/
@@ -46,6 +47,9 @@ int main(void)
 	
 	/* configure ADC1 */
 	ADC1_Config();
+	
+	/* Configure 7-Segment Displays */
+	//Display_GPIO_Config();
 	
 	/* Init Kalman Filter */
 	adcState = malloc(sizeof(kalmanState));
@@ -126,126 +130,6 @@ void SystemClock_Config(void){
 void assert_failed(uint8_t* file, uint32_t line){
 }
 #endif
-
-
-/* GPIO configuration */
-void Display_GPIO_Config(void){
-	
-	/* definition of GPIO pins */
-	GPIO_InitTypeDef segA;
-	GPIO_InitTypeDef segB;
-	GPIO_InitTypeDef segC;
-	GPIO_InitTypeDef segD;
-	GPIO_InitTypeDef segE;
-	GPIO_InitTypeDef segF;
-	GPIO_InitTypeDef segG;
-	GPIO_InitTypeDef segDP;
-	GPIO_InitTypeDef sel1;
-	GPIO_InitTypeDef sel2;
-	GPIO_InitTypeDef sel3;
-	GPIO_InitTypeDef sel4;
-	
-	/* Configure the GPIO clock */
-	__HAL_RCC_GPIOB_CLK_ENABLE();
-	
-	/* initialisation of segA */
-	segA.Pin = 
-	segA.Mode = GPIO_MODE_OUTPUT_PP;												// push-pull
-	segA.Pull = GPIO_NOPULL;
-	segA.Speed = GPIO_SPEED_FREQ_MEDIUM;										// max frequency for our processor is 84MHz
-	segA.Alternate = 
-	
-	/* initialisation of segB */
-	segB.Pin = 
-	segB.Mode = GPIO_MODE_OUTPUT_PP;	
-	segB.Pull = GPIO_NOPULL;
-	segB.Speed = GPIO_SPEED_FREQ_MEDIUM;
-	segB.Alternate = 
-
-	/* initialisation of segC */
-	segC.Pin = 
-	segC.Mode = GPIO_MODE_OUTPUT_PP;	
-	segC.Pull = GPIO_NOPULL;
-	segC.Speed = GPIO_SPEED_FREQ_MEDIUM;
-	segC.Alternate = 
-
-	/* initialisation of segD */
-	segD.Pin = 
-	segD.Mode = GPIO_MODE_OUTPUT_PP;	
-	segD.Pull = GPIO_NOPULL;
-	segD.Speed = GPIO_SPEED_FREQ_MEDIUM;
-	segD.Alternate = 
-
-	/* initialisation of segE */
-	segE.Pin = 
-	segE.Mode = GPIO_MODE_OUTPUT_PP;	
-	segE.Pull = GPIO_NOPULL;
-	segE.Speed = GPIO_SPEED_FREQ_MEDIUM;
-	segE.Alternate = 
-
-	/* initialisation of segF */
-	segF.Pin = 
-	segF.Mode = GPIO_MODE_OUTPUT_PP;	
-	segF.Pull = GPIO_NOPULL;
-	segF.Speed = GPIO_SPEED_FREQ_MEDIUM;
-	segF.Alternate = 
-
-	/* initialisation of segG */
-	segG.Pin = 
-	segG.Mode = GPIO_MODE_OUTPUT_PP;	
-	segG.Pull = GPIO_NOPULL;
-	segG.Speed = GPIO_SPEED_FREQ_MEDIUM;
-	segG.Alternate = 
-
-	/* initialisation of segDP */
-	segDP.Pin = 
-	segDP.Mode = GPIO_MODE_OUTPUT_PP;	
-	segDP.Pull = GPIO_NOPULL;
-	segDP.Speed = GPIO_SPEED_FREQ_MEDIUM;
-	segDP.Alternate = 
-
-	/* initialisation of sel1 */
-	sel1.Pin = 
-	sel1.Mode = GPIO_MODE_OUTPUT_PP;	
-	sel1.Pull = GPIO_NOPULL;
-	sel1.Speed = GPIO_SPEED_FREQ_MEDIUM;
-	sel1.Alternate = 
-
-	/* initialisation of sel2 */
-	sel2.Pin = 
-	sel2.Mode = GPIO_MODE_OUTPUT_PP;	
-	sel2.Pull = GPIO_NOPULL;
-	sel2.Speed = GPIO_SPEED_FREQ_MEDIUM;
-	sel2.Alternate = 
-
-	/* initialisation of sel3 */
-	sel3.Pin = 
-	sel3.Mode = GPIO_MODE_OUTPUT_PP;	
-	sel3.Pull = GPIO_NOPULL;
-	sel3.Speed = GPIO_SPEED_FREQ_MEDIUM;
-	sel3.Alternate = 
-
-	/* initialisation of sel4 */
-	sel4.Pin = 
-	sel4.Mode = GPIO_MODE_OUTPUT_PP;	
-	sel4.Pull = GPIO_NOPULL;
-	sel4.Speed = GPIO_SPEED_FREQ_MEDIUM;
-	//sel4.Alternate = 
-
-	HAL_GPIO_Init(GPIOB, &segA);
-	HAL_GPIO_Init(GPIOB, &segB);
-	HAL_GPIO_Init(GPIOB, &segC);
-	HAL_GPIO_Init(GPIOB, &segD);
-	HAL_GPIO_Init(GPIOB, &segE);
-	HAL_GPIO_Init(GPIOB, &segF);
-	HAL_GPIO_Init(GPIOB, &segG);
-	HAL_GPIO_Init(GPIOB, &segDP);
-	HAL_GPIO_Init(GPIOB, &sel1);
-	HAL_GPIO_Init(GPIOB, &sel2);
-	HAL_GPIO_Init(GPIOB, &sel3);
-	HAL_GPIO_Init(GPIOB, &sel4);
-	
-}
 
 /* ADC1 configuration */
 void ADC1_Config(void){

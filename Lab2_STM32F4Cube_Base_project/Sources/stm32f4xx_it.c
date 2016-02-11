@@ -39,6 +39,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "segment_controller.h"
 #include "stm32f4xx_it.h"
 
 /** @addtogroup STM32F4xx_HAL_Examples
@@ -156,6 +157,7 @@ void PendSV_Handler(void)
 void SysTick_Handler(void)
 {
 	sysTick = 1;
+	//displayTick = (displayTick + 1) % 4;
 	HAL_IncTick();
 }
 

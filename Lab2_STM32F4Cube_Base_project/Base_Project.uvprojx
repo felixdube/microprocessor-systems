@@ -443,6 +443,11 @@
               <FileType>1</FileType>
               <FilePath>.\Sources\kalmanfilter.c</FilePath>
             </File>
+            <File>
+              <FileName>segment_controller.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\segment_controller.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
