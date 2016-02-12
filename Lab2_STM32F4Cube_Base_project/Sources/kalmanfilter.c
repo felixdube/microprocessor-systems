@@ -1,9 +1,13 @@
-/*************************************************************************************/
-// File: kalmanfilter.c
-// Description: Implement a 1D kalman filter
-// Date: February, 2016
-// Author: August Lalande, Juan Morency Trudel, Felix Dube
-/*************************************************************************************/
+/**
+  ******************************************************************************
+  * File Name          : kalmanfilter.c
+  * Description        : Implement a 1D kalman filter
+	* Author						 : Auguste Lalande, Felix Dube, Juan Morency Trudel
+	* Version            : 1.0.0
+	* Date							 : February, 2016
+  ******************************************************************************
+  */
+	
 
 #include <stdlib.h>
 #include <stdio.h>

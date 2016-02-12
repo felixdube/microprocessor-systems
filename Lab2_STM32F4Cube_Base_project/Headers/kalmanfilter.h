@@ -1,3 +1,14 @@
+/**
+  ******************************************************************************
+  * File Name          : kalmanfilter.h
+  * Description        : Implement a 1D kalman filter
+	* Author						 : Auguste Lalande, Felix Dube, Juan Morency Trudel
+	* Version            : 1.0.0
+	* Date							 : February, 2016
+  ******************************************************************************
+  */
+	
+
 #ifndef KALMANFILTER_H
 #define KALMANFILTER_H
 

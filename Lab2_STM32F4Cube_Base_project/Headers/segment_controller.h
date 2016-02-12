@@ -1,3 +1,14 @@
+/**
+  ******************************************************************************
+  * File Name          : segment_controller.h
+  * Description        : Allow to display numbers on 4 7-segments displays
+	* Author						 : Auguste Lalande, Felix Dube, Juan Morency Trudel
+	* Version            : 1.0.0
+	* Date							 : February, 2016
+  ******************************************************************************
+  */
+	
+	
 //#ifndef SEGMENT_CONTROLLER_H
 //#define SEGMENT_CONTROLLER_H
 
