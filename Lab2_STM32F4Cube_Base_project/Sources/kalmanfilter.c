@@ -16,6 +16,16 @@
 
 #include "kalmanfilter.h"
 
+
+/**
+	* @brief Initialize the kalman filter
+	* @param q: Process noise covariance
+	* @param r: Measurement noise covariance
+	* @param x: Estimated value
+	* @param p: Estimation error cavariance
+	* @param k: Adaptive kalman filter gain
+	* @retval None
+	*/
 void kalmanInit(kalmanState* kstate, float q, float r, float x, float p, float k) {
 	kstate->q = q;
 	kstate->r = r;
@@ -24,13 +34,16 @@ void kalmanInit(kalmanState* kstate, float q, float r, float x, float p, float k
 	kstate->k = k;
 }
 
-int kalmanUpdate(kalmanState* kstate, float input) {
+/**
+	* @brief Update the kalman state and filter measured value
+	* @param kstate: state of the kalman filter
+	* @retval None
+	*/
+void kalmanUpdate(kalmanState* kstate, float input) {
 	kstate->p += kstate->q;
 	kstate->k = kstate->p / (kstate->p + kstate->r);
 	kstate->x += kstate->k * (input - kstate->x);
 	kstate->p = (1 - kstate->k) * kstate->p;
 	
-	//if (fetestexcept(FE_INVALID) || fetestexcept(FE_OVERFLOW)) return 15;
-	//else return 0;
-	return 0;
+	return;
 }
