@@ -21,6 +21,6 @@ typedef struct kalmanState {
 } kalmanState;
 
 void kalmanInit(kalmanState* kstate, float q, float r, float x, float p, float k);
-int kalmanUpdate(kalmanState* kstate, float input);
+void kalmanUpdate(kalmanState* kstate, float input);
 
 #endif

@@ -17,7 +17,7 @@
 #include "supporting_functions.h"
 #include "kalmanfilter.h"
 #include "temperature.h"
-#include "segment_controller.h"
+//#include "segment_controller.h"
 #include "main.h"
 
 /* Private variables ---------------------------------------------------------*/
@@ -65,6 +65,8 @@ int main(void)
 				printf("\nkstate: %f", adcState->x);
 				temp = convertTemp(adcState->x);
 				printf("\ntemp: %f", temp);
+				
+//				display(temp);
 				
 				/* reset sysTick flag */
 				sysTick = 0;
