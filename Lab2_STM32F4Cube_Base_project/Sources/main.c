@@ -17,7 +17,7 @@
 #include "supporting_functions.h"
 #include "kalmanfilter.h"
 #include "temperature.h"
-//#include "segment_controller.h"
+#include "segment_controller.h"
 #include "main.h"
 
 /* Private variables ---------------------------------------------------------*/
@@ -49,7 +49,7 @@ int main(void)
 	ADC1_Config();
 	
 	/* Configure 7-Segment Displays */
-	//Display_GPIO_Config();
+	Display_GPIO_Config();
 	
 	/* Init Kalman Filter */
 	adcState = malloc(sizeof(kalmanState));
@@ -60,13 +60,13 @@ int main(void)
 			HAL_ADC_Start(&ADC1_Handle);
 			if (HAL_ADC_PollForConversion(&ADC1_Handle, 1000000) == HAL_OK) {
 				adc_val = HAL_ADC_GetValue(&ADC1_Handle);
-				printf("\nadc: %f", adc_val);
+			//	printf("\nadc: %f", adc_val);
 				kalmanUpdate(adcState, adc_val);
-				printf("\nkstate: %f", adcState->x);
+			//	printf("\nkstate: %f", adcState->x);
 				temp = convertTemp(adcState->x);
-				printf("\ntemp: %f", temp);
+			//	printf("\ntemp: %f", temp);
 				
-//				display(temp);
+				display(temp);
 				
 				/* reset sysTick flag */
 				sysTick = 0;

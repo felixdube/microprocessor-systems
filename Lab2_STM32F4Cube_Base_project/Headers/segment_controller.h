@@ -42,8 +42,6 @@
 
 extern volatile int displayTick;
 
-const int patterns[10][7] = {ZERO, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE};
-const int segments[7] = {segA, segB, segC, segD, segE, segF, segG};
 
 void display(float value);
 int getDigit(float value, int place);

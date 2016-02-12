@@ -8,10 +8,12 @@
   ******************************************************************************
   */
 
-//#include "stm32f4xx_hal.h"
+#include "stm32f4xx_hal.h"
 #include "segment_controller.h"
 
 volatile int displayTick = 0;
+int patterns[10][7] = {ZERO, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE};
+int segments[7] = {segA, segB, segC, segD, segE, segF, segG};
 
 /* GPIO configuration */
 void Display_GPIO_Config(void) {
@@ -39,7 +41,7 @@ void Display_GPIO_Config(void) {
 	* @retval None
 	*/
 void display(float value) {
-	int number = getDigit(value, displayTick);
+	int number = getDigit(23.8, displayTick);
 	setPins(number);
 }
 
@@ -71,10 +73,29 @@ int getDigit(float value, int place) {
 	* @retval None
 	*/
 void setPins(int number) {
-	int pattern[7];
+	int *pattern;
 	int i;
-	*pattern	= *patterns[number];
-		
+	uint16_t displayPin;
+	pattern = patterns[number];
+	for (i = 0; i< 7; i++){
+		printf("%i", pattern[i]);
+	}
+	printf("\n");
+	
+	switch (displayTick) {
+		case 0:
+			displayPin = sel1;
+			break;
+		case 1:
+			displayPin = sel2;
+			break;
+		case 2:
+			displayPin = sel3;
+			break;
+	}
+	
+	HAL_GPIO_WritePin(GPIOB, displayPin, GPIO_PIN_SET);
+	
 	for (i = 0; i < 8; i++) {
 		if (pattern[i] == 1) {
 			HAL_GPIO_WritePin(GPIOB, segments[i], GPIO_PIN_SET);
@@ -82,4 +103,7 @@ void setPins(int number) {
 			HAL_GPIO_WritePin(GPIOB, segments[i], GPIO_PIN_RESET);
 		}
 	}
+	HAL_Delay(1);
+	HAL_GPIO_WritePin(GPIOB, displayPin, GPIO_PIN_RESET);
+
 }
