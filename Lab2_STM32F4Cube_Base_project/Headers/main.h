@@ -44,7 +44,7 @@
 
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
-extern volatile int sysTick;
+extern volatile int adcTick;
 extern volatile int displayTimer;
 /* Exported macro ------------------------------------------------------------*/
 #define ABS(a) (a < 0 ? -a : a)

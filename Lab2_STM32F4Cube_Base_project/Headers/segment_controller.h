@@ -14,7 +14,6 @@
 
 #include "stm32f4xx_hal.h"
 #include <stdint.h>
-#include "stm32f4xx_hal_gpio.h"
 
 #define segA GPIO_PIN_0
 #define segB GPIO_PIN_1

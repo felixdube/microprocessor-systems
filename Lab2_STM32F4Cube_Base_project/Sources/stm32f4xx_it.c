@@ -39,6 +39,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "alarm.h"
 #include "stm32f4xx_it.h"
 
 /** @addtogroup STM32F4xx_HAL_Examples
@@ -155,8 +156,9 @@ void PendSV_Handler(void)
   */
 void SysTick_Handler(void)
 {
-	sysTick = 1;
+	adcTick = 1;
 	displayTimer++;
+	alarmTick = (alarmTick + 1) % 100;
 	HAL_IncTick();
 }
 

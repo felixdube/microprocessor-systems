@@ -20,7 +20,7 @@ void Display_GPIO_Config(void) {
 	//Initialize struct
 	GPIO_InitTypeDef GPIO_InitDef;
 	
-	//Enable clock for GPOIG
+	//Enable clock for GPOIB
 	__HAL_RCC_GPIOB_CLK_ENABLE();
 	 
 	//All will have same mode
@@ -101,6 +101,5 @@ void setPins(int digit) {
 			HAL_GPIO_WritePin(GPIOB, segments[i], GPIO_PIN_RESET);
 		}
 	}
-	//HAL_Delay(1);
 	HAL_GPIO_WritePin(GPIOB, displayPin, GPIO_PIN_RESET);
 }

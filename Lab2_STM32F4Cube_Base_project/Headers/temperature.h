@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * File Name          : temperature.c
+  * File Name          : temperature.h
   * Description        : Implement methods for working with the internal temperature sensor
 	* Author						 : Auguste Lalande, Felix Dube, Juan Morency Trudel
 	* Version            : 1.0.0

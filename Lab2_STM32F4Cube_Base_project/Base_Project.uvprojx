@@ -448,6 +448,11 @@
               <FileType>1</FileType>
               <FilePath>.\Sources\segment_controller.c</FilePath>
             </File>
+            <File>
+              <FileName>alarm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\alarm.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
