@@ -11,7 +11,7 @@
 #ifndef TEMPERATURE_H
 #define TEMPERATURE_H
 
-#define VREF 3.0
+#define VREF 3.3
 
 float convertTemp(int adc_output);
 
