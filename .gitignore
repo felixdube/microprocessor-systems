@@ -7,3 +7,6 @@
 
 #guix files
 *.uvguix.*
+
+#zip files, in case of accident
+*.zip

@@ -23,10 +23,12 @@
 /* Private variables ---------------------------------------------------------*/
 float adc_val = 0;
 float temp = 0;
+float displayTemp = 0;
 kalmanState *adcState; 
 
 /* Global variables ----------------------------------------------------------*/
 volatile int sysTick = 0;
+volatile int displayTimer = 0;
 
 /* Definition of ADC handle struct */
 ADC_HandleTypeDef ADC1_Handle;
@@ -38,6 +40,8 @@ void Display_GPIO_Config(void);
 
 int main(void)
 {
+	int i = 0;
+	int delta = 0;
   /* MCU Configuration----------------------------------------------------------*/
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
@@ -57,21 +61,30 @@ int main(void)
 	
 	while (1){
 		if (sysTick) {
-			HAL_ADC_Start(&ADC1_Handle);
-			if (HAL_ADC_PollForConversion(&ADC1_Handle, 1000000) == HAL_OK) {
-				adc_val = HAL_ADC_GetValue(&ADC1_Handle);
-			//	printf("\nadc: %f", adc_val);
-				kalmanUpdate(adcState, adc_val);
-			//	printf("\nkstate: %f", adcState->x);
-				temp = convertTemp(adcState->x);
-			//	printf("\ntemp: %f", temp);
-				
-				display(temp);
+			HAL_ADC_Start(&ADC1_Handle); //make adc start converting data
+			if (HAL_ADC_PollForConversion(&ADC1_Handle, 1000000) == HAL_OK) { //wait until conversion has finished
+				adc_val = HAL_ADC_GetValue(&ADC1_Handle); //get adc data
+				kalmanUpdate(adcState, adc_val); // filter data
+				delta = temp;
+				temp = convertTemp(adcState->x); // convert data to temperature
+				delta -=  temp; // calculate change of temperature since last measure
+				if (ABS(delta) > 1.5) { // if change greater than 1.5C update display
+					displayTemp = temp;
+				} else if (displayTimer >= 100) { // else wait 1sec before updating
+					displayTemp = temp;
+					displayTimer = 0;
+				}
 				
 				/* reset sysTick flag */
 				sysTick = 0;
 			}
 		}
+		i++;
+		if (i >= 100) {
+			displayTick = (displayTick + 1) % 3;
+			i = 0;
+		}
+	  display(displayTemp);
 	}
 }
 

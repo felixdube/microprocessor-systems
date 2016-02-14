@@ -12,8 +12,8 @@
 #include "segment_controller.h"
 
 volatile int displayTick = 0;
-int patterns[10][7] = {ZERO, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE};
-int segments[7] = {segA, segB, segC, segD, segE, segF, segG};
+const int patterns[10][7] = {ZERO, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE};
+const int segments[7] = {segA, segB, segC, segD, segE, segF, segG};
 
 /* GPIO configuration */
 void Display_GPIO_Config(void) {
@@ -24,7 +24,7 @@ void Display_GPIO_Config(void) {
 	__HAL_RCC_GPIOB_CLK_ENABLE();
 	 
 	//All will have same mode
-	GPIO_InitDef.Pin = segA | segB | segC | segD | segE | segF | segG | segDP | sel1 | sel2 | sel3 | sel4;
+	GPIO_InitDef.Pin = segA | segB | segC | segD | segE | segF | segG | segDP | segDegree | sel1 | sel2 | sel3;
 	//Mode output
 	GPIO_InitDef.Mode = GPIO_MODE_OUTPUT_PP;   //push pull
 	//Without pull resistors
@@ -41,8 +41,8 @@ void Display_GPIO_Config(void) {
 	* @retval None
 	*/
 void display(float value) {
-	int number = getDigit(23.8, displayTick);
-	setPins(number);
+	int digit = getDigit(value, displayTick);
+	setPins(digit);
 }
 
 /**
@@ -52,15 +52,13 @@ void display(float value) {
 	* @retval value of the digit
 	*/
 int getDigit(float value, int place) {
-	int tmp = (int) value * 100;
+	int tmp = (int) (value * 10);
 	switch (place) {
 		case 0:
-			return (tmp - tmp % 1000) / 1000;
+			return (tmp - tmp % 100) / 100;
 		case 1:
-			return (tmp % 1000 - tmp % 100) / 100;
-		case 2:
 			return (tmp % 100 - tmp % 10) / 10;
-		case 3:
+		case 2:
 			return tmp % 10;
 		default:
 			return 0;
@@ -72,26 +70,26 @@ int getDigit(float value, int place) {
 	* @param number:
 	* @retval None
 	*/
-void setPins(int number) {
-	int *pattern;
+void setPins(int digit) {
+	const int *pattern;
 	int i;
 	uint16_t displayPin;
-	pattern = patterns[number];
-	for (i = 0; i< 7; i++){
-		printf("%i", pattern[i]);
-	}
-	printf("\n");
+	pattern = patterns[digit];
+	
+	HAL_GPIO_WritePin(GPIOB, segDegree, GPIO_PIN_SET);
 	
 	switch (displayTick) {
 		case 0:
 			displayPin = sel1;
-			break;
+			HAL_GPIO_WritePin(GPIOB, segDP, GPIO_PIN_RESET);
+		break;
 		case 1:
 			displayPin = sel2;
-			break;
+			HAL_GPIO_WritePin(GPIOB, segDP, GPIO_PIN_SET);
+		break;
 		case 2:
 			displayPin = sel3;
-			break;
+			HAL_GPIO_WritePin(GPIOB, segDP, GPIO_PIN_RESET);
 	}
 	
 	HAL_GPIO_WritePin(GPIOB, displayPin, GPIO_PIN_SET);
@@ -103,7 +101,6 @@ void setPins(int number) {
 			HAL_GPIO_WritePin(GPIOB, segments[i], GPIO_PIN_RESET);
 		}
 	}
-	HAL_Delay(1);
+	//HAL_Delay(1);
 	HAL_GPIO_WritePin(GPIOB, displayPin, GPIO_PIN_RESET);
-
 }
