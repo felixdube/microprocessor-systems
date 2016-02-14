@@ -12,7 +12,7 @@
 #include "segment_controller.h"
 
 volatile int displayTick = 0;
-const int patterns[10][7] = {ZERO, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE};
+const uint8_t patterns[10] = {ZERO, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE};
 const int segments[7] = {segA, segB, segC, segD, segE, segF, segG};
 
 /* GPIO configuration */
@@ -71,7 +71,7 @@ int getDigit(float value, int place) {
 	* @retval None
 	*/
 void setPins(int digit) {
-	const int *pattern;
+	uint8_t pattern;
 	int i;
 	uint16_t displayPin;
 	pattern = patterns[digit];
@@ -94,8 +94,8 @@ void setPins(int digit) {
 	
 	HAL_GPIO_WritePin(GPIOB, displayPin, GPIO_PIN_SET);
 	
-	for (i = 0; i < 8; i++) {
-		if (pattern[i] == 1) {
+	for (i = 0; i < 7; i++) {
+		if ((pattern & (1 << (6 - i))) >> (6 - i) == 1) {
 			HAL_GPIO_WritePin(GPIOB, segments[i], GPIO_PIN_SET);
 		} else {
 			HAL_GPIO_WritePin(GPIOB, segments[i], GPIO_PIN_RESET);

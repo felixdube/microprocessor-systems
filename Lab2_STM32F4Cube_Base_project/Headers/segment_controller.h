@@ -29,16 +29,16 @@
 #define sel2 GPIO_PIN_10
 #define sel3 GPIO_PIN_11
 
-#define ZERO  {1,1,1,1,1,1,0}
-#define ONE   {0,1,1,0,0,0,0}
-#define TWO   {1,1,0,1,1,0,1}
-#define THREE {1,1,1,1,0,0,1}
-#define FOUR  {0,1,1,0,0,1,1}
-#define FIVE  {1,0,1,1,0,1,1}
-#define SIX   {1,0,1,1,1,1,1}
-#define SEVEN {1,1,1,0,0,0,0}
-#define EIGHT {1,1,1,1,1,1,1}
-#define NINE  {1,1,1,1,0,1,1}
+#define ZERO  (uint8_t)0x7E
+#define ONE   (uint8_t)0x30
+#define TWO   (uint8_t)0x6D
+#define THREE (uint8_t)0x79
+#define FOUR  (uint8_t)0x33
+#define FIVE  (uint8_t)0x5B
+#define SIX   (uint8_t)0x5F
+#define SEVEN (uint8_t)0x70
+#define EIGHT (uint8_t)0x7F
+#define NINE  (uint8_t)0x7B
 
 extern volatile int displayTick;
 
