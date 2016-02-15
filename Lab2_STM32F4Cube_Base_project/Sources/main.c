@@ -107,9 +107,15 @@ int main(void)
 		
 		//Alarm triggering
 		if (displayTemp > THRESHHOLD_TEMP) {
-			trigger_alarm();
+			if ( a > 5 ){
+				trigger_alarm();
+			}
+			else {
+				a++;
+			}
 		} else {
 			shutoff_alarm();
+			a = 0;
 		}
 		
 		// change the digit to be updated
