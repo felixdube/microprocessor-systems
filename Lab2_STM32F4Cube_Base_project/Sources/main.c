@@ -31,6 +31,9 @@ kalmanState *adcState;
 //int cycles_since_start = 0;
 int display_slower = 0;
 
+// alarm variable to prevent false alarm
+int a = 0;
+
 /* Global variables ----------------------------------------------------------*/
 volatile int adcTick = 0;
 volatile int displayTimer = 50;
