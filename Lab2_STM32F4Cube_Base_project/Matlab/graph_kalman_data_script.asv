@@ -1,0 +1,8 @@
+clear all, close all;
+data = importdata('data.txt');
+s = size(data);
+number = 1:1:s;
+dataformatted = [number', data];
+figure;
+%subplot(2,1,1),plot();
+plot(dataformatted(:,1),dataformatted(:,2),dataformatted(:,1),dataformatted(:,2));

@@ -12,7 +12,7 @@
 	
 /* Includes ------------------------------------------------------------------*/
 #include <stdlib.h>
-
+#include <stdio.h>
 #include "stm32f4xx_hal.h"
 #include "supporting_functions.h"
 #include "kalmanfilter.h"
@@ -26,6 +26,8 @@ float adc_val = 0;
 float temp = 0;
 float displayTemp = 0;
 kalmanState *adcState; 
+//int cycles_since_start = 0;
+int display_slower = 0;
 
 /* Global variables ----------------------------------------------------------*/
 volatile int adcTick = 0;
@@ -40,7 +42,11 @@ void ADC1_Config(void);
 
 int main(void)
 {
-	int i = 0;
+//	FILE *f = fopen("data.txt", "w+");
+//	if (f == NULL)
+//		{
+//		printf("Error opening file!\n");
+//		}
   /* MCU Configuration----------------------------------------------------------*/
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
@@ -59,7 +65,8 @@ int main(void)
 	
 	/* Init Kalman Filter */
 	adcState = malloc(sizeof(kalmanState));
-	kalmanInit(adcState, 0.1, 0.1, 1024, 0.1, 0);
+	kalmanInit(adcState, INIT_q, INIT_r, INIT_x, INIT_p, INIT_k);
+
 	
 	while (1){
 		if (adcTick) {
@@ -67,6 +74,7 @@ int main(void)
 			if (HAL_ADC_PollForConversion(&ADC1_Handle, 1000000) == HAL_OK) { //wait until conversion has finished
 				adc_val = HAL_ADC_GetValue(&ADC1_Handle); //get adc data
 				kalmanUpdate(adcState, adc_val); // filter data
+				//fprintf(f, "%f,%f,%f,%f,%f,%f\n", adc_val, adcState->q, adcState->r, adcState->x, adcState->p, adcState->q);
 				temp = convertTemp(adcState->x); // convert data to temperature
 				if (displayTimer >= 50) { // update display at 2Hz
 					displayTemp = temp;
@@ -81,12 +89,14 @@ int main(void)
 		} else {
 			shutoff_alarm();
 		}
-		i++;
-		if (i >= 100) {
+		display_slower++;
+		if (display_slower >= 100) {
 			displayTick = (displayTick + 1) % 3;
-			i = 0;
+			display_slower = 0;
 		}
 	  display(displayTemp);
+		//printf("%d %f %f %f %f %f /n", cycles_since_start);
+		//cycles_since_start++;
 	}
 }
 
@@ -119,7 +129,7 @@ void SystemClock_Config(void){
   RCC_ClkInitStruct.APB2CLKDivider 	= RCC_HCLK_DIV2;
   if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_5)!= HAL_OK){Error_Handler(RCC_CONFIG_FAIL);};
 	
-	/*Configures SysTick to provide 1ms interval interrupts.*/
+	/*Configures SysTick to provide 10 ms interval interrupts.*/
   HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq()/100);
 
 	/* This function sets the source clock for the internal SysTick Timer to be the maximum,
@@ -172,7 +182,7 @@ void ADC1_Config(void){
 	__HAL_RCC_ADC1_CLK_ENABLE();
 	
 	/*  initialize ADC1 init struct */
-	ADC1_Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV6;							// ADC Clock frequency 28MHz (168/6)
+	ADC1_Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV2;							// ADC Clock frequency 84MHz (168/2)
 	ADC1_Init.Resolution = ADC_RESOLUTION_12B;												// 12 bit resolution, better but slower
 	ADC1_Init.DataAlign = ADC_DATAALIGN_RIGHT;												// Align the 12 bits data at the right of the 32 bits words
 	ADC1_Init.ScanConvMode = DISABLE;																	// single channel mode
