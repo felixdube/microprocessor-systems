@@ -20,6 +20,7 @@
 #include "segment_controller.h"
 #include "alarm.h"
 #include "main.h"
+#include "lcd.h"
 
 /* Private variables ---------------------------------------------------------*/
 float adc_val = 0;
@@ -32,6 +33,7 @@ int display_slower = 0;
 /* Global variables ----------------------------------------------------------*/
 volatile int adcTick = 0;
 volatile int displayTimer = 50;
+char tempToLCD[20];
 
 /* Definition of ADC handle struct */
 ADC_HandleTypeDef ADC1_Handle;
@@ -57,6 +59,9 @@ int main(void)
 	/* configure ADC1 */
 	ADC1_Config();
 	
+	/* configure LCD */
+	initLCD();
+	
 	/* Configure 7-Segment Displays */
 	Display_GPIO_Config();
 	
@@ -79,6 +84,9 @@ int main(void)
 				if (displayTimer >= 50) { // update display at 2Hz
 					displayTemp = temp;
 					displayTimer = 0;
+					
+					sprintf(tempToLCD, "%f\0", displayTemp);
+					LCD_WriteString(tempToLCD);
 				}
 				/* reset sysTick flag */
 				adcTick = 0;
@@ -97,6 +105,7 @@ int main(void)
 	  display(displayTemp);
 		//printf("%d %f %f %f %f %f /n", cycles_since_start);
 		//cycles_since_start++;
+	
 	}
 }
 
