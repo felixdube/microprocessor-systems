@@ -13,7 +13,10 @@
 
 const int dataPin[8] =	{DB0, DB1, DB2, DB3, DB4, DB5, DB6, DB7};
 
-
+/**
+	* @brief initializes trhe GPIOs for the LCD and clean up the display
+	* @retval None
+	*/
 void initLCD(void){
 	
 	//Initialize struct
@@ -42,6 +45,10 @@ void initLCD(void){
 	
 }
 
+/**
+	* @brief Toggle the enable pin to "send" command to display
+	* @retval None
+	*/
 void enable(void){
 	int i;
 	HAL_GPIO_WritePin(GPIOE, E, GPIO_PIN_SET);
@@ -53,6 +60,10 @@ void enable(void){
 	HAL_GPIO_WritePin(GPIOE, E, GPIO_PIN_RESET);
 }
 
+/**
+	* @brief set the data pin to a particuliar character
+	* @retval None
+	*/
 void LCD_WriteChar(char c){
 	int i;
 	for (i = 0; i < 8; i++) {
@@ -65,6 +76,10 @@ void LCD_WriteChar(char c){
 	enable();
 }
 
+/**
+	* @brief send one by one all the character of the string to LCD_WriteChar()
+	* @retval None
+	*/
 void LCD_WriteString(char * string){
 	int i;
 	inputMode();
@@ -77,6 +92,10 @@ void LCD_WriteString(char * string){
 	}
 }
 
+/**
+	* @brief Clear every character on the display
+	* @retval None
+	*/
 void clearDisplay(void){
 	HAL_GPIO_WritePin(GPIOE, RS, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(GPIOE, RW, GPIO_PIN_RESET);
@@ -91,7 +110,11 @@ void clearDisplay(void){
 
 	enable();
 }
-// set address of the LCD display to address
+
+/**
+	* @brief set address of the LCD display to address
+	* @retval None
+	*/
 void SetAdress(int address){
   int i;
 	HAL_GPIO_WritePin(GPIOE, RS, GPIO_PIN_RESET);
@@ -108,6 +131,10 @@ void SetAdress(int address){
 	enable();
 }
 
+/**
+	* @brief change the address of the LCD pointer to the first one
+	* @retval None
+	*/
 void returnHome(void){
 	HAL_GPIO_WritePin(GPIOE, RS, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(GPIOE, RW, GPIO_PIN_RESET);
@@ -123,11 +150,19 @@ void returnHome(void){
 	enable();
 }
 
+/**
+	* @brief set up pins to input mode
+	* @retval None
+	*/
 void inputMode(void){
 	HAL_GPIO_WritePin(GPIOE, RS, GPIO_PIN_SET);
 	HAL_GPIO_WritePin(GPIOE, RW, GPIO_PIN_RESET);
 }
 	
+/**
+	* @brief Turn on the display
+	* @retval None
+	*/
 void turnOn(void){
 	HAL_GPIO_WritePin(GPIOE, RS, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(GPIOE, RW, GPIO_PIN_RESET);
@@ -142,6 +177,7 @@ void turnOn(void){
 
 	enable();
 }
+
 
 void functionSet(void){
 	HAL_GPIO_WritePin(GPIOE, RS, GPIO_PIN_RESET);
@@ -159,7 +195,10 @@ void functionSet(void){
 }
 
 
-//This function is to shift the display, Not used presently
+/**
+	* @brief set up the entry mode of the display
+	* @retval None
+	*/
 void entryMode(void){
 	HAL_GPIO_WritePin(GPIOE, RS, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(GPIOE, RW, GPIO_PIN_RESET);
