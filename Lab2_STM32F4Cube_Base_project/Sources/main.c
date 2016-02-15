@@ -81,13 +81,13 @@ int main(void)
 				if (displayTimer >= 50) { // update display at 2Hz
 					displayTemp = temp;
 					displayTimer = 0;	
-					sprintf(tempToLCD, "       %.1f         ", displayTemp);
-					clearDisplay();
-					LCD_WriteString("           Temp");
+					sprintf(tempToLCD, "%f", displayTemp);
+					//clearDisplay();
+					//LCD_WriteString("           Temp");
 					
 					//sprintf(tempToLCD, "    %f     ", displayTemp);
 					//LCD_WriteString("   Temperature  ");
-					SetAdress(64); //change line
+					//SetAdress(64); //change line
 					//need to change to 3 digit here
 					LCD_WriteString(tempToLCD);
 				}

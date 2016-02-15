@@ -27,22 +27,17 @@ void initLCD(void){
 	 
 	//All will have same mode
 	GPIO_InitDef.Pin = RS | RW | E | DB0 | DB1 | DB2 | DB3 | DB4 | DB5 | DB6 | DB7;
-	//Mode output
 	GPIO_InitDef.Mode = GPIO_MODE_OUTPUT_PP;   //push pull
-	//Without pull resistors
 	GPIO_InitDef.Pull = GPIO_NOPULL;
-	//pin speed
 	GPIO_InitDef.Speed = GPIO_SPEED_FREQ_MEDIUM;// max frequency for our processor is 84MHz
 	 
 	HAL_GPIO_Init(GPIOE, &GPIO_InitDef);
 	
 	functionSet();
 	turnOn();
-	//entryMode();
+	entryMode();
 	clearDisplay();
-	//HAL_GPIO_WritePin(GPIOE, E, GPIO_PIN_RESET);
-	
-	
+	HAL_GPIO_WritePin(GPIOE, E, GPIO_PIN_RESET);
 }
 
 /**
@@ -52,8 +47,6 @@ void initLCD(void){
 void enable(void){
 	int i;
 	HAL_GPIO_WritePin(GPIOE, E, GPIO_PIN_SET);
-	//manual delay for shorter time than HAL_Delay(1)
-	//HAL_Delay(1);
 	for (i = 0; i < 10000; i++) {
 	i = i;
 	}
@@ -82,12 +75,12 @@ void LCD_WriteChar(char c){
 	*/
 void LCD_WriteString(char * string){
 	int i;
-	inputMode();
 	//turnOn();
 	//clearDisplay();
-	//returnHome();
+	returnHome();
+	inputMode();
 	//printf("%s\n",string);
-	for (i = 0; i < 16; i++){
+	for (i = 0; i < 4; i++){
 		LCD_WriteChar(string[i]);
 	}
 }
@@ -178,7 +171,10 @@ void turnOn(void){
 	enable();
 }
 
-
+/**
+	* @brief Set up length of data bus, and size of display
+	* @retval None
+	*/
 void functionSet(void){
 	HAL_GPIO_WritePin(GPIOE, RS, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(GPIOE, RW, GPIO_PIN_RESET);
@@ -207,7 +203,7 @@ void entryMode(void){
 	HAL_GPIO_WritePin(GPIOE, DB5, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(GPIOE, DB4, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(GPIOE, DB3, GPIO_PIN_RESET);
-	HAL_GPIO_WritePin(GPIOE, DB2, GPIO_PIN_RESET); //cahnged this to reset, I think there was an error
+	HAL_GPIO_WritePin(GPIOE, DB2, GPIO_PIN_SET); //cahnged this to reset, I think there was an error
 	HAL_GPIO_WritePin(GPIOE, DB1, GPIO_PIN_SET);
 	HAL_GPIO_WritePin(GPIOE, DB0, GPIO_PIN_RESET);
 
