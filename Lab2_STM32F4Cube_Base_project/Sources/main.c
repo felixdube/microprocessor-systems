@@ -13,6 +13,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "stm32f4xx_hal.h"
 #include "supporting_functions.h"
 #include "kalmanfilter.h"
@@ -34,6 +35,7 @@ int display_slower = 0;
 volatile int adcTick = 0;
 volatile int displayTimer = 50;
 char tempToLCD[20];
+char tempToLCD2[5];
 
 /* Definition of ADC handle struct */
 ADC_HandleTypeDef ADC1_Handle;
@@ -44,11 +46,6 @@ void ADC1_Config(void);
 
 int main(void)
 {
-//	FILE *f = fopen("data.txt", "w+");
-//	if (f == NULL)
-//		{
-//		printf("Error opening file!\n");
-//		}
   /* MCU Configuration----------------------------------------------------------*/
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
@@ -78,33 +75,39 @@ int main(void)
 			HAL_ADC_Start(&ADC1_Handle); //make adc start converting data
 			if (HAL_ADC_PollForConversion(&ADC1_Handle, 1000000) == HAL_OK) { //wait until conversion has finished
 				adc_val = HAL_ADC_GetValue(&ADC1_Handle); //get adc data
+				//printf("%f,%f,%f,%f,%f,%f\n", adc_val, adcState->q, adcState->r, adcState->x, adcState->p, adcState->k);
 				kalmanUpdate(adcState, adc_val); // filter data
-				//fprintf(f, "%f,%f,%f,%f,%f,%f\n", adc_val, adcState->q, adcState->r, adcState->x, adcState->p, adcState->q);
 				temp = convertTemp(adcState->x); // convert data to temperature
 				if (displayTimer >= 50) { // update display at 2Hz
 					displayTemp = temp;
-					displayTimer = 0;
+					displayTimer = 0;	
+					sprintf(tempToLCD, "       %.1f         ", displayTemp);
+					clearDisplay();
+					LCD_WriteString("           Temp");
 					
-					sprintf(tempToLCD, "%f\0", displayTemp);
+					//sprintf(tempToLCD, "    %f     ", displayTemp);
+					//LCD_WriteString("   Temperature  ");
+					SetAdress(64); //change line
+					//need to change to 3 digit here
 					LCD_WriteString(tempToLCD);
 				}
 				/* reset sysTick flag */
 				adcTick = 0;
 			}
 		}
+		//Alarm triggering
 		if (displayTemp > THRESHHOLD_TEMP) {
 			trigger_alarm();
 		} else {
 			shutoff_alarm();
 		}
+		//Slow down the display of the 7 segment
 		display_slower++;
 		if (display_slower >= 100) {
 			displayTick = (displayTick + 1) % 3;
 			display_slower = 0;
 		}
 	  display(displayTemp);
-		//printf("%d %f %f %f %f %f /n", cycles_since_start);
-		//cycles_since_start++;
 	
 	}
 }

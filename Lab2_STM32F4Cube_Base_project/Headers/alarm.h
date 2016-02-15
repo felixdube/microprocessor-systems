@@ -12,7 +12,7 @@
 #define ALARM_H
 //The maximum temperature for the processor is 85 C for minimum power dissipation
 // and 105 C for maxpower dissipation
-#define THRESHHOLD_TEMP 39.5f
+#define THRESHHOLD_TEMP 42.5f
 
 #define LED1 GPIO_PIN_13
 #define LED2 GPIO_PIN_14

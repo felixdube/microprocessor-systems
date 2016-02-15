@@ -33,5 +33,6 @@ void inputMode(void);
 void turnOn(void);
 void functionSet(void);
 void entryMode(void);
+void SetAdress(int address);
 
 #endif

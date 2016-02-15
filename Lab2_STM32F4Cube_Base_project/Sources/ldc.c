@@ -35,16 +35,21 @@ void initLCD(void){
 	
 	functionSet();
 	turnOn();
-	entryMode();
+	//entryMode();
 	clearDisplay();
-	HAL_GPIO_WritePin(GPIOE, E, GPIO_PIN_RESET);
+	//HAL_GPIO_WritePin(GPIOE, E, GPIO_PIN_RESET);
 	
 	
 }
 
 void enable(void){
+	int i;
 	HAL_GPIO_WritePin(GPIOE, E, GPIO_PIN_SET);
-	HAL_Delay(1);
+	//manual delay for shorter time than HAL_Delay(1)
+	//HAL_Delay(1);
+	for (i = 0; i < 10000; i++) {
+	i = i;
+	}
 	HAL_GPIO_WritePin(GPIOE, E, GPIO_PIN_RESET);
 }
 
@@ -62,12 +67,12 @@ void LCD_WriteChar(char c){
 
 void LCD_WriteString(char * string){
 	int i;
-	turnOn();
-	clearDisplay();
-	returnHome();
 	inputMode();
-	printf("%s\n",string);
-	for (i = 0; i < 4; i++){
+	//turnOn();
+	//clearDisplay();
+	//returnHome();
+	//printf("%s\n",string);
+	for (i = 0; i < 16; i++){
 		LCD_WriteChar(string[i]);
 	}
 }
@@ -84,6 +89,22 @@ void clearDisplay(void){
 	HAL_GPIO_WritePin(GPIOE, DB1, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(GPIOE, DB0, GPIO_PIN_SET);
 
+	enable();
+}
+// set address of the LCD display to address
+void SetAdress(int address){
+  int i;
+	HAL_GPIO_WritePin(GPIOE, RS, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(GPIOE, RW, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(GPIOE, DB7, GPIO_PIN_SET);
+	for (i = 0; i < 7; i++) {
+		if ((address & (1 << i)) >> i == 1) {
+			HAL_GPIO_WritePin(GPIOE, dataPin[i], GPIO_PIN_SET);
+		} else {
+			HAL_GPIO_WritePin(GPIOE, dataPin[i], GPIO_PIN_RESET);
+		}
+	}
+	
 	enable();
 }
 
@@ -116,8 +137,8 @@ void turnOn(void){
 	HAL_GPIO_WritePin(GPIOE, DB4, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(GPIOE, DB3, GPIO_PIN_SET);
 	HAL_GPIO_WritePin(GPIOE, DB2, GPIO_PIN_SET);
-	HAL_GPIO_WritePin(GPIOE, DB1, GPIO_PIN_SET);
-	HAL_GPIO_WritePin(GPIOE, DB0, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(GPIOE, DB1, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(GPIOE, DB0, GPIO_PIN_RESET);
 
 	enable();
 }
@@ -137,6 +158,8 @@ void functionSet(void){
 	enable();
 }
 
+
+//This function is to shift the display, Not used presently
 void entryMode(void){
 	HAL_GPIO_WritePin(GPIOE, RS, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(GPIOE, RW, GPIO_PIN_RESET);
@@ -145,7 +168,7 @@ void entryMode(void){
 	HAL_GPIO_WritePin(GPIOE, DB5, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(GPIOE, DB4, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(GPIOE, DB3, GPIO_PIN_RESET);
-	HAL_GPIO_WritePin(GPIOE, DB2, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(GPIOE, DB2, GPIO_PIN_RESET); //cahnged this to reset, I think there was an error
 	HAL_GPIO_WritePin(GPIOE, DB1, GPIO_PIN_SET);
 	HAL_GPIO_WritePin(GPIOE, DB0, GPIO_PIN_RESET);
 
