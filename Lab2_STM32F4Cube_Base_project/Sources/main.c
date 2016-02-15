@@ -194,7 +194,7 @@ void ADC1_Config(void){
 	__HAL_RCC_ADC1_CLK_ENABLE();
 	
 	/*  initialize ADC1 init struct */
-	ADC1_Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV2;							// ADC Clock frequency 84MHz (168/2)
+	ADC1_Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV4;							// ADC Clock frequency 84MHz (168/2)
 	ADC1_Init.Resolution = ADC_RESOLUTION_12B;												// 12 bit resolution, better but slower
 	ADC1_Init.DataAlign = ADC_DATAALIGN_RIGHT;												// Align the 12 bits data at the right of the 32 bits words
 	ADC1_Init.ScanConvMode = DISABLE;																	// single channel mode
