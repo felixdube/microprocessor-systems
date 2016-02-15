@@ -72,41 +72,54 @@ int main(void)
 	
 	while (1){
 		if (adcTick) {
-			HAL_ADC_Start(&ADC1_Handle); //make adc start converting data
-			if (HAL_ADC_PollForConversion(&ADC1_Handle, 1000000) == HAL_OK) { //wait until conversion has finished
-				adc_val = HAL_ADC_GetValue(&ADC1_Handle); //get adc data
-				//printf("%f,%f,%f,%f,%f,%f\n", adc_val, adcState->q, adcState->r, adcState->x, adcState->p, adcState->k);
-				kalmanUpdate(adcState, adc_val); // filter data
-				temp = convertTemp(adcState->x); // convert data to temperature
-				if (displayTimer >= 50) { // update display at 2Hz
-					displayTemp = temp;
-					displayTimer = 0;	
-					sprintf(tempToLCD, "%f", displayTemp);
-					//clearDisplay();
-					//LCD_WriteString("           Temp");
+			
+			// start ADC conversion
+			HAL_ADC_Start(&ADC1_Handle);
+			
+			// wait for the conversion to be done and get data
+			if (HAL_ADC_PollForConversion(&ADC1_Handle, 1000000) == HAL_OK) { 
+				adc_val = HAL_ADC_GetValue(&ADC1_Handle); 
+				
+				// filter the data
+				kalmanUpdate(adcState, adc_val); 
+				
+				// convert data to celsius
+				temp = convertTemp(adcState->x); 
+				
+				// update the value to be printed at 2Hz
+				if (displayTimer >= 50) {
 					
-					//sprintf(tempToLCD, "    %f     ", displayTemp);
-					//LCD_WriteString("   Temperature  ");
-					//SetAdress(64); //change line
-					//need to change to 3 digit here
+					// update the value to be displayed
+					displayTemp = temp;
+					
+					// reset the displayTimer tick
+					displayTimer = 0;	
+					
+					// print value to the LCD display
+					sprintf(tempToLCD, "%f", displayTemp);
 					LCD_WriteString(tempToLCD);
 				}
-				/* reset sysTick flag */
+				
+				// reset the adcTick
 				adcTick = 0;
 			}
 		}
+		
 		//Alarm triggering
 		if (displayTemp > THRESHHOLD_TEMP) {
 			trigger_alarm();
 		} else {
 			shutoff_alarm();
 		}
-		//Slow down the display of the 7 segment
+		
+		// change the digit to be updated
 		display_slower++;
 		if (display_slower >= 100) {
 			displayTick = (displayTick + 1) % 3;
 			display_slower = 0;
 		}
+		
+		// display on 7-segment display
 	  display(displayTemp);
 	
 	}

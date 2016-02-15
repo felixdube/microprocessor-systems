@@ -25,12 +25,9 @@ void Display_GPIO_Config(void) {
 	 
 	//All will have same mode
 	GPIO_InitDef.Pin = segA | segB | segC | segD | segE | segF | segG | segDP | segDegree | sel1 | sel2 | sel3;
-	//Mode output
-	GPIO_InitDef.Mode = GPIO_MODE_OUTPUT_PP;   //push pull
-	//Without pull resistors
+	GPIO_InitDef.Mode = GPIO_MODE_OUTPUT_PP;   			//push pull
 	GPIO_InitDef.Pull = GPIO_NOPULL;
-	//pin speed
-	GPIO_InitDef.Speed = GPIO_SPEED_FREQ_MEDIUM;// max frequency for our processor is 84MHz
+	GPIO_InitDef.Speed = GPIO_SPEED_FREQ_MEDIUM;		// max frequency for our processor is 84MHz
 	 
 	HAL_GPIO_Init(GPIOB, &GPIO_InitDef);
 }
@@ -66,8 +63,8 @@ int getDigit(float value, int place) {
 }
 
 /**
-	* @brief
-	* @param number:
+	* @brief set all the the segment of a display for a particuliar digit
+	* @param digit: digit to be displayed
 	* @retval None
 	*/
 void setPins(int digit) {
@@ -78,6 +75,7 @@ void setPins(int digit) {
 	
 	HAL_GPIO_WritePin(GPIOB, segDegree, GPIO_PIN_SET);
 	
+	//  select which display will be updated according to the systick
 	switch (displayTick) {
 		case 0:
 			displayPin = sel1;
@@ -94,6 +92,8 @@ void setPins(int digit) {
 	
 	HAL_GPIO_WritePin(GPIOB, displayPin, GPIO_PIN_SET);
 	
+	
+	// update the 7-segment based on the digit value and the preset pattern
 	for (i = 0; i < 7; i++) {
 		if ((pattern & (1 << (6 - i))) >> (6 - i) == 1) {
 			HAL_GPIO_WritePin(GPIOB, segments[i], GPIO_PIN_SET);

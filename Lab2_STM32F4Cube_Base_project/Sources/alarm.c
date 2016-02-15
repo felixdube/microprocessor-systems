@@ -22,16 +22,17 @@ void Alarm_GPIO_Config(void) {
 	 
 	//All will have same mode
 	GPIO_InitDef.Pin = LED1 | LED2 | LED3 | LED4;
-	//Mode output
-	GPIO_InitDef.Mode = GPIO_MODE_OUTPUT_PP;   //push pull
-	//Without pull resistors
+	GPIO_InitDef.Mode = GPIO_MODE_OUTPUT_PP;   			//push pull
 	GPIO_InitDef.Pull = GPIO_NOPULL;
-	//pin speed
-	GPIO_InitDef.Speed = GPIO_SPEED_FREQ_MEDIUM;// max frequency for our processor is 84MHz
+	GPIO_InitDef.Speed = GPIO_SPEED_FREQ_MEDIUM;		// max frequency for our processor is 84MHz
 	 
 	HAL_GPIO_Init(GPIOD, &GPIO_InitDef);
 }
 
+/**
+	* @brief cycle throught the leds as an alarm
+	* @retval None
+	*/
 void trigger_alarm(void) {
 	switch(alarmTick / 25) {
 		case 0:
@@ -60,6 +61,10 @@ void trigger_alarm(void) {
 	}
 }
 
+/**
+	* @brief turn off all the leds of the alarm
+	* @retval None
+	*/
 void shutoff_alarm(void) {
 	HAL_GPIO_WritePin(GPIOD, LED1, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(GPIOD, LED2, GPIO_PIN_RESET);
