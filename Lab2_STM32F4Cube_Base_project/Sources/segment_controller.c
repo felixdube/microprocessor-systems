@@ -11,7 +11,8 @@
 #include "stm32f4xx_hal.h"
 #include "segment_controller.h"
 
-volatile int displayTick = 0;
+volatile int digitToDisplay = 0;
+volatile int timeDisplay1DigitTimer = 0;
 const uint8_t patterns[10] = {ZERO, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE};
 const int segments[7] = {segA, segB, segC, segD, segE, segF, segG};
 
@@ -38,8 +39,12 @@ void Display_GPIO_Config(void) {
 	* @retval None
 	*/
 void display(float value) {
-	int digit = getDigit(value, displayTick);
-	setPins(digit);
+		// change the digit to be viewed slower for the 7-segment slower for better display
+		if (timeDisplay1DigitTimer >= TIME_DISPLAY_1_DIGIT_PERIOD) {
+			timeDisplay1DigitTimer = 0;
+			digitToDisplay = (digitToDisplay + 1) % 3;
+		}
+	setPins(getDigit(value, digitToDisplay));
 }
 
 /**
@@ -76,7 +81,7 @@ void setPins(int digit) {
 	HAL_GPIO_WritePin(GPIOB, segDegree, GPIO_PIN_SET);
 	
 	//  select which display will be updated according to the systick
-	switch (displayTick) {
+	switch (digitToDisplay) {
 		case 0:
 			displayPin = sel1;
 			HAL_GPIO_WritePin(GPIOB, segDP, GPIO_PIN_RESET);

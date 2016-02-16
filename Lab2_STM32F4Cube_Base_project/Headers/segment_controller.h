@@ -12,6 +12,9 @@
 #ifndef SEGMENT_CONTROLLER_H
 #define SEGMENT_CONTROLLER_H
 
+#define TIME_DISPLAY_1_DIGIT_PERIOD 2000 //if too high causes flickering
+#define DISPLAY_7_SEGMENT_PERIOD 1 //if too high causes dimming
+
 
 #define segA GPIO_PIN_0
 #define segB GPIO_PIN_1
@@ -39,6 +42,7 @@
 #define NINE  (uint8_t)0x7B
 
 extern volatile int displayTick;
+extern volatile int timeDisplay1DigitTimer;
 
 
 void display(float value);

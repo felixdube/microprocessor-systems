@@ -14,6 +14,7 @@
 //The maximum temperature for the processor is 85 C for minimum power dissipation
 // and 105 C for maxpower dissipation
 #define THRESHHOLD_TEMP 42.5f
+#define DISPLAY_TIME_1_LED_ALARM 80000
 
 #define LED1 GPIO_PIN_13
 #define LED2 GPIO_PIN_14
@@ -22,7 +23,7 @@
 
 void Alarm_GPIO_Config(void);
 
-extern volatile int alarmTick;
+extern volatile int alarmLedTimer;
 void trigger_alarm(void);
 void shutoff_alarm(void);
 

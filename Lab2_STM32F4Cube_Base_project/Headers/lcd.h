@@ -24,6 +24,11 @@
 #define DB7 GPIO_PIN_13
 
 #define MAX_NUMBER_CHAR_LCD_DISPLAY 16
+#define ENABLE_TIME 40 //in us Don't set below ~35 or weird timing issue with display
+#define WAIT_TIME_AFTER_RESET 900 //in us Can't set below ~900 with
+
+/* Exported variables ------------------------------------------------------- */
+extern volatile int lcdtimer;
 
 void initLCD(void);
 void enable(void);

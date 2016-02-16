@@ -458,19 +458,19 @@
               <FilePath>.\Sources\alarm.c</FilePath>
             </File>
             <File>
+              <FileName>lcd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\lcd.c</FilePath>
+            </File>
+            <File>
               <FileName>system_clock.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\system_clock.c</FilePath>
+              <FilePath>.\Sources\system_clock.c</FilePath>
             </File>
             <File>
               <FileName>ADC_config.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\ADC_config.c</FilePath>
-            </File>
-            <File>
-              <FileName>lcd.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Sources\lcd.c</FilePath>
+              <FilePath>.\Sources\ADC_config.c</FilePath>
             </File>
           </Files>
         </Group>

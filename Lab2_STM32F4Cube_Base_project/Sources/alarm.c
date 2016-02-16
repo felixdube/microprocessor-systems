@@ -11,7 +11,7 @@
 #include "stm32f4xx_hal.h"
 #include "alarm.h"
 
-volatile int alarmTick = 0;
+volatile int alarmLedTimer = 0;
 
 /**
 	* @brief Configure the GPIO pins for controlling the LED for the alarm
@@ -38,7 +38,10 @@ void Alarm_GPIO_Config(void) {
 void trigger_alarm(void) {
 	//alarmTick gets incremented with Systick and goes back to 0 to 100
 	//Here the each LED is put on for 25 * systick period (in our case 1/4 second)
-	switch(alarmTick / 25) {
+	
+
+	
+	switch((alarmLedTimer / DISPLAY_TIME_1_LED_ALARM)%4) {
 		case 0:
 		  HAL_GPIO_WritePin(GPIOD, LED1, GPIO_PIN_SET);
 			HAL_GPIO_WritePin(GPIOD, LED2, GPIO_PIN_RESET);
@@ -71,6 +74,7 @@ void trigger_alarm(void) {
 	* @retval None
 	*/
 void shutoff_alarm(void) {
+	alarmLedTimer =0;
 	HAL_GPIO_WritePin(GPIOD, LED1, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(GPIOD, LED2, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(GPIOD, LED3, GPIO_PIN_RESET);

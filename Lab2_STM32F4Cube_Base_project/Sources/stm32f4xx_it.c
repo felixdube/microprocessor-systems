@@ -40,7 +40,9 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "alarm.h"
+#include "segment_controller.h"
 #include "stm32f4xx_it.h"
+#include "lcd.h"
 
 /** @addtogroup STM32F4xx_HAL_Examples
   * @{
@@ -54,6 +56,7 @@
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
+	int systick_counter;
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
@@ -156,13 +159,23 @@ void PendSV_Handler(void)
   */
 void SysTick_Handler(void)
 {
+		adcTimer++;
+		updateMeasureForDisplayTimer++;
+		display7segTimer++;
+		timeDisplay1DigitTimer++;
+		alarmLedTimer++;
+		lcdtimer++;
+		HAL_IncTick();
+	} 
+	//71	minutes before overflow	of Tick1us
+	//7	minutes before overflow	of Tick100ns
+	// should check for overflow. I don't actually know if it just goes back to 0	
 	
 	//This needs to be done more intelligently
-	adcTick = 1;
-	displayTimer++;
-	alarmTick = (alarmTick + 1) % 100;
-	HAL_IncTick();
-}
+//	adcTick = 1;
+//	displayTimer++;
+//	alarmTick = (alarmTick + 1) % 100;
+//	HAL_IncTick();
 
 /******************************************************************************/
 /*                 STM32F4xx Peripherals Interrupt Handlers                   */

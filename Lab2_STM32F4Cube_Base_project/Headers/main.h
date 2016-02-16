@@ -38,12 +38,16 @@
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __MAIN_H
 #define __MAIN_H
+#include <stdint.h>
 
-/* Exported types ------------------------------------------------------------*/
-/* Exported constants --------------------------------------------------------*/
-extern volatile int adcTick;
-extern volatile int displayTimer;
+//timer in us
+#define ADC_PERIOD 10000 
+#define UPDATE_MEASURE_PERIOD 500000
+
 /* Exported variables ------------------------------------------------------- */
+extern volatile int adcTimer;
+extern volatile int updateMeasureForDisplayTimer;
+extern volatile int display7segTimer;
 
 #endif /* __MAIN_H */
 

@@ -14,6 +14,8 @@
 //Array to update the values of the pins easier in loops
 const int dataPin[8] =	{DB0, DB1, DB2, DB3, DB4, DB5, DB6, DB7};
 
+volatile int lcdtimer;
+
 /**
 	* @brief initializes trhe GPIOs for the LCD and clean up the display
 	* @param None
@@ -48,14 +50,11 @@ void initLCD(void){
 	* @retval None
 	*/
 void enable(void){
-	int i;
 	HAL_GPIO_WritePin(GPIOE, E, GPIO_PIN_SET);
-	//This is a faster and more tunable delay
-	//this could be improved maybe
-	for (i = 0; i < 3000; i++) {
-		i = i;
-	}
-	
+	while (lcdtimer < ENABLE_TIME){
+		//delay for synchronization
+	}			
+	lcdtimer = 0;
 	HAL_GPIO_WritePin(GPIOE, E, GPIO_PIN_RESET);
 }
 
@@ -114,6 +113,11 @@ void clearDisplay(void){
 	HAL_GPIO_WritePin(GPIOE, DB0, GPIO_PIN_SET);
 
 	enable();
+	//extra wait time from the datasheet 1.53ms
+	while (lcdtimer < WAIT_TIME_AFTER_RESET){
+		//delay for synchronization
+	}	
+	lcdtimer = 0;
 }
 
 /**
@@ -160,6 +164,11 @@ void returnHome(void){
 	HAL_GPIO_WritePin(GPIOE, DB0, GPIO_PIN_RESET);
 
 	enable();
+	//extra wait time from the datasheet 1.53ms
+	while (lcdtimer < WAIT_TIME_AFTER_RESET){
+		//delay for synchronization
+	}
+	lcdtimer = 0;	
 }
 
 /**
