@@ -76,6 +76,8 @@ int main(void)
 				adc_val = HAL_ADC_GetValue(&ADC1_Handle); /* get the value */
 				
 				kalmanUpdate(adcState, adc_val); 					/* filter the data and update the filter parameters */
+				/* DON'T DELETE printf for matlab script */
+				//printf("%f,%f,%f,%f,%f,%f\n",adc_val, adcState->q,adcState->r, adcState->x, adcState->p, adcState->k);
 				
 				temp = convertTemp(adcState->x); 					/* convert the filterd value of the ADC into temperature */
 				
