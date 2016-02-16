@@ -165,7 +165,6 @@ void SysTick_Handler(void)
 		lcdtimer++;
 		HAL_IncTick();
 	} 
-	//71	minutes before overflow	of Tick1us
 	//7	minutes before overflow	of Tick100ns
 	// should check for overflow. I don't actually know if it just goes back to 0	
 	

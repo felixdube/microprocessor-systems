@@ -13,8 +13,8 @@
 
 /* The maximum temperature for the processor is 85 C for minimum power dissipation
  * and 105 C for max power dissipation */
-#define THRESHHOLD_TEMP 42.5f
-#define DISPLAY_TIME_1_LED_ALARM 80000
+#define THRESHHOLD_TEMP 36.5f
+#define DISPLAY_TIME_1_LED_ALARM 40000
 
 #define LED1 GPIO_PIN_13
 #define LED2 GPIO_PIN_14
