@@ -12,8 +12,6 @@
 #ifndef SEGMENT_CONTROLLER_H
 #define SEGMENT_CONTROLLER_H
 
-#include "stm32f4xx_hal.h"
-#include <stdint.h>
 
 #define segA GPIO_PIN_0
 #define segB GPIO_PIN_1

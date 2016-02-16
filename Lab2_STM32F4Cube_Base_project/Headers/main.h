@@ -39,16 +39,13 @@
 #ifndef __MAIN_H
 #define __MAIN_H
 
-/* Includes ------------------------------------------------------------------*/
-#include "stm32f4xx_hal.h"
-
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 extern volatile int adcTick;
 extern volatile int displayTimer;
 /* Exported macro ------------------------------------------------------------*/
 #define ABS(a) (a < 0 ? -a : a)
-/* Exported functions ------------------------------------------------------- */
+/* Exported variables ------------------------------------------------------- */
 
 #endif /* __MAIN_H */
 

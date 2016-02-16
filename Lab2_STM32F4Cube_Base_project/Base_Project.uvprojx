@@ -462,6 +462,16 @@
               <FileType>1</FileType>
               <FilePath>.\Sources\ldc.c</FilePath>
             </File>
+            <File>
+              <FileName>system_clock.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\system_clock.c</FilePath>
+            </File>
+            <File>
+              <FileName>ADC_config.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\ADC_config.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

@@ -23,6 +23,8 @@
 #define DB6 GPIO_PIN_12
 #define DB7 GPIO_PIN_13
 
+#define MAX_NUMBER_CHAR_LCD_DISPLAY 16
+
 void initLCD(void);
 void enable(void);
 void LCD_WriteChar(char c);

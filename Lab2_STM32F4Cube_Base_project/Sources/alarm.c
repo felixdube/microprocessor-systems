@@ -13,6 +13,11 @@
 
 volatile int alarmTick = 0;
 
+/**
+	* @brief Configure the GPIO pins for controlling the LED for the alarm
+	* @param None
+	* @retval None
+	*/
 void Alarm_GPIO_Config(void) {
 	//Initialize struct
 	GPIO_InitTypeDef GPIO_InitDef;
@@ -31,9 +36,12 @@ void Alarm_GPIO_Config(void) {
 
 /**
 	* @brief cycle throught the leds as an alarm
+	* @param None
 	* @retval None
 	*/
 void trigger_alarm(void) {
+	//alarmTick gets incremented with Systick and goes back to 0 to 100
+	//Here the each LED is put on for 25 * systick period (in our case 1/4 second)
 	switch(alarmTick / 25) {
 		case 0:
 		  HAL_GPIO_WritePin(GPIOD, LED1, GPIO_PIN_SET);
@@ -62,7 +70,8 @@ void trigger_alarm(void) {
 }
 
 /**
-	* @brief turn off all the leds of the alarm
+	* @brief Turn off all the leds of the alarm
+	* @param None
 	* @retval None
 	*/
 void shutoff_alarm(void) {
