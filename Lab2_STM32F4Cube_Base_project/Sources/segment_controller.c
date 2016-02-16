@@ -18,17 +18,17 @@ const int segments[7] = {segA, segB, segC, segD, segE, segF, segG};
 
 /* GPIO configuration */
 void Display_GPIO_Config(void) {
-	//Initialize struct
+	/* Initialize struct */
 	GPIO_InitTypeDef GPIO_InitDef;
 	
-	//Enable clock for GPOIB
+	/* Enable clock for GPOIB */
 	__HAL_RCC_GPIOB_CLK_ENABLE();
 	 
-	//All will have same mode
+	/* All will have same mode */
 	GPIO_InitDef.Pin = segA | segB | segC | segD | segE | segF | segG | segDP | segDegree | sel1 | sel2 | sel3;
-	GPIO_InitDef.Mode = GPIO_MODE_OUTPUT_PP;   			//push pull
+	GPIO_InitDef.Mode = GPIO_MODE_OUTPUT_PP;   			/* push pull */
 	GPIO_InitDef.Pull = GPIO_NOPULL;
-	GPIO_InitDef.Speed = GPIO_SPEED_FREQ_MEDIUM;		// max frequency for our processor is 84MHz
+	GPIO_InitDef.Speed = GPIO_SPEED_FREQ_MEDIUM;		/* max frequency for our processor is 84MHz */
 	 
 	HAL_GPIO_Init(GPIOB, &GPIO_InitDef);
 }

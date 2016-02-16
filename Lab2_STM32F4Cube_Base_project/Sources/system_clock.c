@@ -46,7 +46,7 @@ void SystemClock_Config(void){
   RCC_ClkInitStruct.APB2CLKDivider 	= RCC_HCLK_DIV2;
   if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_5)!= HAL_OK){Error_Handler(RCC_CONFIG_FAIL);};
 	
-	/* Configures SysTick to provide 100 ns interval interrupts */
+	/* Configures SysTick to provide 1000 ns interval interrupts */
   HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq()/1000000);
 
 	/* This function sets the source clock for the internal SysTick Timer to be the maximum,

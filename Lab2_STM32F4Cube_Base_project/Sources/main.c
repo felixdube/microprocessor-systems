@@ -51,14 +51,15 @@ int main(void)
   HAL_Init();	  													/* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   SystemClock_Config(); 									/* Configure the system clock */
 	ADC1_Config(); 													/* configure ADC1 */
+	Display_GPIO_Config(); 									/* Configure 7-Segment Displays */
+	Alarm_GPIO_Config(); 										/* Configure alarm pins */	
 	initLCD(); 															/* configure LCD */
-	
+
 	/* print temperature on the first line of the LCD */
 	returnHome(); 													/* just makes sure that start writing at the right place */
 	LCD_WriteString("  Temperature"); 			/* The 2 initial space are for centering */
 	
-	Display_GPIO_Config(); 									/* Configure 7-Segment Displays */
-	Alarm_GPIO_Config(); 										/* Configure alarm pins */
+
 	
 	adcState = malloc(sizeof(kalmanState)); /* Init Kalman Filter */
 	kalmanInit(adcState, INIT_q, INIT_r, INIT_x, INIT_p, INIT_k);

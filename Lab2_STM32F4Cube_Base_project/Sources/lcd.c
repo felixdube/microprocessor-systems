@@ -29,11 +29,10 @@ void initLCD(void){
 	GPIO_InitDef.Pull = GPIO_NOPULL;
 	GPIO_InitDef.Speed = GPIO_SPEED_FREQ_MEDIUM;			/* max frequency for our processor is 84MHz */
 	HAL_GPIO_Init(GPIOE, &GPIO_InitDef);
-	HAL_GPIO_WritePin(GPIOE, E, GPIO_PIN_RESET);
+	clearDisplay();
 	turnOn();
 	functionSet();
 	entryMode();
-	clearDisplay();
 }
 
 /**
