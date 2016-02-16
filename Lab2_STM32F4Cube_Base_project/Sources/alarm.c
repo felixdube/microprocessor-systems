@@ -19,13 +19,13 @@ volatile int alarmLedTimer = 0;
 	* @retval None
 	*/
 void Alarm_GPIO_Config(void) {
-	GPIO_InitTypeDef GPIO_InitDef; 	//Initialize struct
-	__HAL_RCC_GPIOD_CLK_ENABLE(); //Enable clock for GPOID 
-	//All will have same mode
-	GPIO_InitDef.Pin = LED1 | LED2 | LED3 | LED4;
-	GPIO_InitDef.Mode = GPIO_MODE_OUTPUT_PP;   			//push pull
+	GPIO_InitTypeDef GPIO_InitDef; 									/* Initialize struct */
+	__HAL_RCC_GPIOD_CLK_ENABLE(); 									/* Enable clock for GPOID  */
+	
+	GPIO_InitDef.Pin = LED1 | LED2 | LED3 | LED4; 	/* All will have same mode */
+	GPIO_InitDef.Mode = GPIO_MODE_OUTPUT_PP;   			/* push pull */
 	GPIO_InitDef.Pull = GPIO_NOPULL;
-	GPIO_InitDef.Speed = GPIO_SPEED_FREQ_MEDIUM;		// max frequency for our processor is 84MHz
+	GPIO_InitDef.Speed = GPIO_SPEED_FREQ_MEDIUM;		/* max frequency for our processor is 84MHz */
 	
 	HAL_GPIO_Init(GPIOD, &GPIO_InitDef);
 }
@@ -36,11 +36,7 @@ void Alarm_GPIO_Config(void) {
 	* @retval None
 	*/
 void trigger_alarm(void) {
-	//alarmTick gets incremented with Systick and goes back to 0 to 100
-	//Here the each LED is put on for 25 * systick period (in our case 1/4 second)
-	
-
-	
+	/* each LED is on for DISPLAY_TIME_1_LED_ALARM */
 	switch((alarmLedTimer / DISPLAY_TIME_1_LED_ALARM)%4) {
 		case 0:
 		  HAL_GPIO_WritePin(GPIOD, LED1, GPIO_PIN_SET);

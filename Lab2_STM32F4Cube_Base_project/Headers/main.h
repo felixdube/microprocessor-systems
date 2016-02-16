@@ -40,9 +40,8 @@
 #define __MAIN_H
 #include <stdint.h>
 
-//timer in us
-#define ADC_PERIOD 10000 
-#define UPDATE_MEASURE_PERIOD 500000
+#define ADC_PERIOD 10000 /* in us */
+#define UPDATE_MEASURE_PERIOD 500000 /* in us */
 
 /* Exported variables ------------------------------------------------------- */
 extern volatile int adcTimer;

@@ -16,7 +16,7 @@
 	* @retval temp: temperature un *C
 	*/
 float convertTemp(int adc_output) {
-	//ADC is at 12 bit resolution so max value 4096
+	/* ADC is at 12 bit resolution so max value 4096 */
 	float voltage = adc_output / 4096.0 * VREF;
 	float temp = 400 * voltage - 279;
 	return temp;

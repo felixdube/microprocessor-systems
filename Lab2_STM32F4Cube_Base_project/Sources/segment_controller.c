@@ -39,7 +39,7 @@ void Display_GPIO_Config(void) {
 	* @retval None
 	*/
 void display(float value) {
-		// change the digit to be viewed slower for the 7-segment slower for better display
+		/* change the digit to be viewed slower for the 7-segment slower for better display */
 		if (timeDisplay1DigitTimer >= TIME_DISPLAY_1_DIGIT_PERIOD) {
 			timeDisplay1DigitTimer = 0;
 			digitToDisplay = (digitToDisplay + 1) % 3;
@@ -80,7 +80,7 @@ void setPins(int digit) {
 	
 	HAL_GPIO_WritePin(GPIOB, segDegree, GPIO_PIN_SET);
 	
-	//  select which display will be updated according to the systick
+	/* select which display will be updated according to the systick */
 	switch (digitToDisplay) {
 		case 0:
 			displayPin = sel1;
@@ -98,7 +98,7 @@ void setPins(int digit) {
 	HAL_GPIO_WritePin(GPIOB, displayPin, GPIO_PIN_SET);
 	
 	
-	// update the 7-segment based on the digit value and the preset pattern
+	/* update the 7-segment based on the digit value and the preset pattern */
 	for (i = 0; i < 7; i++) {
 		if ((pattern & (1 << (6 - i))) >> (6 - i) == 1) {
 			HAL_GPIO_WritePin(GPIOB, segments[i], GPIO_PIN_SET);

@@ -38,10 +38,12 @@
   */
 
 /* Includes ------------------------------------------------------------------*/
+#include "stm32f4xx_it.h"
+#include "stm32f4xx_hal.h"
+
 #include "main.h"
 #include "alarm.h"
 #include "segment_controller.h"
-#include "stm32f4xx_it.h"
 #include "lcd.h"
 
 /** @addtogroup STM32F4xx_HAL_Examples
@@ -52,13 +54,9 @@
   * @{
   */
 
-/* Private typedef -----------------------------------------------------------*/
-/* Private define ------------------------------------------------------------*/
-/* Private macro -------------------------------------------------------------*/
+
 /* Private variables ---------------------------------------------------------*/
 	int systick_counter;
-/* Private function prototypes -----------------------------------------------*/
-/* Private functions ---------------------------------------------------------*/
 
 /******************************************************************************/
 /*            Cortex-M4 Processor Exceptions Handlers                         */

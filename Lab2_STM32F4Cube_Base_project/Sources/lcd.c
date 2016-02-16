@@ -11,7 +11,7 @@
 #include "stm32f4xx_hal.h"
 #include "lcd.h"
 
-//Array to update the values of the pins easier in loops
+/* Array to update the values of the pins easier in loops */
 const int dataPin[8] =	{DB0, DB1, DB2, DB3, DB4, DB5, DB6, DB7};
 
 volatile int lcdtimer;
@@ -22,26 +22,20 @@ volatile int lcdtimer;
 	* @retval None
 	*/
 void initLCD(void){
-	
-	//Initialize struct
-	GPIO_InitTypeDef GPIO_InitDef;
-	
-	//Enable clock for GPOIE
-	__HAL_RCC_GPIOE_CLK_ENABLE();
-	 
-	//All will have same mode
-	GPIO_InitDef.Pin = RS | RW | E | DB0 | DB1 | DB2 | DB3 | DB4 | DB5 | DB6 | DB7;
-	GPIO_InitDef.Mode = GPIO_MODE_OUTPUT_PP;   //push pull
+	GPIO_InitTypeDef GPIO_InitDef; 										/* Initialize struct */
+	__HAL_RCC_GPIOE_CLK_ENABLE(); 										/* Enable clock for GPOIE */
+	GPIO_InitDef.Pin = RS | RW | E | DB0 | DB1 | DB2 | DB3 | DB4 | DB5 | DB6 | DB7; /* All will have same mode */
+	GPIO_InitDef.Mode = GPIO_MODE_OUTPUT_PP;   				/* push pull */
 	GPIO_InitDef.Pull = GPIO_NOPULL;
-	GPIO_InitDef.Speed = GPIO_SPEED_FREQ_MEDIUM;// max frequency for our processor is 84MHz
-	 
+	GPIO_InitDef.Speed = GPIO_SPEED_FREQ_MEDIUM;			/* max frequency for our processor is 84MHz */
 	HAL_GPIO_Init(GPIOE, &GPIO_InitDef);
 	
 	functionSet();
-	turnOn();
+
 	entryMode();
 	clearDisplay();
-	HAL_GPIO_WritePin(GPIOE, E, GPIO_PIN_RESET);
+	turnOn();
+	HAL_GPIO_WritePin(GPIOE, E, GPIO_PIN_RESET); /************ NOT sure we need this */
 }
 
 /**
@@ -51,9 +45,7 @@ void initLCD(void){
 	*/
 void enable(void){
 	HAL_GPIO_WritePin(GPIOE, E, GPIO_PIN_SET);
-	while (lcdtimer < ENABLE_TIME){
-		//delay for synchronization
-	}			
+	while (lcdtimer < ENABLE_TIME){/* delay for synchronization */}			
 	lcdtimer = 0;
 	HAL_GPIO_WritePin(GPIOE, E, GPIO_PIN_RESET);
 }
@@ -66,7 +58,7 @@ void enable(void){
 void LCD_WriteChar(char c){
 	int i;
 	for (i = 0; i < 8; i++) {
-		//extracts a bit of the char and checks if it's 1 to set the line to high
+		/* extracts a bit of the char and checks if it's 1 to set the line to high */
 		if ((c & (1 << i)) >> i == 1) {
 			HAL_GPIO_WritePin(GPIOE, dataPin[i], GPIO_PIN_SET);
 		} else {
@@ -83,13 +75,9 @@ void LCD_WriteChar(char c){
 	*/
 void LCD_WriteString(char * string){
 	int i;
-	//turnOn();
-	//clearDisplay();
-	//returnHome();
-	inputMode();
-	//printf("%s\n",string);
-	//Extract each char individually and calls LCD_WriteChar for each one
-	//until it hits the MAX_NUMBER_CHAR_LCD_DISPLAY or the end char \0
+	inputMode(); /************ NOT sure we need this */
+	/* Extract each char individually and calls LCD_WriteChar for each one */
+	/* until it hits the MAX_NUMBER_CHAR_LCD_DISPLAY or the end char \0 */
 	for (i = 0; (i < MAX_NUMBER_CHAR_LCD_DISPLAY) && (string[i] != '\0') ; i++){
 		LCD_WriteChar(string[i]);
 	}
@@ -111,12 +99,9 @@ void clearDisplay(void){
 	HAL_GPIO_WritePin(GPIOE, DB2, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(GPIOE, DB1, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(GPIOE, DB0, GPIO_PIN_SET);
-
 	enable();
-	//extra wait time from the datasheet 1.53ms
-	while (lcdtimer < WAIT_TIME_AFTER_RESET){
-		//delay for synchronization
-	}	
+	/* extra wait time from the datasheet 1.53ms */
+	while (lcdtimer < WAIT_TIME_AFTER_RESET){/* delay for synchronization */}	
 	lcdtimer = 0;
 }
 
@@ -134,7 +119,7 @@ void SetAdress(int address){
 	HAL_GPIO_WritePin(GPIOE, RS, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(GPIOE, RW, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(GPIOE, DB7, GPIO_PIN_SET);
-	//set DB0 to DB6 to the address of the DDRAM 
+	/* set DB0 to DB6 to the address of the DDRAM */
 	for (i = 0; i < 7; i++) {
 		if ((address & (1 << i)) >> i == 1) {
 			HAL_GPIO_WritePin(GPIOE, dataPin[i], GPIO_PIN_SET);
@@ -142,7 +127,6 @@ void SetAdress(int address){
 			HAL_GPIO_WritePin(GPIOE, dataPin[i], GPIO_PIN_RESET);
 		}
 	}
-	
 	enable();
 }
 
@@ -162,12 +146,9 @@ void returnHome(void){
 	HAL_GPIO_WritePin(GPIOE, DB2, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(GPIOE, DB1, GPIO_PIN_SET);
 	HAL_GPIO_WritePin(GPIOE, DB0, GPIO_PIN_RESET);
-
 	enable();
-	//extra wait time from the datasheet 1.53ms
-	while (lcdtimer < WAIT_TIME_AFTER_RESET){
-		//delay for synchronization
-	}
+	/* extra wait time from the datasheet 1.53ms */
+	while (lcdtimer < WAIT_TIME_AFTER_RESET){/* delay for synchronization */}
 	lcdtimer = 0;	
 }
 
@@ -197,7 +178,6 @@ void turnOn(void){
 	HAL_GPIO_WritePin(GPIOE, DB2, GPIO_PIN_SET);
 	HAL_GPIO_WritePin(GPIOE, DB1, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(GPIOE, DB0, GPIO_PIN_RESET);
-
 	enable();
 }
 
@@ -217,7 +197,6 @@ void functionSet(void){
 	HAL_GPIO_WritePin(GPIOE, DB2, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(GPIOE, DB1, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(GPIOE, DB0, GPIO_PIN_RESET);
-
 	enable();
 }
 
@@ -235,9 +214,8 @@ void entryMode(void){
 	HAL_GPIO_WritePin(GPIOE, DB5, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(GPIOE, DB4, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(GPIOE, DB3, GPIO_PIN_RESET);
-	HAL_GPIO_WritePin(GPIOE, DB2, GPIO_PIN_SET); //changed this to reset, I think there was an error
+	HAL_GPIO_WritePin(GPIOE, DB2, GPIO_PIN_SET);
 	HAL_GPIO_WritePin(GPIOE, DB1, GPIO_PIN_SET);
 	HAL_GPIO_WritePin(GPIOE, DB0, GPIO_PIN_RESET);
-
 	enable();
 }

@@ -12,8 +12,8 @@
 #ifndef SEGMENT_CONTROLLER_H
 #define SEGMENT_CONTROLLER_H
 
-#define TIME_DISPLAY_1_DIGIT_PERIOD 2000 //if too high causes flickering
-#define DISPLAY_7_SEGMENT_PERIOD 1 //if too high causes dimming
+#define TIME_DISPLAY_1_DIGIT_PERIOD 2000 	/* if too high causes flickering */
+#define DISPLAY_7_SEGMENT_PERIOD 1 				/* if too high causes dimming */
 
 
 #define segA GPIO_PIN_0
@@ -29,7 +29,7 @@
 #define sel2 GPIO_PIN_14
 #define sel3 GPIO_PIN_15
 
-// the segments that have to be ON and OFF on the 7 segment to display a certain digit
+/* the segments that have to be ON and OFF on the 7 segment to display a certain digit */
 #define ZERO  (uint8_t)0x7E
 #define ONE   (uint8_t)0x30
 #define TWO   (uint8_t)0x6D

@@ -41,11 +41,9 @@ void kalmanInit(kalmanState* kstate, float q, float r, float x, float p, float k
 	* @retval None
 	*/
 void kalmanUpdate(kalmanState* kstate, float input) {
-	
 	kstate->p += kstate->q;
 	kstate->k = kstate->p / (kstate->p + kstate->r);
 	kstate->x += kstate->k * (input - kstate->x);
 	kstate->p = (1 - kstate->k) * kstate->p;
-	
 	return;
 }
