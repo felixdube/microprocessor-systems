@@ -156,6 +156,8 @@ void PendSV_Handler(void)
   */
 void SysTick_Handler(void)
 {
+	
+	//This needs to be done more intelligently
 	adcTick = 1;
 	displayTimer++;
 	alarmTick = (alarmTick + 1) % 100;

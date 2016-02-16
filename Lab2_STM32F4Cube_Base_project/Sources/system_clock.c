@@ -2,7 +2,7 @@
   ******************************************************************************
   * File Name          : system_clock.c
   * Description        : Sets up the initial system clock
-	* Author						 : Auguste Lalande, Felix Dube, Juan Morency Trudel
+	* Author						 : Ashraf Suyyagh
 	* Version            : 1.0.0
 	* Date							 : February, 2016
   ******************************************************************************

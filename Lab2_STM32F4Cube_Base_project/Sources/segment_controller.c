@@ -64,7 +64,7 @@ int getDigit(float value, int place) {
 
 /**
 	* @brief set all the the segment of a display for a particuliar digit
-	* @param digit: digit to be displayed
+	* @param digit: digit to be displayed input as an int
 	* @retval None
 	*/
 void setPins(int digit) {

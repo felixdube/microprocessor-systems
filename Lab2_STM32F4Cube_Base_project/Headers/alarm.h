@@ -1,7 +1,7 @@
 /**
   ******************************************************************************
   * File Name          : alarm.h
-  * Description        : Implement methods for temperature alarm
+  * Description        : header file for alarm.c
 	* Author						 : Auguste Lalande, Felix Dube, Juan Morency Trudel
 	* Version            : 1.0.0
 	* Date							 : February, 2016

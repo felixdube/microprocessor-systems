@@ -12,7 +12,6 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_hal.h"
 #include "ADC_config.h"
-#include "main.h"
 
 /* Definition of ADC handle struct */
 ADC_HandleTypeDef ADC1_Handle;

@@ -36,10 +36,12 @@ void kalmanInit(kalmanState* kstate, float q, float r, float x, float p, float k
 
 /**
 	* @brief Update the kalman state and filter measured value
-	* @param kstate: state of the kalman filter
+	* @param kstate: kalmanState struct instance needing update
+	* @param input: input value of the filter
 	* @retval None
 	*/
 void kalmanUpdate(kalmanState* kstate, float input) {
+	
 	kstate->p += kstate->q;
 	kstate->k = kstate->p / (kstate->p + kstate->r);
 	kstate->x += kstate->k * (input - kstate->x);

@@ -1,7 +1,7 @@
 /**
   ******************************************************************************
-  * File Name          : kalmanfilter.h
-  * Description        : header for system_clock.c
+  * File Name          : system_clock.h
+  * Description        : Header for system_clock.c
 	* Author						 : Auguste Lalande, Felix Dube, Juan Morency Trudel
 	* Version            : 1.0.0
 	* Date							 : February, 2016

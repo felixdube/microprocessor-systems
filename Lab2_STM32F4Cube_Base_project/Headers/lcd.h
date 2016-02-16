@@ -1,7 +1,7 @@
 /**
   ******************************************************************************
   * File Name          : lcd.h
-  * Description        : Implement methods for controlling the lcd
+  * Description        : Header for lcd.c
 	* Author						 : Auguste Lalande, Felix Dube, Juan Morency Trudel
 	* Version            : 1.0.0
 	* Date							 : February, 2016

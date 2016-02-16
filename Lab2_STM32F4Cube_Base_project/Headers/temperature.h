@@ -1,7 +1,7 @@
 /**
   ******************************************************************************
   * File Name          : temperature.h
-  * Description        : Implement methods for working with the internal temperature sensor
+  * Description        : Header file for temperature.c
 	* Author						 : Auguste Lalande, Felix Dube, Juan Morency Trudel
 	* Version            : 1.0.0
 	* Date							 : February, 2016

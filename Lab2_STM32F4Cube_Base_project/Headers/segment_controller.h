@@ -1,7 +1,7 @@
 /**
   ******************************************************************************
   * File Name          : segment_controller.h
-  * Description        : Allow to display numbers on 4 7-segments displays
+  * Description        : Header for segment_controller.c
 	* Author						 : Auguste Lalande, Felix Dube, Juan Morency Trudel
 	* Version            : 1.0.0
 	* Date							 : February, 2016
@@ -26,6 +26,7 @@
 #define sel2 GPIO_PIN_14
 #define sel3 GPIO_PIN_15
 
+// the segments that have to be ON and OFF on the 7 segment to display a certain digit
 #define ZERO  (uint8_t)0x7E
 #define ONE   (uint8_t)0x30
 #define TWO   (uint8_t)0x6D

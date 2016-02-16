@@ -43,8 +43,6 @@
 /* Exported constants --------------------------------------------------------*/
 extern volatile int adcTick;
 extern volatile int displayTimer;
-/* Exported macro ------------------------------------------------------------*/
-#define ABS(a) (a < 0 ? -a : a)
 /* Exported variables ------------------------------------------------------- */
 
 #endif /* __MAIN_H */

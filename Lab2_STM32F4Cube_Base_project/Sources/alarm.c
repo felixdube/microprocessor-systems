@@ -1,7 +1,7 @@
 /**
   ******************************************************************************
   * File Name          : alarm.c
-  * Description        : Implement methods for temperature alarm
+  * Description        : Header for alarm.c
 	* Author						 : Auguste Lalande, Felix Dube, Juan Morency Trudel
 	* Version            : 1.0.0
 	* Date							 : February, 2016
@@ -19,18 +19,14 @@ volatile int alarmTick = 0;
 	* @retval None
 	*/
 void Alarm_GPIO_Config(void) {
-	//Initialize struct
-	GPIO_InitTypeDef GPIO_InitDef;
-	
-	//Enable clock for GPOID
-	__HAL_RCC_GPIOD_CLK_ENABLE();
-	 
+	GPIO_InitTypeDef GPIO_InitDef; 	//Initialize struct
+	__HAL_RCC_GPIOD_CLK_ENABLE(); //Enable clock for GPOID 
 	//All will have same mode
 	GPIO_InitDef.Pin = LED1 | LED2 | LED3 | LED4;
 	GPIO_InitDef.Mode = GPIO_MODE_OUTPUT_PP;   			//push pull
 	GPIO_InitDef.Pull = GPIO_NOPULL;
 	GPIO_InitDef.Speed = GPIO_SPEED_FREQ_MEDIUM;		// max frequency for our processor is 84MHz
-	 
+	
 	HAL_GPIO_Init(GPIOD, &GPIO_InitDef);
 }
 

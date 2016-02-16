@@ -1,7 +1,7 @@
 /**
   ******************************************************************************
-  * File Name          : kalmanfilter.h
-  * Description        : header for system_clock.c
+  * File Name          : ADC_config.h
+  * Description        : Header for ADC_config.c
   * Author						 : Auguste Lalande, Felix Dube, Juan Morency Trudel
   * Version            : 1.0.0 
   * Date							 : February, 2016
