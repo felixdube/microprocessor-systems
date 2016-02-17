@@ -40,18 +40,23 @@ GPIOs are used in order to for the processor to communicate with external compon
 The 7-segment displays are LED diplay for which the segment can be individually controled to display the appropriate character.
 
 \subsection{LCD Display}
-An alternative way of presenting the temperature is to use an LCD display. The LCD used for the project is adm1602k-fsy-ybs/z. The processor comunicate with the display using 2 control bit and an 8 bits data bus. On the display, each character position is an address in memory (memory of the display itself). In order to write something on the disaplay, the character needed to be displayed needs to be saved at the appropriate memory address.
+An alternative way of presenting the temperature is to use an LCD display. The display used for the project is an LCD diplay made by sparkfun with part number adm1602k-fsy-ybs/z. The processor comunicate with the display using 2 control bit and an 8 bits data bus. On the display, each character position is an address in memory (memory of the display itself). In order to write something on the disaplay, the character needed to be displayed needs to be saved at the appropriate memory address.
 
 
 \section{Implementation}
 \subsection{Sampling Data}
 
 \subsection{Filtering Data}
+\begin{figure}[!htb]
+\centering
+\includegraphics[scale=0.35]{images/kalmanfilter.jpg}
+\caption{Filtered Data Compared to Raw Data Before and After Optimising the Kalman Filter Parameters}
+\label{fig:kalmanfilter}
+\end{figure}
 
 \subsection{Displaying the Data}
 
 \subsection{Overheating Alarm}
-
 
 \section{Observation}
 
