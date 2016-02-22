@@ -1,0 +1,118 @@
+%TODO Final reread for english
+%TODO Final formatting
+%TODO We need a hypothesis or else we lose points
+
+\documentclass[12pt]{article}
+\usepackage{mathtools, amsmath, amsfonts, amssymb}
+\usepackage{hyperref, graphicx, wrapfig, geometry}
+\usepackage[makeroom]{cancel}
+\usepackage{placeins}
+\usepackage{float}
+
+
+\newgeometry{margin=2cm}
+
+\title{Microprocessor Systems - Lab report}
+\author{Auguste Lalande, Felix Dube, Juan Morency Trudel}
+\date{\today}
+
+\begin{document}
+\maketitle
+\clearpage
+
+\tableofcontents
+\clearpage
+
+\section{Abstract}
+Today's microprocessor inevitably need temperature monitoring to avoid overheating. To this end, the goal of this experiment was to acquire, analyse and output the built in temperature sensor data on the STM32F4DISCOVERY board's STM32F4407VGT6 processor. A key point of the data processing was noise reduction implemented using a basic Kalman filter. The data was then converted to temperature values and displayed on four 7 segment display as well as an small LCD. Lastly, an overheating alarm was implemented.
+
+\section{Problem Statement}
+\subsection{ADC configuration} Since the temperature sensor measurements are mapped into a voltage range and not directly into digital data, an analog to digital converter (ADC) on the microprocessor has to be correctly used. In this kind of digitization, sampling frequency must be high enough to have enough time resolution but as low as possible for energy and processor time considerations.
+\subsection{Filtering}
+Some kind of filtering has to be applied to the input data in order to overcome the noise induced by the sensor and the ADC. Filtering parameters for the chosen implementation have to be tuned to the context of temperature measurement for overheating detection.
+\subsection{Data conversion}
+Data from the ADC comes in the form of a simple meaningless number. To make sense out of it, some calculations on the initial input value are required.
+\subsection{Display}
+Visual feedback is required in this experiment. The type of display and configuration parameters such as refresh rate have to be chosen to best represent the incoming data.
+\subsection{Overheating alarm}
+Another visual feedback is required to inform the user of overheating. The right threshold to activate this alarm has to be chosen.
+
+\section{Theoretical Background}
+\subsection{Kalman filter}
+Signals like the temperature recorded in this experiment can be affected by noise of different nature: thermal noise, interference, quantum noise, shot noise, etc \cite{kuo1995active}. Most of these noise are random in nature thus the need to use some kind of filter instead of simply adjusting the ADC conversion formula. For varying process like the temperature, an adaptative approach is usually preferred \cite{kuo1995active}. Of the many algorithm that exist for noise filtering in a signal, the Kalman filter algorithm \cite{kalman1960new} has been praised for its fast and elegant recursive design. Because of the Gaussian nature of most of the noise present in this experiment \cite{kish2000noise}, the Kalman filter is a natural choice. 
+
+A Kalman filter algorithm usually has state variables to modal the noise and adjust the value of the filtered data. Each time a new input is filtered, these state variables are recalculated to model the changing environment. Parameters that are used in this experiment will be: $k$ the  adaptive  tuning  factor, $p$ the covariance on the estimation error, $q$ the noise parameter in the  input  measurements,  and $r$ the noise parameter in the  state  estimation. While k and p are updated on every measurement, q and r are not and are important to specify in order to have a enough smoothing while having a reasonable convergence time \cite{kalman1960new}. The choice of these parameters is explained in section 5.1.
+
+\subsection{Systick and Timing}
+Systick is a process that count the period of the processor clock. It start to a predefinned value and count down to 0. When it reaches to 0, the Systick handler is called \cite{STMCubeDatasheet}. This will be used to set up various timing requirement of the project.
+
+\section{Implementation}
+
+The implementation of our system is briefly described in the next sections. For more complete explanation of the the software, please refer to the code. 
+\subsection{Analog to Digital Converter}
+
+A single ADC channel was configured with key parameters shown in table 1. First, channel 16 was chosen since the internal temperature sensor is hard wired to it. Next, because temperature is varying slowly it was decided that a 100 Hz sampling frequency was enough. For this purpose, a slower clock ($168/4 = 42$ MHz) and the slowest sampling time was chosen. The resolution was set at 12 bits to have the maximum precision in the reading. Finally, the 12 bit data was align to the right in a 32 bit word to facilitate data processing.
+\begin{table}[H]
+\centering
+\caption{Key Parameters of the ADC Initialization}
+\label{my-label}
+\begin{tabular}{|l|l|}
+\hline
+\multicolumn{1}{|c|}{\textbf{Parameter}} & \multicolumn{1}{c|}{\textbf{Value}} \\ \hline
+Channel                                  & ADC\_CHANNEL\_16                    \\ \hline
+SamplingTime                             & ADC\_SAMPLETIME\_480CYCLES          \\ \hline
+ClockPrescaler                           & ADC\_CLOCK\_SYNC\_PCLK\_DIV4        \\ \hline
+Resolution                               & ADC\_RESOLUTION\_12B                \\ \hline
+DataAlign                                & ADC\_DATAALIGN\_RIGHT               \\ \hline
+\end{tabular}
+\end{table}
+
+\subsection{General Purpose Input Output}
+\FloatBarrier
+GPIO pins were used to interface the display and the alarm. The pins in bank B,D and E were used for their availability. For maximum speed, the pins were set to push-pull mode and the speed parameter was set to medium due to the maximum speed of the GPIO pins on the STM32F4407VGT6 being $48 MHz$ \cite{STM32F407xx}.
+
+\subsection{Filtering}
+Smoothing of the temperature readings was implemented using a one dimensional kalman filter with the parameters mentioned in section 3.1. The parameter values were chosen by trial and error.
+
+\subsection{Systick and Timing}
+For the timing flexibility required in the software, the Systick period was set at $1\mu s$. From there, task dedicated counters were incremented each time the Systick interrupt was called. The $1\mu s$ time was especially important to configure the LCD effectively. One counter was used for the ADC sampling period, and 5 for the display for a total of 6. The various utilities of the timers for display are explained in the 7-Segments Display and LCD Display sections.
+\subsection{7-Segments Displays}
+%TODO explain the circuit, pull up resistors, why we use transistors (less pins), explain the code a little, maybe a diagram of our PINOUT
+
+To control the display time of the 7 segment display, 2 counters were used. A first counter called display7segTimer was used to set the frequency at which the display function is called (a kind of refresh rate) and a second counter was used to limit the speed at which the incoming value to be displayed is changed. These values were adjusted to have the minimum dimming and to avoid flickering, respectively, by trial and error. 
+
+\subsection{LCD Display}
+An alternative way of presenting the temperature is to use an LCD display. The display used for this experiment is an LCD based on  the  Hitachi  HD44780  controller  chipset made by Sparkfun with part number GDM1602k. The processor communicate with the display using 2 control bit and an 8 bits data bus. On the display, each character position is an address in memory (memory of the display itself). In order to write something on the display, the character needed to be displayed needs to be saved at the appropriate memory address. The basic built in functions of the HD44780 controller interfaced with the GPIO E ports were used to display characters. Simple type casting was used to convert the float temperature to be display in a Char array. The display gets updated at the same reduced frequency (2 Hz) of the 7 segment display to improve readability. 
+
+%TODO Maybe explain a little more + diagram of our PINOUT
+
+
+
+\subsection{Overheating Alarm}
+A trivial overheating alarm was implemented by verifying at each temperature measurement if the value is above a threshold. To avoid false positive, the filtered data is used in the overheating verification. Additionally, five consecutive values above threshold have to be recorded for the alarm to go on. The alarm threshold was set to $42.5^\circ$ Celcius for testing purposes but would be set a little lower than the junction temperature for the actual system in the actual system. In this implementation, the alarm routine doesn't actually try to cool down the processor but simply makes some LED's on the board blink to warn the user.
+
+\subsection{Code structure}
+%TODO like a UML of the code? If no time just delete section
+
+
+\section{Testing and Observation}
+
+\subsection{Kalman Filter Parameters}
+As mentioned in section 3.1, the parameters for the kalman filter had to be optimized for the application of temperature monitoring. Adjustements were done by trial and error for parameter q and r. Figure 1 shows the input and output data of the filter before and after the right parameters had been found. The time of convergence that can be observed in this figure is roughly 30 measurement which corresponds to about 300 ms. This was judge to be sufficient because temperature varies relatively slowly in the processor (it will not jump by 50 degrees in less than a second). The k and p parameters were set to the values these variables converged to after running the filter for a long period. Nevertheless, the initial value of k and p proved to have close to no impact on the resulting filter characterization.
+\begin{figure}[!htb]
+\centering
+\includegraphics[scale=0.50]{images/kalmanfilter.jpg}
+\caption{Filtered Data Compared to Raw Data Before and After Optimising the Kalman Filter Parameters}
+\label{fig:kalmanfilter}
+\end{figure}
+
+\subsection{Display}
+In order to achieve an acceptable display, timing parameters for the 7 segment display were tested by trial and error. In order for the 7 segment display to operate properly, 2 parameters had to be adjusted:  the time before the next digit gets shown and the number the time a single digit gets refreshed per second. At first, our algorithm just cycled through the digits at maximum speed, but this proved to be too fast for the human eye (the LEDs were not staying on long enough). To make up for this, the counter timeDisplay1DigitTimer was used to wait 2 ms before changing digit to display. This was the maximum value that did not cause noticeable flickering. The second parameter, the refresh rate of a single digit was tuned at the minimum Systick time of $1/mu s$. Due to the nature of our implementation which turns on and then directly off the LED's in on function call, the function has to be called as much as possible to avoid dimming on the LED. Needless to mention that this is a limitation can be overcome by improving our display algorithm.
+
+\section{Conclusion}
+%TODO write a simple conclusion
+\newpage
+\section{Bibliography}
+\bibliographystyle{unsrt}
+\bibliography{LabReport2} 
+\end{document}
