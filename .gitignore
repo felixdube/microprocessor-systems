@@ -20,4 +20,5 @@
 *.synctex.gz
 *.toc
 *.out
+*.tex.bak
 
