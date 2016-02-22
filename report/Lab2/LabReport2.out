@@ -1,0 +1,25 @@
+\BOOKMARK [1][-]{section.1}{Abstract}{}% 1
+\BOOKMARK [1][-]{section.2}{Problem Statement}{}% 2
+\BOOKMARK [2][-]{subsection.2.1}{ADC configuration}{section.2}% 3
+\BOOKMARK [2][-]{subsection.2.2}{Filtering}{section.2}% 4
+\BOOKMARK [2][-]{subsection.2.3}{Data conversion}{section.2}% 5
+\BOOKMARK [2][-]{subsection.2.4}{Display}{section.2}% 6
+\BOOKMARK [2][-]{subsection.2.5}{Overheating alarm}{section.2}% 7
+\BOOKMARK [1][-]{section.3}{Theory and Hypothesis}{}% 8
+\BOOKMARK [2][-]{subsection.3.1}{Kalman filter}{section.3}% 9
+\BOOKMARK [2][-]{subsection.3.2}{Systick and Timing}{section.3}% 10
+\BOOKMARK [2][-]{subsection.3.3}{Hypothesis}{section.3}% 11
+\BOOKMARK [1][-]{section.4}{Implementation}{}% 12
+\BOOKMARK [2][-]{subsection.4.1}{Analog to Digital Converter}{section.4}% 13
+\BOOKMARK [2][-]{subsection.4.2}{General Purpose Input Output}{section.4}% 14
+\BOOKMARK [2][-]{subsection.4.3}{Filtering}{section.4}% 15
+\BOOKMARK [2][-]{subsection.4.4}{Systick and Timing}{section.4}% 16
+\BOOKMARK [2][-]{subsection.4.5}{7-Segments Displays}{section.4}% 17
+\BOOKMARK [2][-]{subsection.4.6}{LCD Display}{section.4}% 18
+\BOOKMARK [2][-]{subsection.4.7}{Overheating Alarm}{section.4}% 19
+\BOOKMARK [2][-]{subsection.4.8}{Code structure}{section.4}% 20
+\BOOKMARK [1][-]{section.5}{Testing and Observations}{}% 21
+\BOOKMARK [2][-]{subsection.5.1}{Kalman Filter Parameters}{section.5}% 22
+\BOOKMARK [2][-]{subsection.5.2}{Display}{section.5}% 23
+\BOOKMARK [1][-]{section.6}{Conclusion}{}% 24
+\BOOKMARK [1][-]{section.7}{Bibliography}{}% 25
