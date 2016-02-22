@@ -12,12 +12,12 @@
 *.zip
 
 #latex output files
-/report/*.aux
-/report/*.fdb_latexmk
-/report/*.fls
-/report/*.log
-/report/*.pdf
-/report/*.synctex.gz
-/report/*.toc
-/report/*.out
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.pdf
+*.synctex.gz
+*.toc
+*.out
 
