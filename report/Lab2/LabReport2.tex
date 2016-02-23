@@ -95,7 +95,14 @@ An alternative way of presenting the temperature is to use an LCD display. The d
 A trivial overheating alarm was implemented by verifying at each temperature measurement if the value is above a threshold. To avoid false positive, the filtered data is used in the overheating verification. Additionally, five consecutive values above threshold have to be recorded for the alarm to turn on. The alarm threshold was set to $42.5^\circ$ Celsius for testing purposes but would be set a little lower than the junction temperature for the actual system in the actual system. In this implementation, the alarm routine doesn't actually try to cool down the processor but simply makes some LEDs on the board blink to warn the user.
 
 \subsection{Code structure}
-%TODO like a UML of the code? If no time just delete section
+ Figure \ref{fig:statediagram} present the state diagram of our implementation. Each timer variables are incremented in the systick handle.
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[scale=0.6]{images/statediagram.png}
+\caption{State Diagram of the Temperature Monitoring Software}
+\label{fig:statediagram}
+\end{figure}
 
 
 \section{Testing and Observations}
