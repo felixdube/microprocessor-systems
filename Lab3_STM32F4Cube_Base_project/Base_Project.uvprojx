@@ -10,8 +10,8 @@
       <TargetName>Lab 3</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
-      <pArmCC>5050169::V5.05 update 2 (build 169)::.\ARMCC_505u2</pArmCC>
-      <pCCUsed>5050169::V5.05 update 2 (build 169)::.\ARMCC_505u2</pCCUsed>
+      <pArmCC>5060061::V5.06 update 1 (build 61)::ARMCC</pArmCC>
+      <pCCUsed>5060061::V5.06 update 1 (build 61)::ARMCC</pCCUsed>
       <TargetOption>
         <TargetCommonOption>
           <Device>STM32F407VGTx</Device>
@@ -500,6 +500,21 @@
               <FileName>stm32f4xx_it.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Sources\stm32f4xx_it.c</FilePath>
+            </File>
+            <File>
+              <FileName>kalmanfilter.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\kalmanfilter.c</FilePath>
+            </File>
+            <File>
+              <FileName>segment_controller.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\segment_controller.c</FilePath>
+            </File>
+            <File>
+              <FileName>accelerometer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\accelerometer.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -12,6 +12,13 @@
 #include "stm32f4xx_hal.h"
 #include "supporting_functions.h"
 #include "lis3dsh.h"
+#include "accelerometer.h"
+
+/* initialize flags */
+volatile int accFlag = 0;
+	
+/* initialize variables */
+float accValue = 0;
 
 /* Private variables ---------------------------------------------------------*/
 
@@ -28,8 +35,19 @@ int main(void)
   SystemClock_Config();
 	
   /* Initialize all configured peripherals */
+	Accelerometer_Config();
+	Accelerometer_GPIO_Config();
+	Accelerometer_Interrupt_Config();
 
 	while (1){
+		if(accFlag == 1) {
+			accFlag = 0;
+			LIS3DSH_ReadACC(&accValue);
+			printf("%f\n", accValue);
+		}
+		//printf("Hello world\n");
+		
+		
 	}
 }
 
