@@ -1,2 +1,2 @@
 #ECSE 426 
-Microprocessor Systems
+Microprocessor Systems (μPain Systems)
