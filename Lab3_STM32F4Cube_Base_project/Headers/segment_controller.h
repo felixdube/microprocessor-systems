@@ -12,10 +12,6 @@
 #ifndef SEGMENT_CONTROLLER_H
 #define SEGMENT_CONTROLLER_H
 
-#define TIME_DISPLAY_1_DIGIT_PERIOD 2000 	/* if too high causes flickering */
-#define DISPLAY_7_SEGMENT_PERIOD 1 				/* if too high causes dimming */
-
-
 #define segA GPIO_PIN_0
 #define segB GPIO_PIN_1
 #define segC GPIO_PIN_2
@@ -41,14 +37,16 @@
 #define EIGHT (uint8_t)0x7F
 #define NINE  (uint8_t)0x7B
 
-extern volatile int displayTick;
-extern volatile int timeDisplay1DigitTimer;
+extern volatile int digitTimer;
+extern volatile int displayTimer;
 
+void Display_GPIO_Config(void);
+void Display_TIM_Config(void);
+	
+void TIM3_IRQHandler(void);
 
 void display(float value);
 int getDigit(float value, int place);
 void setPins(int number);
-
-void Display_GPIO_Config(void);
 
 #endif

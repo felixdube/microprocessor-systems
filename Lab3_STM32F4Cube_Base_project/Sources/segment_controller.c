@@ -11,10 +11,14 @@
 #include "stm32f4xx_hal.h"
 #include "segment_controller.h"
 
-volatile int digitToDisplay = 0;
-volatile int timeDisplay1DigitTimer = 0;
+volatile int digitTimer = 0;
+volatile int displayTimer = 1;
 const uint8_t patterns[10] = {ZERO, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE};
 const int segments[7] = {segA, segB, segC, segD, segE, segF, segG};
+
+/* Initialize struct */
+TIM_Base_InitTypeDef TIM3_InitDef;
+TIM_HandleTypeDef TIM3_HandleDef;
 
 /* GPIO configuration */
 void Display_GPIO_Config(void) {
@@ -33,18 +37,38 @@ void Display_GPIO_Config(void) {
 	HAL_GPIO_Init(GPIOB, &GPIO_InitDef);
 }
 
+/* Display timer configuration */
+void Display_TIM_Config(void) {
+	/* Enable clock for TIM3 */
+	__HAL_RCC_TIM3_CLK_ENABLE();
+	
+	TIM3_InitDef.Prescaler = 84;
+	TIM3_InitDef.Period = 100;
+	TIM3_InitDef.CounterMode = TIM_COUNTERMODE_DOWN;
+	
+	TIM3_HandleDef.Instance = TIM3;
+	TIM3_HandleDef.Init = TIM3_InitDef;
+	
+	HAL_TIM_Base_Start_IT(&TIM3_HandleDef);
+	
+	HAL_NVIC_EnableIRQ(TIM3_IRQn);
+	HAL_NVIC_SetPriority(TIM3_IRQn, 2, 0);
+}
+
+void TIM3_IRQHandler(void) {
+	digitTimer++;
+	displayTimer = 1;
+	HAL_TIM_IRQHandler(&TIM3_HandleDef);
+}
+
 /**
 	* @brief Display a value on the 4 7-segment displays
 	* @param value: value to be display
 	* @retval None
 	*/
 void display(float value) {
-		/* change the digit to be viewed slower for the 7-segment slower for better display */
-		if (timeDisplay1DigitTimer >= TIME_DISPLAY_1_DIGIT_PERIOD) {
-			timeDisplay1DigitTimer = 0;
-			digitToDisplay = (digitToDisplay + 1) % 3;
-		}
-	setPins(getDigit(value, digitToDisplay));
+	digitTimer %= 3;
+	setPins(getDigit(value, digitTimer));
 }
 
 /**
@@ -73,30 +97,33 @@ int getDigit(float value, int place) {
 	* @retval None
 	*/
 void setPins(int digit) {
-	uint8_t pattern;
 	int i;
-	uint16_t displayPin;
+	uint8_t pattern;
 	pattern = patterns[digit];
 	
 	HAL_GPIO_WritePin(GPIOB, segDegree, GPIO_PIN_SET);
 	
 	/* select which display will be updated according to the systick */
-	switch (digitToDisplay) {
+	switch (digitTimer) {
 		case 0:
-			displayPin = sel1;
+			HAL_GPIO_WritePin(GPIOB, sel1, GPIO_PIN_SET);
+			HAL_GPIO_WritePin(GPIOB, sel2, GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(GPIOB, sel3, GPIO_PIN_RESET);
 			HAL_GPIO_WritePin(GPIOB, segDP, GPIO_PIN_RESET);
 		break;
 		case 1:
-			displayPin = sel2;
+			HAL_GPIO_WritePin(GPIOB, sel1, GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(GPIOB, sel2, GPIO_PIN_SET);
+			HAL_GPIO_WritePin(GPIOB, sel3, GPIO_PIN_RESET);
 			HAL_GPIO_WritePin(GPIOB, segDP, GPIO_PIN_SET);
 		break;
 		case 2:
-			displayPin = sel3;
+			HAL_GPIO_WritePin(GPIOB, sel1, GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(GPIOB, sel2, GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(GPIOB, sel3, GPIO_PIN_SET);
 			HAL_GPIO_WritePin(GPIOB, segDP, GPIO_PIN_RESET);
+		
 	}
-	
-	HAL_GPIO_WritePin(GPIOB, displayPin, GPIO_PIN_SET);
-	
 	
 	/* update the 7-segment based on the digit value and the preset pattern */
 	for (i = 0; i < 7; i++) {
@@ -106,5 +133,4 @@ void setPins(int digit) {
 			HAL_GPIO_WritePin(GPIOB, segments[i], GPIO_PIN_RESET);
 		}
 	}
-	HAL_GPIO_WritePin(GPIOB, displayPin, GPIO_PIN_RESET);
 }

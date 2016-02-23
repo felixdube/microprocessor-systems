@@ -8,12 +8,6 @@
   ******************************************************************************
   */
 	
-
-#include <stdlib.h>
-#include <stdio.h>
-#include <math.h>
-#include <fenv.h>
-
 #include "kalmanfilter.h"
 
 

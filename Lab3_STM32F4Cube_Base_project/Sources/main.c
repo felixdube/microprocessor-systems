@@ -13,9 +13,8 @@
 #include "supporting_functions.h"
 #include "lis3dsh.h"
 #include "accelerometer.h"
+#include "segment_controller.h"
 
-/* initialize flags */
-volatile int accFlag = 0;
 	
 /* initialize variables */
 float accValue = 0;
@@ -34,21 +33,29 @@ int main(void)
   /* Configure the system clock */
   SystemClock_Config();
 	
-  /* Initialize all configured peripherals */
-	Accelerometer_Config();
-	Accelerometer_GPIO_Config();
-	Accelerometer_Interrupt_Config();
-
-	while (1){
-		if(accFlag == 1) {
-			accFlag = 0;
-			LIS3DSH_ReadACC(&accValue);
-			printf("%f\n", accValue);
-		}
-		//printf("Hello world\n");
-		
-		
-	}
+  /* Initialize accelerometer */
+  Accelerometer_Config();
+  Accelerometer_GPIO_Config();
+  Accelerometer_Interrupt_Config();
+  
+  /* Initialize 7-segment display */
+  Display_GPIO_Config();
+  Display_TIM_Config();
+	
+  /* Initialize 7-segment display */
+  
+  while (1){
+    if(accFlag == 1) {
+	  accFlag = 0;
+	  LIS3DSH_ReadACC(&accValue);
+	  printf("%f\n", accValue);
+    }
+	
+	if (displayTimer) {
+      display(12.3);
+      displayTimer = 0;
+    }
+  }
 }
 
 /** System Clock Configuration*/

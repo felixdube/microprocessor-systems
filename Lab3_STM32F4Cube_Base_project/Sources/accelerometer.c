@@ -12,6 +12,8 @@
 #include "accelerometer.h"
 #include "lis3dsh.h"
 
+/* initialize flags */
+volatile int accFlag = 0;
 
 /**
 * @brief Initialise the Accelerometer
