@@ -41,6 +41,7 @@ void Accelerometer_Config(void) {
 	
 	LIS3DSH_Init(&Acc_InitDef);
 	
+	/* Init Kalman Filter for the accelerometer */
 	xState = malloc(sizeof(kalmanState));
 	yState = malloc(sizeof(kalmanState));
 	zState = malloc(sizeof(kalmanState));
@@ -91,11 +92,14 @@ void Accelerometer_GPIO_Config(void) {
 	 
 	HAL_GPIO_Init(GPIOE, &Acc_GPIO_InitDef);
 }
-	
-void EXTI0_IRQHandler (void) {
-	HAL_GPIO_EXTI_IRQHandler(accPin);
-}
 
+/**
+  * @brief  Calculate the pitch using 3D acceleration
+	* @param  x:	acceleration in x axis
+	* @param 	y:	acceleration in y axis
+	* @param	z:	acceleration in z axis
+  * @retval pitch in degrees
+  */
 float calcPitch (float x, float y, float z) {
 	int pitch = atan2(x, (sqrt(y*y+z*z))) * 180.0 / PI;
 	if ( z < 0 && pitch < 0){
@@ -110,13 +114,24 @@ float calcPitch (float x, float y, float z) {
 	return pitch;
 }
 	
+/**
+  * @brief  Callback from the external GPIO interupt
+	* @param  GPIO_Pin: pin on with the interupt occurs	
+  * @retval None
+  */
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
 	if(GPIO_Pin == accPin) {
+		
+		/* Get values */
 		LIS3DSH_ReadACC(accValue);
-//		kalmanUpdate(xState, accValue[0]);
-//		kalmanUpdate(yState, accValue[1]);
-//		kalmanUpdate(zState, accValue[2]);
+		
+		/* Filter values */
+		kalmanUpdate(xState, accValue[0]);
+		kalmanUpdate(yState, accValue[1]);
+		kalmanUpdate(zState, accValue[2]);
+		
+		/* Calc pitch */
 		pitch = calcPitch(accValue[0], accValue[1], accValue[2]);
-	  printf("%f -- %f -- %f -- pitch: %f\n", accValue[0], accValue[1], accValue[2], pitch);
+	  printf("%f -- %f -- %f -- pitch: %f\n", xState->x, yState->x, zState->x, pitch);
 	}
 }
