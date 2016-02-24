@@ -13,11 +13,13 @@
 #include "lis3dsh.h"
 #include "kalmanFilter.h"
 #include <stdlib.h>
+#include <math.h>
 
 float accValue[3] = {0, 0, 0};
 kalmanState *xState;
 kalmanState *yState;
 kalmanState *zState;
+float pitch = 0;
 
 
 /**
@@ -93,6 +95,20 @@ void Accelerometer_GPIO_Config(void) {
 void EXTI0_IRQHandler (void) {
 	HAL_GPIO_EXTI_IRQHandler(accPin);
 }
+
+float calcPitch (float x, float y, float z) {
+	int pitch = atan2(x, (sqrt(y*y+z*z))) * 180.0 / PI;
+	if ( z < 0 && pitch < 0){
+		pitch = 180 + pitch;
+	}
+	else if( z < 0 && pitch > 0) {
+			pitch = 180 - pitch;
+	}
+	else if ( pitch < 0 ){
+		pitch = -pitch;
+	}
+	return pitch;
+}
 	
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
 	if(GPIO_Pin == accPin) {
@@ -100,6 +116,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
 //		kalmanUpdate(xState, accValue[0]);
 //		kalmanUpdate(yState, accValue[1]);
 //		kalmanUpdate(zState, accValue[2]);
-	  printf("%f -- %f -- %f\n", accValue[0], accValue[1], accValue[2]);
+		pitch = calcPitch(accValue[0], accValue[1], accValue[2]);
+	  printf("%f -- %f -- %f -- pitch: %f\n", accValue[0], accValue[1], accValue[2], pitch);
 	}
 }
