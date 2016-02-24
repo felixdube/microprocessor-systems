@@ -14,7 +14,7 @@
 
 #define accPin GPIO_PIN_0
 
-extern volatile int accFlag;
+extern float accValue[3];
 
 void Accelerometer_Config(void);
 void Accelerometer_Interrupt_Config(void);

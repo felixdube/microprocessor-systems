@@ -17,7 +17,6 @@
 
 	
 /* initialize variables */
-float accValue = 0;
 
 /* Private variables ---------------------------------------------------------*/
 
@@ -42,14 +41,8 @@ int main(void)
   Display_GPIO_Config();
   Display_TIM_Config();
 	
-  /* Initialize 7-segment display */
   
   while (1){
-    if(accFlag == 1) {
-	  accFlag = 0;
-	  LIS3DSH_ReadACC(&accValue);
-	  printf("%f\n", accValue);
-    }
 	
 	if (displayTimer) {
       display(12.3);

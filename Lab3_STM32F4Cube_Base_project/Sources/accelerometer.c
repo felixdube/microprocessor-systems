@@ -11,9 +11,14 @@
 #include "stm32f4xx_hal.h"
 #include "accelerometer.h"
 #include "lis3dsh.h"
+#include "kalmanFilter.h"
+#include <stdlib.h>
 
-/* initialize flags */
-volatile int accFlag = 0;
+float accValue[3] = {0, 0, 0};
+kalmanState *xState;
+kalmanState *yState;
+kalmanState *zState;
+
 
 /**
 * @brief Initialise the Accelerometer
@@ -28,11 +33,18 @@ void Accelerometer_Config(void) {
 	/* define field of the accelerometer initialisation structure */
 	Acc_InitDef.Power_Mode_Output_DataRate = LIS3DSH_DATARATE_25;      								/* 25Hz */
 	Acc_InitDef.Axes_Enable = LIS3DSH_XYZ_ENABLE;                     									/* XYZ */
-	Acc_InitDef.Continous_Update = LIS3DSH_ContinousUpdate_Enabled;											/* continuous update */
+	Acc_InitDef.Continous_Update = LIS3DSH_ContinousUpdate_Disabled;											/* continuous update */
 	Acc_InitDef.AA_Filter_BW = LIS3DSH_AA_BW_50;																				/* 50Hz */				
 	Acc_InitDef.Full_Scale = LIS3DSH_FULLSCALE_2;																				/* 2g */
 	
 	LIS3DSH_Init(&Acc_InitDef);
+	
+	xState = malloc(sizeof(kalmanState));
+	yState = malloc(sizeof(kalmanState));
+	zState = malloc(sizeof(kalmanState));
+	kalmanInit(xState, INIT_q, INIT_r, INIT_x, INIT_p, INIT_k);
+	kalmanInit(yState, INIT_q, INIT_r, INIT_x, INIT_p, INIT_k);
+	kalmanInit(zState, INIT_q, INIT_r, INIT_x, INIT_p, INIT_k);
 }
 
 /**
@@ -75,13 +87,19 @@ void Accelerometer_GPIO_Config(void) {
 	Acc_GPIO_InitDef.Pull = GPIO_NOPULL;
 	Acc_GPIO_InitDef.Speed = GPIO_SPEED_FREQ_MEDIUM;		/* max frequency for our processor is 84MHz */
 	 
-	HAL_GPIO_Init(GPIOB, &Acc_GPIO_InitDef);
+	HAL_GPIO_Init(GPIOE, &Acc_GPIO_InitDef);
 }
 	
 void EXTI0_IRQHandler (void) {
-	accFlag = 1;
 	HAL_GPIO_EXTI_IRQHandler(accPin);
 }
 	
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
+	if(GPIO_Pin == accPin) {
+		LIS3DSH_ReadACC(accValue);
+//		kalmanUpdate(xState, accValue[0]);
+//		kalmanUpdate(yState, accValue[1]);
+//		kalmanUpdate(zState, accValue[2]);
+	  printf("%f -- %f -- %f\n", accValue[0], accValue[1], accValue[2]);
+	}
 }
