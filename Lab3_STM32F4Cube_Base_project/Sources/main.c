@@ -24,6 +24,9 @@
 kalmanState *xState;
 kalmanState *yState;
 kalmanState *zState;
+int debounce = 0;
+int keyLock = 1;
+
 /* Private variables ---------------------------------------------------------*/
 
 /* Private function prototypes -----------------------------------------------*/
@@ -58,6 +61,7 @@ int main(void)
       display(12.3);
       displayTimer = 0;
     }
+	readKeypad();
   }
 }
 
@@ -82,8 +86,6 @@ void assert_failed(uint8_t* file, uint32_t line){
   * @retval None
   */
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
-	int row = 0;
-	int col = 0;
 	
 	switch (GPIO_Pin) {
 		case accPin:
@@ -99,24 +101,6 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
 			pitch = calcPitch(accValue[0], accValue[1], accValue[2]);
 			//printf("%f -- %f -- %f -- pitch: %f\n", xState->x, yState->x, zState->x, pitch);
 			break;
-		
-		case col1:
-			col = 1;
-			row = findRow();
-			printf("%c\n", convertToChar(col, row));
-			break;
-		
-		case col2:
-			col = 2;
-			row = findRow();
-			printf("%c\n", convertToChar(col, row));
-			break;
-		
-		case col3:
-			col = 3;
-			row = findRow();
-			printf("%c\n", convertToChar(col, row));
-			break;	
 	}
 }
 

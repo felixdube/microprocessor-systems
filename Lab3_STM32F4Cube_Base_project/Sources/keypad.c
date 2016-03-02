@@ -15,14 +15,18 @@
 GPIO_InitTypeDef Row_GPIO_InitDef;
 GPIO_InitTypeDef Column_GPIO_InitDef;
 	
-/* keypad configuration */
+/**
+	* @brief Initialise the keypad
+	* @param None
+	* @retval None
+	*/
 void Keypad_Config(void) {
 	
-	/* ROW */
-	/* Enable clock for GPOIB */
+	/* Enable clock for GPOIC */
 	__HAL_RCC_GPIOC_CLK_ENABLE();
 	 
-	/* All will have same mode */
+	/* ROW */
+	/ * output */
 	Row_GPIO_InitDef.Pin = row1 | row2 | row3 | row4;
 	Row_GPIO_InitDef.Mode = GPIO_MODE_OUTPUT_PP;   			/* push pull */
 	Row_GPIO_InitDef.Pull = GPIO_NOPULL;
@@ -36,34 +40,96 @@ void Keypad_Config(void) {
 	HAL_GPIO_WritePin(GPIOC, row4, GPIO_PIN_RESET);
 	
 	/* COLUMN */
-	 
-	/* All will have same mode */
+	/* input */
 	Column_GPIO_InitDef.Pin = col1 | col2 | col3;
-	Column_GPIO_InitDef.Mode = GPIO_MODE_IT_FALLING;   			/* INPUT */
+	Column_GPIO_InitDef.Mode = GPIO_MODE_INPUT;   			/* INPUT */
 	Column_GPIO_InitDef.Pull = GPIO_PULLUP;
 	Column_GPIO_InitDef.Speed = GPIO_SPEED_FREQ_MEDIUM;		/* max frequency for our processor is 84MHz */
 	 
 	HAL_GPIO_Init(GPIOC, &Column_GPIO_InitDef);
-	
-	HAL_NVIC_EnableIRQ(EXTI1_IRQn);
-	HAL_NVIC_SetPriority(EXTI1_IRQn, 0, 2);
-	
-//	HAL_NVIC_EnableIRQ(EXTI2_IRQn);
-//	HAL_NVIC_SetPriority(EXTI2_IRQn, 0, 2);
-//	
-//	HAL_NVIC_EnableIRQ(EXTI4_IRQn);
-//	HAL_NVIC_SetPriority(EXTI4_IRQn, 0, 2);
 }
 
+/**
+	* @brief Check is a button is pressed on the keypad
+	* @param None
+	* @retval None
+	*/
+void readKeypad(void) {
+	int row = 0;
+	int col = 0;
+
+	/* the keyLock prevent a button to be triggered more than once when it is pushed only once */
+	if(keyLock){
+		
+		/* check if a button is pressed and in which row the button is */
+		if (HAL_GPIO_ReadPin(GPIOC, col1) == GPIO_PIN_RESET){
+			debounce++;
+			
+			/* debounce for button pressed */
+			if(debounce > 100){
+				keyLock = 0;
+				col = 1;
+				row = findRow();
+				printf("%c\n", convertToChar(col, row));
+			}
+		}
+		
+		else if (HAL_GPIO_ReadPin(GPIOC, col2) == GPIO_PIN_RESET){
+			debounce++;
+			
+			/* debounce for button pressed */
+			if (debounce > 100){
+				keyLock = 0;
+				col = 2;
+				row = findRow();
+				printf("%c\n", convertToChar(col, row));
+			}
+		}
+		
+		else if (HAL_GPIO_ReadPin(GPIOC, col3) == GPIO_PIN_RESET){
+			debounce++;
+			
+			/* debounce for button pressed */
+			if (debounce > 100) {
+				keyLock = 0;
+				col = 3;
+				row = findRow();
+				printf("%c\n", convertToChar(col, row));
+			}
+		}
+	}
+	else{
+		
+		/* debounce for when the button is depressed */
+		if(	HAL_GPIO_ReadPin(GPIOC, col1) == GPIO_PIN_SET && 
+				HAL_GPIO_ReadPin(GPIOC, col2) == GPIO_PIN_SET && 
+				HAL_GPIO_ReadPin(GPIOC, col3) == GPIO_PIN_SET){
+			debounce--;
+		}
+		
+		/* unlock the keypad after the button press */
+		if(debounce < 0){
+			keyLock = 1;
+		}
+	}
+}
+
+/**
+	* @brief Find in which row a button was pressed
+	* @param None
+	* @retval None
+	*/
 int findRow(void){
-	int count = 0;
 	int row = 0;
 
+	/* change the column at output */
 	Column_GPIO_InitDef.Mode = GPIO_MODE_OUTPUT_PP;   
 	Column_GPIO_InitDef.Pull = GPIO_NOPULL;
 	
 	HAL_GPIO_Init(GPIOC, &Column_GPIO_InitDef);
 	
+	
+	/* change row as input */
 	Row_GPIO_InitDef.Mode = GPIO_MODE_INPUT;
 	Row_GPIO_InitDef.Pull = GPIO_PULLUP;
 	
@@ -73,7 +139,7 @@ int findRow(void){
 	HAL_GPIO_WritePin(GPIOC, col2, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(GPIOC, col3, GPIO_PIN_RESET);
 	
-	
+	/* check which row have a button pressed */
 	if (HAL_GPIO_ReadPin(GPIOC, row1) == GPIO_PIN_RESET){
 		row = 1;
 	}
@@ -90,6 +156,7 @@ int findRow(void){
 		row = 4;
 	}
 	
+	/* set back the row and column as output and input */
 	Row_GPIO_InitDef.Mode = GPIO_MODE_OUTPUT_PP;
 	Row_GPIO_InitDef.Pull = GPIO_NOPULL;
 	
@@ -100,7 +167,7 @@ int findRow(void){
 	HAL_GPIO_WritePin(GPIOC, row3, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(GPIOC, row4, GPIO_PIN_RESET);
 
-	Column_GPIO_InitDef.Mode = GPIO_MODE_IT_FALLING;   
+	Column_GPIO_InitDef.Mode = GPIO_MODE_INPUT;   
 	Column_GPIO_InitDef.Pull = GPIO_PULLUP;
 	
 	HAL_GPIO_Init(GPIOC, &Column_GPIO_InitDef);
@@ -108,7 +175,14 @@ int findRow(void){
 	return row;
 }
 
+/**
+	* @brief Convert a keypad position to a character
+	* @param col: Column of the button
+	* @param row: Row of the button
+	* @retval character corresponding the the column and row
+	*/
 char convertToChar(int col, int row){ 
+	
 	switch(col) {
 		case 1:
 			switch(row){

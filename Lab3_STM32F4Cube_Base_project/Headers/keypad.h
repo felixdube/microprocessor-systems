@@ -19,10 +19,14 @@
 #define row3 GPIO_PIN_8
 #define row4 GPIO_PIN_9
 
+extern int debounce;
+extern int keyLock;
+
 
 char convertToChar(int col, int row);
 void Keypad_Config(void);
 int findRow(void);
+void readKeypad(void);
 
 
 
