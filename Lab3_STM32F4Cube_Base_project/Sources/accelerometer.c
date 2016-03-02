@@ -14,11 +14,9 @@
 #include "kalmanFilter.h"
 #include <stdlib.h>
 #include <math.h>
+#include "keypad.h"
 
 float accValue[3] = {0, 0, 0};
-kalmanState *xState;
-kalmanState *yState;
-kalmanState *zState;
 float pitch = 0;
 
 
@@ -112,26 +110,4 @@ float calcPitch (float x, float y, float z) {
 		pitch = -pitch;
 	}
 	return pitch;
-}
-	
-/**
-  * @brief  Callback from the external GPIO interupt
-	* @param  GPIO_Pin: pin on with the interupt occurs	
-  * @retval None
-  */
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
-	if(GPIO_Pin == accPin) {
-		
-		/* Get values */
-		LIS3DSH_ReadACC(accValue);
-		
-		/* Filter values */
-		kalmanUpdate(xState, accValue[0]);
-		kalmanUpdate(yState, accValue[1]);
-		kalmanUpdate(zState, accValue[2]);
-		
-		/* Calc pitch */
-		pitch = calcPitch(accValue[0], accValue[1], accValue[2]);
-	  printf("%f -- %f -- %f -- pitch: %f\n", xState->x, yState->x, zState->x, pitch);
-	}
 }

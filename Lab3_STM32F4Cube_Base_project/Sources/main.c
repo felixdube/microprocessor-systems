@@ -4,7 +4,7 @@
   * Description        : Main program subroutine
 	* Author						 : Auguste Lalande, Felix Dube, Juan Morency Trudel
 	* Version            : 1.0.0
-	* Date							 : January 14th, 2016
+	* Date							 : February 2016
   ******************************************************************************
   */
 	
@@ -15,10 +15,15 @@
 #include "accelerometer.h"
 #include "segment_controller.h"
 #include "system_clock.h"
+#include "kalmanFilter.h"
+#include "keypad.h"
+
 
 	
 /* initialize variables */
-
+kalmanState *xState;
+kalmanState *yState;
+kalmanState *zState;
 /* Private variables ---------------------------------------------------------*/
 
 /* Private function prototypes -----------------------------------------------*/
@@ -37,6 +42,10 @@ int main(void)
   Accelerometer_Config();
   Accelerometer_GPIO_Config();
   Accelerometer_Interrupt_Config();
+	
+	/* Initialize */
+	Keypad_Config();
+	
   
   /* Initialize 7-segment display */
   Display_GPIO_Config();
@@ -66,4 +75,49 @@ int main(void)
 void assert_failed(uint8_t* file, uint32_t line){
 }
 #endif
+
+/**
+  * @brief  Callback from the external GPIO interupt
+	* @param  GPIO_Pin: pin on with the interupt occurs	
+  * @retval None
+  */
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
+	int row = 0;
+	int col = 0;
+	
+	switch (GPIO_Pin) {
+		case accPin:
+			/* Get values */
+			LIS3DSH_ReadACC(accValue);
+			
+			/* Filter values */
+			kalmanUpdate(xState, accValue[0]);
+			kalmanUpdate(yState, accValue[1]);
+			kalmanUpdate(zState, accValue[2]);
+			
+			/* Calc pitch */
+			pitch = calcPitch(accValue[0], accValue[1], accValue[2]);
+			//printf("%f -- %f -- %f -- pitch: %f\n", xState->x, yState->x, zState->x, pitch);
+			break;
+		
+		case col1:
+			col = 1;
+			row = findRow();
+			printf("%c\n", convertToChar(col, row));
+			break;
+		
+		case col2:
+			col = 2;
+			row = findRow();
+			printf("%c\n", convertToChar(col, row));
+			break;
+		
+		case col3:
+			col = 3;
+			row = findRow();
+			printf("%c\n", convertToChar(col, row));
+			break;	
+	}
+}
+
 

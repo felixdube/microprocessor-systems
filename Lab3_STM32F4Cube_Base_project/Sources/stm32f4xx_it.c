@@ -41,6 +41,7 @@
 #include "main.h"
 #include "stm32f4xx_it.h"
 #include "accelerometer.h"
+#include "keypad.h"
 
 /** @addtogroup STM32F4xx_HAL_Examples
   * @{
@@ -174,6 +175,19 @@ void SysTick_Handler(void)
 void EXTI0_IRQHandler (void) {
 	HAL_GPIO_EXTI_IRQHandler(accPin);
 }
+
+void EXTI1_IRQHandler (void) {
+	HAL_GPIO_EXTI_IRQHandler(col1);
+}
+
+void EXTI2_IRQHandler (void) {
+	HAL_GPIO_EXTI_IRQHandler(col2);
+}
+
+void EXTI4_IRQHandler (void) {
+	HAL_GPIO_EXTI_IRQHandler(col3);
+}
+
 
 /**
   * @brief  This function handles PPP interrupt request.

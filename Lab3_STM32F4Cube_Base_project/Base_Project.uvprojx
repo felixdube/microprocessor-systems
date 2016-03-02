@@ -521,6 +521,11 @@
               <FileType>1</FileType>
               <FilePath>.\Sources\system_clock.c</FilePath>
             </File>
+            <File>
+              <FileName>keypad.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\keypad.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

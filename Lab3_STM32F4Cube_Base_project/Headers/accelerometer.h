@@ -8,9 +8,11 @@
   ******************************************************************************
   */
 	
-	
+
 #ifndef ACCELEROMETER_H
 #define ACCELEROMETER_H
+
+#include "kalmanFilter.h"
 
 #define accPin GPIO_PIN_0
 
@@ -18,12 +20,15 @@
 
 extern float accValue[3];
 extern float pitch;
+extern kalmanState *xState;
+extern kalmanState *yState;
+extern kalmanState *zState;
 
 void Accelerometer_Config(void);
 void Accelerometer_Interrupt_Config(void);
 void Accelerometer_GPIO_Config(void);
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin);
 void EXTI0_IRQHandler (void);
+float calcPitch (float x, float y, float z);
 
 
 
