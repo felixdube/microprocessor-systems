@@ -35,7 +35,7 @@ void Accelerometer_Config(void) {
 	Acc_InitDef.Axes_Enable = LIS3DSH_XYZ_ENABLE;                     									/* XYZ */
 	Acc_InitDef.Continous_Update = LIS3DSH_ContinousUpdate_Disabled;											/* continuous update */
 	Acc_InitDef.AA_Filter_BW = LIS3DSH_AA_BW_50;																				/* 50Hz */				
-	Acc_InitDef.Full_Scale = LIS3DSH_FULLSCALE_2;																				/* 2g */
+	Acc_InitDef.Full_Scale = LIS3DSH_FULLSCALE_2;		/*Why at 2 only? won't we overflow for fast movements?*/																		/* 2g */
 	
 	LIS3DSH_Init(&Acc_InitDef);
 	
@@ -79,12 +79,12 @@ void Accelerometer_GPIO_Config(void) {
 	/* Initialize struct */
 	GPIO_InitTypeDef Acc_GPIO_InitDef;
 	
-	/* Enable clock for GPOIB */
+	/* Enable clock for GPOIE */
 	__HAL_RCC_GPIOE_CLK_ENABLE();
 	 
 	/* All will have same mode */
 	Acc_GPIO_InitDef.Pin = accPin;
-	Acc_GPIO_InitDef.Mode = GPIO_MODE_IT_RISING;   			/* push pull */
+	Acc_GPIO_InitDef.Mode = GPIO_MODE_IT_RISING;   			/* External Interrupt Mode with Rising edge trigger detection*/
 	Acc_GPIO_InitDef.Pull = GPIO_NOPULL;
 	Acc_GPIO_InitDef.Speed = GPIO_SPEED_FREQ_MEDIUM;		/* max frequency for our processor is 84MHz */
 	 
@@ -99,7 +99,7 @@ void Accelerometer_GPIO_Config(void) {
   * @retval pitch in degrees
   */
 float calcPitch (float x, float y, float z) {
-	int pitch = atan2(x, (sqrt(y*y+z*z))) * 180.0 / PI;
+	float pitch = atan2(x, (sqrt(y*y+z*z))) * 180.0 / PI;
 	if ( z < 0 && pitch < 0){
 		pitch = 180 + pitch;
 	}

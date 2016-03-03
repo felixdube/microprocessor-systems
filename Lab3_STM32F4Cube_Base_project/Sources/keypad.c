@@ -26,7 +26,7 @@ void Keypad_Config(void) {
 	__HAL_RCC_GPIOC_CLK_ENABLE();
 	 
 	/* ROW */
-	/ * output */
+	/* output */
 	Row_GPIO_InitDef.Pin = row1 | row2 | row3 | row4;
 	Row_GPIO_InitDef.Mode = GPIO_MODE_OUTPUT_PP;   			/* push pull */
 	Row_GPIO_InitDef.Pull = GPIO_NOPULL;
@@ -121,7 +121,6 @@ void readKeypad(void) {
 	*/
 int findRow(void){
 	int row = 0;
-
 	/* change the column at output */
 	Column_GPIO_InitDef.Mode = GPIO_MODE_OUTPUT_PP;   
 	Column_GPIO_InitDef.Pull = GPIO_NOPULL;
@@ -151,9 +150,9 @@ int findRow(void){
 	else if (HAL_GPIO_ReadPin(GPIOC, row3) == GPIO_PIN_RESET){
 		row = 3;
 	}
-	
 	else if (HAL_GPIO_ReadPin(GPIOC, row4) == GPIO_PIN_RESET){
 		row = 4;
+		printf("test\n");
 	}
 	
 	/* set back the row and column as output and input */

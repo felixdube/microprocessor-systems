@@ -15,7 +15,8 @@ volatile int digitTimer = 0;
 volatile int displayTimer = 1;
 const uint8_t patterns[10] = {ZERO, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE};
 const int segments[7] = {segA, segB, segC, segD, segE, segF, segG};
-
+int tmp;
+int dotPosition = 1;
 /* Initialize struct */
 TIM_Base_InitTypeDef TIM3_InitDef;
 TIM_HandleTypeDef TIM3_HandleDef;
@@ -52,7 +53,7 @@ void Display_TIM_Config(void) {
 	HAL_TIM_Base_Start_IT(&TIM3_HandleDef);
 	
 	HAL_NVIC_EnableIRQ(TIM3_IRQn);
-	HAL_NVIC_SetPriority(TIM3_IRQn, 2, 0);
+	HAL_NVIC_SetPriority(TIM3_IRQn, 0, 2);
 }
 
 void TIM3_IRQHandler(void) {
@@ -78,7 +79,19 @@ void display(float value) {
 	* @retval value of the digit
 	*/
 int getDigit(float value, int place) {
-	int tmp = (int) (value * 10);
+	if(value >= 100){
+		tmp = (int) (value);
+		dotPosition = 2;
+	}
+	else if(value >= 10){
+		tmp = (int) (value * 10);
+		dotPosition = 1;
+	}
+	else {
+		tmp = (int) (value * 100);
+		dotPosition = 0;
+	}
+		
 	switch (place) {
 		case 0:
 			return (tmp - tmp % 100) / 100;
@@ -89,6 +102,7 @@ int getDigit(float value, int place) {
 		default:
 			return 0;
 	}
+	
 }
 
 /**
@@ -109,20 +123,29 @@ void setPins(int digit) {
 			HAL_GPIO_WritePin(GPIOB, sel1, GPIO_PIN_SET);
 			HAL_GPIO_WritePin(GPIOB, sel2, GPIO_PIN_RESET);
 			HAL_GPIO_WritePin(GPIOB, sel3, GPIO_PIN_RESET);
-			HAL_GPIO_WritePin(GPIOB, segDP, GPIO_PIN_RESET);
+			if (dotPosition == 0){
+				HAL_GPIO_WritePin(GPIOB, segDP, GPIO_PIN_SET);
+			}
+			else {
+				HAL_GPIO_WritePin(GPIOB, segDP, GPIO_PIN_RESET);
+			}
 		break;
 		case 1:
 			HAL_GPIO_WritePin(GPIOB, sel1, GPIO_PIN_RESET);
 			HAL_GPIO_WritePin(GPIOB, sel2, GPIO_PIN_SET);
 			HAL_GPIO_WritePin(GPIOB, sel3, GPIO_PIN_RESET);
-			HAL_GPIO_WritePin(GPIOB, segDP, GPIO_PIN_SET);
+			if (dotPosition == 1){
+				HAL_GPIO_WritePin(GPIOB, segDP, GPIO_PIN_SET);
+			}
+			else {
+				HAL_GPIO_WritePin(GPIOB, segDP, GPIO_PIN_RESET);
+			}
 		break;
 		case 2:
 			HAL_GPIO_WritePin(GPIOB, sel1, GPIO_PIN_RESET);
 			HAL_GPIO_WritePin(GPIOB, sel2, GPIO_PIN_RESET);
 			HAL_GPIO_WritePin(GPIOB, sel3, GPIO_PIN_SET);
 			HAL_GPIO_WritePin(GPIOB, segDP, GPIO_PIN_RESET);
-		
 	}
 	
 	/* update the 7-segment based on the digit value and the preset pattern */

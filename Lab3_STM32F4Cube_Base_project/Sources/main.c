@@ -58,7 +58,7 @@ int main(void)
   while (1){
 	
 	if (displayTimer) {
-      display(12.3);
+      display(pitch);
       displayTimer = 0;
     }
 	readKeypad();
@@ -86,7 +86,6 @@ void assert_failed(uint8_t* file, uint32_t line){
   * @retval None
   */
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
-	
 	switch (GPIO_Pin) {
 		case accPin:
 			/* Get values */
@@ -99,7 +98,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
 			
 			/* Calc pitch */
 			pitch = calcPitch(accValue[0], accValue[1], accValue[2]);
-			//printf("%f -- %f -- %f -- pitch: %f\n", xState->x, yState->x, zState->x, pitch);
+			printf("%f -- %f -- %f -- pitch: %f\n", accValue[0],accValue[1],accValue[2], pitch);
 			break;
 	}
 }
