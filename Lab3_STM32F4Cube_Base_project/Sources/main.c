@@ -90,15 +90,19 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
 		case accPin:
 			/* Get values */
 			LIS3DSH_ReadACC(accValue);
+			Calibrate(accValue);
 			
 			/* Filter values */
 			kalmanUpdate(xState, accValue[0]);
 			kalmanUpdate(yState, accValue[1]);
 			kalmanUpdate(zState, accValue[2]);
-			
+		
+			/* DON'T DELETE printf for matlab script */
+			printf("%f,%f,%f,%f,%f,%f\n",accValue[0], xState->q,xState->r, xState->x, xState->p, xState->k);
 			/* Calc pitch */
 			pitch = calcPitch(accValue[0], accValue[1], accValue[2]);
-			printf("%f -- %f -- %f -- pitch: %f\n", accValue[0],accValue[1],accValue[2], pitch);
+			//printf("%f %f %f pitch: %f\n", accValue[0],accValue[1],accValue[2], pitch);
+		  //printf("%f %f %f\n", accValue[0],accValue[1],accValue[2]);
 			break;
 	}
 }

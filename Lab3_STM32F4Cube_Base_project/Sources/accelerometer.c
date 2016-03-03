@@ -18,6 +18,7 @@
 
 float accValue[3] = {0, 0, 0};
 float pitch = 0;
+float tmp0, tmp1, tmp2;
 
 
 /**
@@ -110,4 +111,14 @@ float calcPitch (float x, float y, float z) {
 		pitch = -pitch;
 	}
 	return pitch;
+}
+
+void Calibrate(float* out) {
+	tmp0 = out[0]; //x
+	tmp1 = out[1]; //y
+	tmp2 = out[2]; //z
+	out[0] = tmp0*(float)cal_X11 + tmp1*(float)cal_X21 + tmp2*(float)cal_X31 + (float)cal_X41;
+	out[1] = tmp0*(float)cal_X12 + tmp1*(float)cal_X22 + tmp2*(float)cal_X32 + (float)cal_X42;
+	out[2] = tmp0*(float)cal_X13 + tmp1*(float)cal_X23 + tmp2*(float)cal_X33 + (float)cal_X43;
+	
 }
