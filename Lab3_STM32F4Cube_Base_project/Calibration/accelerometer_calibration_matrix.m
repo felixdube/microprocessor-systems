@@ -1,9 +1,9 @@
-Y = [   0   0   1;
-        0   0   -1;
-        0   1   0;
-        0   -1  0;
-        1   0   0;
-        -1  0   0];
+Y = [   0   0   1000;
+        0   0   -1000;
+        0   1000   0;
+        0   -1000  0;
+        1000   0   0;
+        -1000  0   0];
 %Raw data gathered for calibration
 w1raw = [
 22.204000 3.355000 1032.058960
@@ -465,12 +465,12 @@ w6raw = [
 -970.754028 -12.444000 35.990002
 -972.156982 -10.858000 35.685001    
 ];
-w1 = [mean(w1raw),1];
-w2 = [mean(w2raw),1];
-w3 = [mean(w3raw),1];
-w4 = [mean(w4raw),1];
-w5 = [mean(w5raw),1];
-w6 = [mean(w6raw),1];
+w1 = [mean(w1raw),1000];
+w2 = [mean(w2raw),1000];
+w3 = [mean(w3raw),1000];
+w4 = [mean(w4raw),1000];
+w5 = [mean(w5raw),1000];
+w6 = [mean(w6raw),1000];
 W = [w1;w2;w3;w4;w5;w6];
 
 X = inv(transpose(W)*W)*transpose(W)*Y

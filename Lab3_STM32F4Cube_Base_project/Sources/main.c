@@ -98,11 +98,11 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
 			kalmanUpdate(zState, accValue[2]);
 		
 			/* DON'T DELETE printf for matlab script */
-			printf("%f,%f,%f,%f,%f,%f\n",accValue[0], xState->q,xState->r, xState->x, xState->p, xState->k);
+			//printf("%f,%f,%f,%f,%f,%f\n",accValue[2], zState->q,zState->r, zState->x, zState->p, zState->k);
 			/* Calc pitch */
-			pitch = calcPitch(accValue[0], accValue[1], accValue[2]);
-			//printf("%f %f %f pitch: %f\n", accValue[0],accValue[1],accValue[2], pitch);
-		  //printf("%f %f %f\n", accValue[0],accValue[1],accValue[2]);
+			pitch = calcPitch(xState->x, yState->x, zState->x);
+			printf("%f %f %f pitch: %f\n", xState->x,yState->x,zState->x, pitch);
+		  //printf("%f %f %f;\n", xState->x,yState->x,zState->x);
 			break;
 	}
 }

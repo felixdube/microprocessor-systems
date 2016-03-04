@@ -1,0 +1,15 @@
+
+
+For flat position on the desk
+
+	   x	      y	      z
+Before: 23.828	 11.1373   1029.487
+After :  5.751    7.462    995.500
+
+Pitch precision:
+
+degree    0      45     90
+Before: 1.93	45.6	88.2
+error : 1.93	0.6	1.8			MEAN ERROR BEFORE 1.44
+After : 0.9    44.8    90.5
+error : 0.9	0.2	0.5			MEAN ERROR AFTER 0.53
