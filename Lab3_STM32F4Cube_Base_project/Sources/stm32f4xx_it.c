@@ -42,6 +42,7 @@
 #include "stm32f4xx_it.h"
 #include "accelerometer.h"
 #include "keypad.h"
+#include "segment_controller.h"
 
 /** @addtogroup STM32F4xx_HAL_Examples
   * @{
@@ -176,17 +177,28 @@ void EXTI0_IRQHandler (void) {
 	HAL_GPIO_EXTI_IRQHandler(accPin);
 }
 
-void EXTI1_IRQHandler (void) {
-	HAL_GPIO_EXTI_IRQHandler(col1);
+/**
+  * @brief  This function handles Timer 4 interrupts for the display
+  * @param  None
+  * @retval None
+  */
+void TIM4_IRQHandler (void) {
+	//digitTimer++;
+	//displayTimer = 1;
+	HAL_TIM_IRQHandler(&TIM_7_seg_HandleDef);
 }
 
-void EXTI2_IRQHandler (void) {
-	HAL_GPIO_EXTI_IRQHandler(col2);
-}
+//void EXTI1_IRQHandler (void) {
+//	HAL_GPIO_EXTI_IRQHandler(col1);
+//}
 
-void EXTI4_IRQHandler (void) {
-	HAL_GPIO_EXTI_IRQHandler(col3);
-}
+//void EXTI2_IRQHandler (void) {
+//	HAL_GPIO_EXTI_IRQHandler(col2);
+//}
+
+//void EXTI4_IRQHandler (void) {
+//	HAL_GPIO_EXTI_IRQHandler(col3);
+//}
 
 
 /**

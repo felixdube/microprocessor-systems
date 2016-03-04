@@ -39,11 +39,10 @@
 
 extern volatile int digitTimer;
 extern volatile int displayTimer;
+extern TIM_HandleTypeDef TIM_7_seg_HandleDef;
 
 void Display_GPIO_Config(void);
 void Display_TIM_Config(void);
-	
-void TIM3_IRQHandler(void);
 
 void display(float value);
 int getDigit(float value, int place);

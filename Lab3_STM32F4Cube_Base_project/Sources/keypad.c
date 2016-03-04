@@ -7,14 +7,18 @@
 	* Date							 : February 2016
   ******************************************************************************
   */
-	
+#include "stm32f4xx_hal.h"	
 #include "keypad.h"
-#include "stm32f4xx_hal.h"
 
 /* Initialize struct */
 GPIO_InitTypeDef Row_GPIO_InitDef;
 GPIO_InitTypeDef Column_GPIO_InitDef;
-	
+
+
+/* Initialize struct */
+TIM_Base_InitTypeDef TIM_keypad_InitDef;
+TIM_HandleTypeDef TIM_keypad_HandleDef;
+
 /**
 	* @brief Initialise the keypad
 	* @param None
@@ -152,7 +156,6 @@ int findRow(void){
 	}
 	else if (HAL_GPIO_ReadPin(GPIOC, row4) == GPIO_PIN_RESET){
 		row = 4;
-		printf("test\n");
 	}
 	
 	/* set back the row and column as output and input */

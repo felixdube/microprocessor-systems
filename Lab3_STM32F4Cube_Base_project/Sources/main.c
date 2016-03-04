@@ -45,14 +45,13 @@ int main(void)
   Accelerometer_Config();
   Accelerometer_GPIO_Config();
   Accelerometer_Interrupt_Config();
-	
-	/* Initialize */
-	Keypad_Config();
-	
   
   /* Initialize 7-segment display */
   Display_GPIO_Config();
   Display_TIM_Config();
+	
+	/* Initialize Keypad*/
+	Keypad_Config();
 	
   
   while (1){
@@ -79,7 +78,16 @@ int main(void)
 void assert_failed(uint8_t* file, uint32_t line){
 }
 #endif
-
+/**
+  * @brief  Callback from the Timers
+	* @param  Timer handler
+  * @retval None
+  */
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
+		digitTimer++;
+		displayTimer = 1;
+}
+	
 /**
   * @brief  Callback from the external GPIO interupt
 	* @param  GPIO_Pin: pin on with the interupt occurs	
@@ -101,7 +109,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
 			//printf("%f,%f,%f,%f,%f,%f\n",accValue[2], zState->q,zState->r, zState->x, zState->p, zState->k);
 			/* Calc pitch */
 			pitch = calcPitch(xState->x, yState->x, zState->x);
-			printf("%f %f %f pitch: %f\n", xState->x,yState->x,zState->x, pitch);
+			//printf("%f %f %f pitch: %f\n", xState->x,yState->x,zState->x, pitch);
 		  //printf("%f %f %f;\n", xState->x,yState->x,zState->x);
 			break;
 	}

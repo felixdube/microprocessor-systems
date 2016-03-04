@@ -18,8 +18,8 @@ const int segments[7] = {segA, segB, segC, segD, segE, segF, segG};
 int tmp;
 int dotPosition = 1;
 /* Initialize struct */
-TIM_Base_InitTypeDef TIM3_InitDef;
-TIM_HandleTypeDef TIM3_HandleDef;
+TIM_Base_InitTypeDef TIM_7_seg_InitDef;
+TIM_HandleTypeDef TIM_7_seg_HandleDef;
 
 /* GPIO configuration */
 void Display_GPIO_Config(void) {
@@ -40,26 +40,20 @@ void Display_GPIO_Config(void) {
 
 /* Display timer configuration */
 void Display_TIM_Config(void) {
-	/* Enable clock for TIM3 */
-	__HAL_RCC_TIM3_CLK_ENABLE();
+	/* Enable clock for TIM4 */
+	__HAL_RCC_TIM4_CLK_ENABLE();
+	/* The desired frequency = 84MHz / (Prescaler*Period)*/	
+	TIM_7_seg_InitDef.Prescaler = 84;
+	TIM_7_seg_InitDef.Period = 100;
+	TIM_7_seg_InitDef.CounterMode = TIM_COUNTERMODE_DOWN;
 	
-	TIM3_InitDef.Prescaler = 84;
-	TIM3_InitDef.Period = 100;
-	TIM3_InitDef.CounterMode = TIM_COUNTERMODE_DOWN;
+	TIM_7_seg_HandleDef.Instance = TIM4;
+	TIM_7_seg_HandleDef.Init = TIM_7_seg_InitDef;
 	
-	TIM3_HandleDef.Instance = TIM3;
-	TIM3_HandleDef.Init = TIM3_InitDef;
+	HAL_TIM_Base_Start_IT(&TIM_7_seg_HandleDef);
 	
-	HAL_TIM_Base_Start_IT(&TIM3_HandleDef);
-	
-	HAL_NVIC_EnableIRQ(TIM3_IRQn);
+	HAL_NVIC_EnableIRQ(TIM4_IRQn);
 	HAL_NVIC_SetPriority(TIM3_IRQn, 0, 2);
-}
-
-void TIM3_IRQHandler(void) {
-	digitTimer++;
-	displayTimer = 1;
-	HAL_TIM_IRQHandler(&TIM3_HandleDef);
 }
 
 /**

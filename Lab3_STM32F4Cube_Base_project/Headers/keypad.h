@@ -7,7 +7,7 @@
 	* Date							 : January 14th, 2016
   ******************************************************************************
   */
-	
+
 #ifndef KEYPAD_H
 #define KEYPAD_H
 
@@ -25,7 +25,6 @@ hence pin 8 is unoccupied
 
 extern int debounce;
 extern int keyLock;
-
 
 char convertToChar(int col, int row);
 void Keypad_Config(void);
