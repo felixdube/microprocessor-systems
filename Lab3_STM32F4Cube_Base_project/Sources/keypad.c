@@ -10,6 +10,9 @@
 #include "stm32f4xx_hal.h"	
 #include "keypad.h"
 
+char a;
+
+
 /* Initialize struct */
 GPIO_InitTypeDef Row_GPIO_InitDef;
 GPIO_InitTypeDef Column_GPIO_InitDef;
@@ -58,7 +61,7 @@ void Keypad_Config(void) {
 	* @param None
 	* @retval None
 	*/
-void readKeypad(void) {
+char readKeypad(void) {
 	int row = 0;
 	int col = 0;
 
@@ -74,7 +77,8 @@ void readKeypad(void) {
 				keyLock = 0;
 				col = 1;
 				row = findRow();
-				printf("%c\n", convertToChar(col, row));
+				a = convertToChar(col, row);
+				printf("%c\n", a);
 			}
 		}
 		
@@ -86,7 +90,8 @@ void readKeypad(void) {
 				keyLock = 0;
 				col = 2;
 				row = findRow();
-				printf("%c\n", convertToChar(col, row));
+				a = convertToChar(col, row);
+				printf("%c\n", a);
 			}
 		}
 		
@@ -98,9 +103,11 @@ void readKeypad(void) {
 				keyLock = 0;
 				col = 3;
 				row = findRow();
-				printf("%c\n", convertToChar(col, row));
+				a = convertToChar(col, row);
+				printf("%c\n", a);
 			}
 		}
+		return a;
 	}
 	else{
 		

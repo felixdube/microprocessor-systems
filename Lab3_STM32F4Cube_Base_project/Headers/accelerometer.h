@@ -33,6 +33,7 @@
 
 extern float accValue[3];
 extern float pitch;
+extern int flag_accPin;
 extern kalmanState *xState;
 extern kalmanState *yState;
 extern kalmanState *zState;
@@ -43,6 +44,7 @@ void Accelerometer_GPIO_Config(void);
 void EXTI0_IRQHandler (void);
 float calcPitch (float x, float y, float z);
 void Calibrate(float* out);
+void ReadAcc(void);
 
 
 

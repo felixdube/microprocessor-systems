@@ -119,6 +119,24 @@ void Calibrate(float* out) {
 	tmp2 = out[2]; //z
 	out[0] = tmp0*(float)cal_X11 + tmp1*(float)cal_X21 + tmp2*(float)cal_X31 + (float)cal_X41*1000;
 	out[1] = tmp0*(float)cal_X12 + tmp1*(float)cal_X22 + tmp2*(float)cal_X32 + (float)cal_X42*1000;
-	out[2] = tmp0*(float)cal_X13 + tmp1*(float)cal_X23 + tmp2*(float)cal_X33 + (float)cal_X43*1000;
-	
+	out[2] = tmp0*(float)cal_X13 + tmp1*(float)cal_X23 + tmp2*(float)cal_X33 + (float)cal_X43*1000;	
 }
+
+void ReadAcc(void){
+		/* Get values */
+	LIS3DSH_ReadACC(accValue);
+	Calibrate(accValue);
+	
+	/* Filter values */
+	kalmanUpdate(xState, accValue[0]);
+	kalmanUpdate(yState, accValue[1]);
+	kalmanUpdate(zState, accValue[2]);
+
+	/* DON'T DELETE printf for matlab script */
+	//printf("%f,%f,%f,%f,%f,%f\n",accValue[2], zState->q,zState->r, zState->x, zState->p, zState->k);
+	/* Calc pitch */
+	pitch = calcPitch(xState->x, yState->x, zState->x);
+	//printf("%f %f %f pitch: %f\n", xState->x,yState->x,zState->x, pitch);
+	//printf("%f %f %f;\n", xState->x,yState->x,zState->x);
+}
+

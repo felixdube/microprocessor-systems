@@ -17,15 +17,18 @@
 #include "system_clock.h"
 #include "kalmanFilter.h"
 #include "keypad.h"
+#include "lcd.h"
+#include "main.h"
 
-
-	
 /* initialize variables */
 kalmanState *xState;
 kalmanState *yState;
 kalmanState *zState;
 int debounce = 0;
 int keyLock = 1;
+char input_Keypad;
+int flag_accPin = 0;
+int system_State = 0;
 
 /* Private variables ---------------------------------------------------------*/
 
@@ -55,12 +58,21 @@ int main(void)
 	
   
   while (1){
+		if (system_State == startState)
+		
+		if(flag_accPin){
+			ReadAcc();
+			flag_accPin = 0;
+		}
 	
-	if (displayTimer) {
-      display(pitch);
-      displayTimer = 0;
-    }
-	readKeypad();
+		if (displayTimer) {
+				display(pitch);
+				displayTimer = 0;
+			}
+		
+		//if keypad interrupt ...
+		input_Keypad = readKeypad();
+		
   }
 }
 
@@ -94,25 +106,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
   * @retval None
   */
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
-	switch (GPIO_Pin) {
-		case accPin:
-			/* Get values */
-			LIS3DSH_ReadACC(accValue);
-			Calibrate(accValue);
-			
-			/* Filter values */
-			kalmanUpdate(xState, accValue[0]);
-			kalmanUpdate(yState, accValue[1]);
-			kalmanUpdate(zState, accValue[2]);
-		
-			/* DON'T DELETE printf for matlab script */
-			//printf("%f,%f,%f,%f,%f,%f\n",accValue[2], zState->q,zState->r, zState->x, zState->p, zState->k);
-			/* Calc pitch */
-			pitch = calcPitch(xState->x, yState->x, zState->x);
-			//printf("%f %f %f pitch: %f\n", xState->x,yState->x,zState->x, pitch);
-		  //printf("%f %f %f;\n", xState->x,yState->x,zState->x);
-			break;
-	}
+	if (GPIO_Pin == accPin) {	
+			flag_accPin = 1;
+		}
 }
-
-

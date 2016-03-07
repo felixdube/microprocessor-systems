@@ -29,7 +29,7 @@ extern int keyLock;
 char convertToChar(int col, int row);
 void Keypad_Config(void);
 int findRow(void);
-void readKeypad(void);
+char readKeypad(void);
 
 
 
