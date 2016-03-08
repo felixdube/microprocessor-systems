@@ -55,6 +55,7 @@
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin);
 
 extern int input_count;
+extern int system_State;
 
 #endif /* __MAIN_H */
 

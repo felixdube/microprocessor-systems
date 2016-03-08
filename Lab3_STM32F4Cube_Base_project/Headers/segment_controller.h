@@ -7,8 +7,8 @@
 	* Date							 : February, 2016
   ******************************************************************************
   */
-	
-	
+
+
 #ifndef SEGMENT_CONTROLLER_H
 #define SEGMENT_CONTROLLER_H
 

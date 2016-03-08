@@ -7,7 +7,7 @@
 	* Date							 : February, 2016
   ******************************************************************************
   */
-	
+
 #include "stm32f4xx_hal.h"
 #include "accelerometer.h"
 #include "lis3dsh.h"
@@ -28,19 +28,19 @@ int counter_display_slower = 0;
 * @retval None
 */
 void Accelerometer_Config(void) {
-	
+
 	/* initialise accelerometer */
 	LIS3DSH_InitTypeDef Acc_InitDef;
-	
+
 	/* define field of the accelerometer initialisation structure */
 	Acc_InitDef.Power_Mode_Output_DataRate = LIS3DSH_DATARATE_25;      									/* 25Hz */
 	Acc_InitDef.Axes_Enable = LIS3DSH_XYZ_ENABLE;                     									/* XYZ */
 	Acc_InitDef.Continous_Update = LIS3DSH_ContinousUpdate_Disabled;										/* continuous update */
-	Acc_InitDef.AA_Filter_BW = LIS3DSH_AA_BW_50;																				/* 50Hz to filter gravity*/				
+	Acc_InitDef.AA_Filter_BW = LIS3DSH_AA_BW_50;																				/* 50Hz to filter gravity*/
 	Acc_InitDef.Full_Scale = LIS3DSH_FULLSCALE_2;																				/* 2g */
-	
+
 	LIS3DSH_Init(&Acc_InitDef);
-	
+
 	/* Init Kalman Filter for the accelerometer */
 	xState = malloc(sizeof(kalmanState));
 	yState = malloc(sizeof(kalmanState));
@@ -64,7 +64,7 @@ void Accelerometer_Interrupt_Config(void) {
 	Acc_Interrupt_InitDef.Dataready_Interrupt = LIS3DSH_DATA_READY_INTERRUPT_ENABLED;   							/* enable */
 	Acc_Interrupt_InitDef.Interrupt_signal = LIS3DSH_ACTIVE_HIGH_INTERRUPT_SIGNAL;                  	/* active high */
 	Acc_Interrupt_InitDef.Interrupt_type = LIS3DSH_INTERRUPT_REQUEST_PULSED;                     			/* pulse interupt */
-	
+
 	LIS3DSH_DataReadyInterruptConfig(&Acc_Interrupt_InitDef);
 
 	HAL_NVIC_EnableIRQ(EXTI0_IRQn);
@@ -77,19 +77,19 @@ void Accelerometer_Interrupt_Config(void) {
 * @retval None
 */
 void Accelerometer_GPIO_Config(void) {
-	
+
 	/* Initialize struct */
 	GPIO_InitTypeDef Acc_GPIO_InitDef;
-	
+
 	/* Enable clock for GPOIE */
 	__HAL_RCC_GPIOE_CLK_ENABLE();
-	 
+
 	/* All will have same mode */
 	Acc_GPIO_InitDef.Pin = accPin;
 	Acc_GPIO_InitDef.Mode = GPIO_MODE_IT_RISING;   			/* External Interrupt Mode with Rising edge trigger detection*/
 	Acc_GPIO_InitDef.Pull = GPIO_NOPULL;
 	Acc_GPIO_InitDef.Speed = GPIO_SPEED_FREQ_MEDIUM;		/* max frequency for our processor is 84MHz */
-	 
+
 	HAL_GPIO_Init(GPIOE, &Acc_GPIO_InitDef);
 }
 
@@ -120,14 +120,14 @@ void Calibrate(float* out) {
 	tmp2 = out[2]; //z
 	out[0] = tmp0*(float)cal_X11 + tmp1*(float)cal_X21 + tmp2*(float)cal_X31 + (float)cal_X41*1000;
 	out[1] = tmp0*(float)cal_X12 + tmp1*(float)cal_X22 + tmp2*(float)cal_X32 + (float)cal_X42*1000;
-	out[2] = tmp0*(float)cal_X13 + tmp1*(float)cal_X23 + tmp2*(float)cal_X33 + (float)cal_X43*1000;	
+	out[2] = tmp0*(float)cal_X13 + tmp1*(float)cal_X23 + tmp2*(float)cal_X33 + (float)cal_X43*1000;
 }
 
 void ReadAcc(void){
 		/* Get values */
 	LIS3DSH_ReadACC(accValue);
 	Calibrate(accValue);
-	
+
 	/* Filter values */
 	kalmanUpdate(xState, accValue[0]);
 	kalmanUpdate(yState, accValue[1]);
@@ -144,4 +144,3 @@ void ReadAcc(void){
 	//printf("%f %f %f pitch: %f\n", xState->x,yState->x,zState->x, pitch);
 	//printf("%f %f %f;\n", xState->x,yState->x,zState->x);
 }
-

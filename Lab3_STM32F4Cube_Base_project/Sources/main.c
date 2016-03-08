@@ -7,7 +7,7 @@
 	* Date							 : February 2016
   ******************************************************************************
   */
-	
+
 /* Includes ------------------------------------------------------------------*/
 #include <stdlib.h>
 #include <stdio.h>
@@ -36,7 +36,7 @@ char input_angle[5] = "000";
 float input_angle_float = 0;
 float display_number = 0;
 int input_count = 0;
-float delta_angle = 100; // not initialized at 0 to avoid direct win 
+float delta_angle = 100; // not initialized at 0 to avoid direct win
 
 
 /* Private variables ---------------------------------------------------------*/
@@ -45,32 +45,32 @@ float delta_angle = 100; // not initialized at 0 to avoid direct win
 void SystemClock_Config	(void);
 
 int main(void)
-{	
+{
   /* MCU Configuration----------------------------------------------------------*/
 
   HAL_Init();
 
   /* Configure the system clock */
   SystemClock_Config();
-	
+
   /* Initialize accelerometer */
   Accelerometer_Config();
   Accelerometer_GPIO_Config();
   Accelerometer_Interrupt_Config();
-  
+
   /* Initialize 7-segment display */
   Display_GPIO_Config();
   Display_TIM_Config();
-	
+
 	/* Initialize Keypad*/
 	Keypad_Config();
-	
+
 //	initLCD(); 															/* configure LCD */
-	
-  
+
+
   while (1){
-		
-		//start state, just display angle and wait for enter 
+
+		//start state, just display angle and wait for enter
 		while (system_State == startState) {
 			if(flag_accPin){
 				ReadAcc();
@@ -80,7 +80,7 @@ int main(void)
 					display(pitch);
 					displayTimer = 0;
 				}
-		
+
 			//if keypad interrupt ...
 			input_Keypad = readKeypad();
 //			if (input_Keypad != 'n') {
@@ -90,7 +90,7 @@ int main(void)
 				system_State = inputState;
 			}
 		}
-		
+
 		//input destination angle and press enter
 		while (system_State == inputState) {
 			if (displayTimer) {
@@ -119,23 +119,23 @@ int main(void)
 				ReadAcc();
 				flag_accPin = 0;
 			}
-			
+
 			if (displayTimer) {
-					
+
 					display(pitch);
 					displayTimer = 0;
 				}
-		
+
 			//if keypad interrupt ...
 			input_Keypad = readKeypad();
 			if (input_Keypad == '#') {
 				system_State = startState;
 			}
-			
-			
+
+
 			//visual feedback for helping the user orient the board
 			delta_angle = input_angle_float - pitch;
-			
+
 			if(abs(delta_angle) <= 5) {
 				system_State = endState;
 			}
@@ -147,10 +147,10 @@ int main(void)
 			//display something on LCD
 				printf("go down\n");
 			}
-			
-			
+
+
 		}
-		
+
 		//display win message
 		while (system_State == endState) {
 			if (displayTimer) {
@@ -158,15 +158,15 @@ int main(void)
 					displayTimer = 0;
 					printf("endState\n");
 				}
-			
+
 			//returnHome(); 													/* just makes sure that start writing at the right place */
-			//LCD_WriteString("WIN"); 			/* The 2 initial space are for centering */				
+			//LCD_WriteString("WIN"); 			/* The 2 initial space are for centering */
 		}
-		
+
 		//safety if the state gets weird
 		if(system_State != 0 && system_State != 1 && system_State != 2 && system_State != 3){
 				system_State = 0;
-		}			
+		}
   }
 }
 
@@ -181,14 +181,14 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 		digitTimer++;
 		displayTimer = 1;
 }
-	
+
 /**
   * @brief  Callback from the external GPIO interupt
-	* @param  GPIO_Pin: pin on with the interupt occurs	
+	* @param  GPIO_Pin: pin on with the interupt occurs
   * @retval None
   */
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
-	if (GPIO_Pin == accPin) {	
+	if (GPIO_Pin == accPin) {
 			flag_accPin = 1;
 		}
 }

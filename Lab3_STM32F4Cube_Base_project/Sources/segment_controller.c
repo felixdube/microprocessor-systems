@@ -147,7 +147,7 @@ void setPins(int digit) {
 			HAL_GPIO_WritePin(GPIOB, segDP, GPIO_PIN_RESET);
 	}
 
-	if (input_count == digitTimer && flash < 20) {
+	if (input_count == digitTimer && flash < 20 && system_State == inputState) {
 			HAL_GPIO_WritePin(GPIOB, sel1, GPIO_PIN_RESET);
 			HAL_GPIO_WritePin(GPIOB, sel2, GPIO_PIN_RESET);
 			HAL_GPIO_WritePin(GPIOB, sel3, GPIO_PIN_RESET);
