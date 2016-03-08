@@ -37,6 +37,7 @@ float input_angle_float = 0;
 float display_number = 0;
 int input_count = 0;
 float delta_angle = 100; // not initialized at 0 to avoid direct win
+int clear_display = 0;
 
 
 /* Private variables ---------------------------------------------------------*/
@@ -64,12 +65,16 @@ int main(void)
 
 	/* Initialize Keypad*/
 	Keypad_Config();
-
-//	initLCD(); 															/* configure LCD */
-
-
+	
+	initLCD(); 															/* configure LCD */
+	clearDisplay();
+	returnHome(); 													/* just makes sure that start writing at the right place */
+	LCD_WriteString("     Start"); 			/* The 2 initial space are for centering */
   while (1){
 
+		
+		
+		
 		//start state, just display angle and wait for enter
 		while (system_State == startState) {
 			if(flag_accPin){
@@ -92,6 +97,11 @@ int main(void)
 		}
 
 		//input destination angle and press enter
+		if (system_State == inputState){
+			clearDisplay();
+			returnHome(); 													/* just makes sure that start writing at the right place */
+			LCD_WriteString("   Input Angle"); 						/* The 2 initial space are for centering */
+		}
 		while (system_State == inputState) {
 			if (displayTimer) {
 					display(input_angle_float);
@@ -100,14 +110,21 @@ int main(void)
 			//if keypad interrupt ...
 			input_Keypad = readKeypad();
 			if (input_Keypad == '#') {
-				system_State = moveState;
+				if(input_angle_float <= 180){
+					system_State = moveState;
+				}
+				else {
+				clearDisplay();
+				returnHome(); 													/* just makes sure that start writing at the right place */
+				LCD_WriteString("Max Angle = 180"); 						/* The 2 initial space are for centering */
+				}
 			}
 			else if (input_Keypad != 'n'  && input_Keypad != '*') {
 				input_angle[input_count] = input_Keypad;
 				input_count++;
 				input_angle_float = atof(input_angle);
-				printf("%c\n",input_Keypad);
-				printf("%f\n",input_angle_float);
+				//printf("%c\n",input_Keypad);
+				//printf("%f\n",input_angle_float);
 				if (input_count >= 3){
 					input_count = 0;
 				}
@@ -121,16 +138,15 @@ int main(void)
 			}
 
 			if (displayTimer) {
-
 					display(pitch);
 					displayTimer = 0;
 				}
 
-			//if keypad interrupt ...
-			input_Keypad = readKeypad();
-			if (input_Keypad == '#') {
-				system_State = startState;
-			}
+//			//if keypad interrupt ...
+//			input_Keypad = readKeypad();
+//			if (input_Keypad == '#') {
+//				system_State = startState;
+//			}
 
 
 			//visual feedback for helping the user orient the board
@@ -140,23 +156,44 @@ int main(void)
 				system_State = endState;
 			}
 			else if (delta_angle > 0) {
-			//display something on LCD
-				printf("go up\n");
+				//display something on LCD
+				if(clear_display == 0){
+					clearDisplay();
+					clear_display = 1;
+					returnHome(); 													/* just makes sure that start writing at the right place */
+					LCD_WriteString("     Go up"); 						/* The 2 initial space are for centering */
+				}
 			}
 			else {
-			//display something on LCD
-				printf("go down\n");
+				//display something on LCD
+				if(clear_display == 0){
+					clearDisplay();
+					clear_display = 1;
+					returnHome(); 													/* just makes sure that start writing at the right place */
+					LCD_WriteString("    Go down"); 						/* The 2 initial space are for centering */
+				}
+
 			}
 
 
 		}
 
 		//display win message
+		if (system_State == endState){
+			clear_display = 0;
+			if(clear_display == 0){
+				clearDisplay();
+				clear_display = 1;
+			}
+			clearDisplay();
+			returnHome(); 													/* just makes sure that start writing at the right place */
+			LCD_WriteString("   Bravo Harsh"); 						/* The 2 initial space are for centering */
+		}
 		while (system_State == endState) {
 			if (displayTimer) {
-					display(pitch);
+					display(input_angle_float);
 					displayTimer = 0;
-					printf("endState\n");
+					//printf("endState\n");
 				}
 
 			//returnHome(); 													/* just makes sure that start writing at the right place */

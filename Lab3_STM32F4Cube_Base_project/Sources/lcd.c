@@ -14,7 +14,6 @@
 /* Array to update the values of the pins easier in loops */
 const int dataPin[8] =	{DB0, DB1, DB2, DB3, DB4, DB5, DB6, DB7};
 
-volatile int lcdtimer;
 
 /**
 	* @brief initializes trhe GPIOs for the LCD and clean up the display
@@ -23,7 +22,7 @@ volatile int lcdtimer;
 	*/
 void initLCD(void){
 	GPIO_InitTypeDef GPIO_InitDef; 										/* Initialize struct */
-	__HAL_RCC_GPIOF_CLK_ENABLE(); 										/* Enable clock for GPOIE */
+	__HAL_RCC_GPIOE_CLK_ENABLE();
 	GPIO_InitDef.Pin = RS | RW | E | DB0 | DB1 | DB2 | DB3 | DB4 | DB5 | DB6 | DB7; /* All will have same mode */
 	GPIO_InitDef.Mode = GPIO_MODE_OUTPUT_PP;   				/* push pull */
 	GPIO_InitDef.Pull = GPIO_NOPULL;
@@ -42,7 +41,9 @@ void initLCD(void){
 	*/
 void enable(void){
 	HAL_GPIO_WritePin(GPIOE, E, GPIO_PIN_SET);
-	while (lcdtimer < ENABLE_TIME){/* delay for synchronization */}			
+	lcdtimer = 0;
+	while (lcdtimer < ENABLE_TIME){/* delay for synchronization */
+	}	
 	lcdtimer = 0;
 	HAL_GPIO_WritePin(GPIOE, E, GPIO_PIN_RESET);
 }
@@ -98,6 +99,7 @@ void clearDisplay(void){
 	HAL_GPIO_WritePin(GPIOE, DB0, GPIO_PIN_SET);
 	enable();
 	/* extra wait time from the datasheet 1.53ms */
+	lcdtimer = 0;
 	while (lcdtimer < WAIT_TIME_AFTER_RESET){/* delay for synchronization */}	
 	lcdtimer = 0;
 }

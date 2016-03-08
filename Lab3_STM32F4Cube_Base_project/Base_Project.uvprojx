@@ -526,6 +526,11 @@
               <FileType>1</FileType>
               <FilePath>.\Sources\keypad.c</FilePath>
             </File>
+            <File>
+              <FileName>lcd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\lcd.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

@@ -44,6 +44,8 @@
 #include "keypad.h"
 #include "segment_controller.h"
 
+int lcdtimer = 0;
+
 /** @addtogroup STM32F4xx_HAL_Examples
   * @{
   */
@@ -158,6 +160,7 @@ void PendSV_Handler(void)
   */
 void SysTick_Handler(void)
 {
+	lcdtimer++;
 	HAL_IncTick();
 }
 

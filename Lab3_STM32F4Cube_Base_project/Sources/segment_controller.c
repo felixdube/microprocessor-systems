@@ -67,7 +67,7 @@ void Display_TIM_Config(void) {
 void display(float value) {
 	digitTimer %= 3;
 	flash++;
-	flash %= 40;
+	flash %= 400;
 	setPins(getDigit(value, digitTimer));
 }
 
@@ -147,7 +147,7 @@ void setPins(int digit) {
 			HAL_GPIO_WritePin(GPIOB, segDP, GPIO_PIN_RESET);
 	}
 
-	if (input_count == digitTimer && flash < 20 && system_State == inputState) {
+	if (input_count == digitTimer && flash < 200 && system_State == inputState) {
 			HAL_GPIO_WritePin(GPIOB, sel1, GPIO_PIN_RESET);
 			HAL_GPIO_WritePin(GPIOB, sel2, GPIO_PIN_RESET);
 			HAL_GPIO_WritePin(GPIOB, sel3, GPIO_PIN_RESET);

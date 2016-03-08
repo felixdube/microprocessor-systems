@@ -40,7 +40,7 @@ void SystemClock_Config(void){
 	
 	/*Configures SysTick to provide 1ms interval interrupts. SysTick is already 
 	  configured inside HAL_Init, I don't kow why the CubeMX generates this call again*/
-  HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq()/1000);
+  HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq()/1000000);
 
 	/* This function sets the source clock for the internal SysTick Timer to be the maximum,
 	   in our case, HCLK is now 168MHz*/
