@@ -40,12 +40,13 @@ void Accelerometer_Config(void) {
 	
 	LIS3DSH_Init(&Acc_InitDef);
 	
-
-	
 	/* Init Kalman Filter for the accelerometer */
-	xState = {INIT_q, INIT_r, INIT_x, INIT_p, INIT_k};
-	yState = {INIT_q, INIT_r, INIT_y, INIT_p, INIT_k};
-	zState = {INIT_q, INIT_r, INIT_z, INIT_p, INIT_k};
+	xState = malloc(sizeof(kalmanState));
+	yState = malloc(sizeof(kalmanState));
+	zState = malloc(sizeof(kalmanState));
+	kalmanInit(xState, INIT_q, INIT_r, INIT_x, INIT_p, INIT_k);
+	kalmanInit(yState, INIT_q, INIT_r, INIT_y, INIT_p, INIT_k);
+	kalmanInit(zState, INIT_q, INIT_r, INIT_z, INIT_p, INIT_k);
 }
 
 /**
