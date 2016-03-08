@@ -24,3 +24,6 @@
 *.blg
 *.bbl
 
+#windows files
+*.db
+

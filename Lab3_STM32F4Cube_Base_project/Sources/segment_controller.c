@@ -10,6 +10,7 @@
 
 #include "stm32f4xx_hal.h"
 #include "segment_controller.h"
+#include "main.h"
 
 volatile int digitTimer = 0;
 volatile int displayTimer = 1;
@@ -17,6 +18,8 @@ const uint8_t patterns[10] = {ZERO, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIG
 const int segments[7] = {segA, segB, segC, segD, segE, segF, segG};
 int tmp;
 int dotPosition = 1;
+int flash = 0;
+
 /* Initialize struct */
 TIM_Base_InitTypeDef TIM_7_seg_InitDef;
 TIM_HandleTypeDef TIM_7_seg_HandleDef;
@@ -25,16 +28,16 @@ TIM_HandleTypeDef TIM_7_seg_HandleDef;
 void Display_GPIO_Config(void) {
 	/* Initialize struct */
 	GPIO_InitTypeDef GPIO_InitDef;
-	
+
 	/* Enable clock for GPOIB */
 	__HAL_RCC_GPIOB_CLK_ENABLE();
-	 
+
 	/* All will have same mode */
 	GPIO_InitDef.Pin = segA | segB | segC | segD | segE | segF | segG | segDP | segDegree | sel1 | sel2 | sel3;
 	GPIO_InitDef.Mode = GPIO_MODE_OUTPUT_PP;   			/* push pull */
 	GPIO_InitDef.Pull = GPIO_NOPULL;
 	GPIO_InitDef.Speed = GPIO_SPEED_FREQ_MEDIUM;		/* max frequency for our processor is 84MHz */
-	 
+
 	HAL_GPIO_Init(GPIOB, &GPIO_InitDef);
 }
 
@@ -42,16 +45,16 @@ void Display_GPIO_Config(void) {
 void Display_TIM_Config(void) {
 	/* Enable clock for TIM4 */
 	__HAL_RCC_TIM4_CLK_ENABLE();
-	/* The desired frequency = 84MHz / (Prescaler*Period)*/	
+	/* The desired frequency = 84MHz / (Prescaler*Period)*/
 	TIM_7_seg_InitDef.Prescaler = 84;
 	TIM_7_seg_InitDef.Period = 100;
 	TIM_7_seg_InitDef.CounterMode = TIM_COUNTERMODE_DOWN;
-	
+
 	TIM_7_seg_HandleDef.Instance = TIM4;
 	TIM_7_seg_HandleDef.Init = TIM_7_seg_InitDef;
-	
+
 	HAL_TIM_Base_Start_IT(&TIM_7_seg_HandleDef);
-	
+
 	HAL_NVIC_EnableIRQ(TIM4_IRQn);
 	HAL_NVIC_SetPriority(TIM3_IRQn, 0, 2);
 }
@@ -63,6 +66,8 @@ void Display_TIM_Config(void) {
 	*/
 void display(float value) {
 	digitTimer %= 3;
+	flash++;
+	flash %= 40;
 	setPins(getDigit(value, digitTimer));
 }
 
@@ -85,7 +90,7 @@ int getDigit(float value, int place) {
 		tmp = (int) (value * 100);
 		dotPosition = 0;
 	}
-		
+
 	switch (place) {
 		case 0:
 			return (tmp - tmp % 100) / 100;
@@ -96,7 +101,7 @@ int getDigit(float value, int place) {
 		default:
 			return 0;
 	}
-	
+
 }
 
 /**
@@ -108,9 +113,9 @@ void setPins(int digit) {
 	int i;
 	uint8_t pattern;
 	pattern = patterns[digit];
-	
+
 	HAL_GPIO_WritePin(GPIOB, segDegree, GPIO_PIN_SET);
-	
+
 	/* select which display will be updated according to the systick */
 	switch (digitTimer) {
 		case 0:
@@ -141,7 +146,13 @@ void setPins(int digit) {
 			HAL_GPIO_WritePin(GPIOB, sel3, GPIO_PIN_SET);
 			HAL_GPIO_WritePin(GPIOB, segDP, GPIO_PIN_RESET);
 	}
-	
+
+	if (input_count == digitTimer && flash < 20) {
+			HAL_GPIO_WritePin(GPIOB, sel1, GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(GPIOB, sel2, GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(GPIOB, sel3, GPIO_PIN_RESET);
+	}
+
 	/* update the 7-segment based on the digit value and the preset pattern */
 	for (i = 0; i < 7; i++) {
 		if ((pattern & (1 << (6 - i))) >> (6 - i) == 1) {

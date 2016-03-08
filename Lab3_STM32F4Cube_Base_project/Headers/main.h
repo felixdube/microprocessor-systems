@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * @file    HAL/HAL_TimeBase/Inc/main.h 
+  * @file    HAL/HAL_TimeBase/Inc/main.h
   * @author  MCD Application Team
   * @version   V1.2.4
   * @date      13-November-2015
@@ -53,6 +53,8 @@
 /* Exported functions ------------------------------------------------------- */
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin);
+
+extern int input_count;
 
 #endif /* __MAIN_H */
 
