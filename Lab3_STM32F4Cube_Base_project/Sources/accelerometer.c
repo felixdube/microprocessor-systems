@@ -16,10 +16,10 @@
 #include <math.h>
 #include "keypad.h"
 
-float accValue[3] = {0, 0, 0};
-float pitch = 0;
-float tmp0, tmp1, tmp2;
-int counter_display_slower = 0;
+float accValue[3] = {0, 0, 0};				//{AccX, AccY, AccZ}
+float pitch = 0;											//Pitch angle in degrees 0-180
+float tmp0, tmp1, tmp2;								//Temp variable used for calibration
+int counter_display_slower = 0;				//prevent the display value to change too fast
 
 
 /**
@@ -102,6 +102,8 @@ void Accelerometer_GPIO_Config(void) {
   */
 float calcPitch (float x, float y, float z) {
 	float pitch = atan2(x, (sqrt(y*y+z*z))) * 180.0 / PI;
+	
+	//Normalize the pitch to a value between 0-180
 	if ( z < 0 && pitch < 0){
 		pitch = 180 + pitch;
 	}
@@ -114,6 +116,12 @@ float calcPitch (float x, float y, float z) {
 	return pitch;
 }
 
+
+/**
+  * @brief  Calibrate the accelerometer data
+	* @param  out[]: acceleration values to be calibrated
+  * @retval None
+  */
 void Calibrate(float* out) {
 	tmp0 = out[0]; //x
 	tmp1 = out[1]; //y
@@ -123,6 +131,12 @@ void Calibrate(float* out) {
 	out[2] = tmp0*(float)cal_X13 + tmp1*(float)cal_X23 + tmp2*(float)cal_X33 + (float)cal_X43*1000;
 }
 
+
+/**
+  * @brief  Read Acc values, Calibrate them, filter them, and update the pitch value to be displayed
+	* @param  None
+  * @retval None
+  */
 void ReadAcc(void){
 		/* Get values */
 	LIS3DSH_ReadACC(accValue);

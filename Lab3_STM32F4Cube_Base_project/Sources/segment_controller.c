@@ -12,19 +12,23 @@
 #include "segment_controller.h"
 #include "main.h"
 
-volatile int digitTimer = 0;
-volatile int displayTimer = 1;
+volatile int digitTimer = 0;			// timer to change the digit to be updated
+volatile int displayTimer = 1;		// timer for updating the display
+int tmp;													// temp value to be displayed
+int dotPosition = 1;							// decimal position
+int flash = 0;										// timer for flashing a digit on the 7-segment display
 const uint8_t patterns[10] = {ZERO, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE};
 const int segments[7] = {segA, segB, segC, segD, segE, segF, segG};
-int tmp;
-int dotPosition = 1;
-int flash = 0;
 
 /* Initialize struct */
 TIM_Base_InitTypeDef TIM_7_seg_InitDef;
 TIM_HandleTypeDef TIM_7_seg_HandleDef;
 
-/* GPIO configuration */
+/**
+	* @brief GPIO for 7-segments display init
+	* @param None
+	* @retval None
+	*/
 void Display_GPIO_Config(void) {
 	/* Initialize struct */
 	GPIO_InitTypeDef GPIO_InitDef;
@@ -41,7 +45,12 @@ void Display_GPIO_Config(void) {
 	HAL_GPIO_Init(GPIOB, &GPIO_InitDef);
 }
 
-/* Display timer configuration */
+
+/**
+	* @brief Display timer configuration
+	* @param None
+	* @retval None
+	*/
 void Display_TIM_Config(void) {
 	/* Enable clock for TIM4 */
 	__HAL_RCC_TIM4_CLK_ENABLE();

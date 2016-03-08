@@ -27,17 +27,16 @@
 kalmanState *xState;
 kalmanState *yState;
 kalmanState *zState;
-int debounce = 0;
-int keyLock = 1;
-char input_Keypad;
-int flag_accPin = 0;
-int system_State = startState;
-char input_angle[5] = "000";
-float input_angle_float = 0;
-float display_number = 0;
-int input_count = 0;
-float delta_angle = 100; // not initialized at 0 to avoid direct win
-int clear_display = 0;
+int debounce = 0;												// used to debounced the keypad
+int keyLock = 1;												// mutex for keypressed
+char input_Keypad;											// button pressed by the user
+int flag_accPin = 0;										// data ready flag for accelerometer
+int system_State = startState;					// State of the state machine
+char input_angle[5] = "000";						//user input in a string
+float input_angle_float = 0;						//User input angle in float			
+int input_count = 0;										// 7-segment display digit position
+float delta_angle = 100; 								// not initialized at 0 to avoid direct win
+int clear_display = 0;									// boolean the prevents the lcd display te be updated every cycles
 
 
 /* Private variables ---------------------------------------------------------*/
@@ -69,45 +68,61 @@ int main(void)
 	initLCD(); 															/* configure LCD */
 	clearDisplay();
 	returnHome(); 													/* just makes sure that start writing at the right place */
-	LCD_WriteString("     Start"); 			/* The 2 initial space are for centering */
-  while (1){
+	LCD_WriteString("     Start"); 					/* The 2 initial space are for centering */
+ 
 
+	while (1){
+
+		/************************************************************************************************************/
+		/* Finite State Machine 																																										*/
+		/* startState: Display current pitch and wait for the user to press # 																			*/
+		/* inputState: Wait for the user to enter an angle and to press # 																					*/
+		/* moveState: display the current pitch angle and wait for the user to move the board to the correct angle 	*/
+		/* endState: the user win, the user input angle is displayed 																								*/
+		/************************************************************************************************************/
 		
-		
-		
-		//start state, just display angle and wait for enter
+		/*************** START STATE **************************/
+		/* start state, just display angle and wait for enter */
 		while (system_State == startState) {
+			
+			/* read accelerometer value */
 			if(flag_accPin){
 				ReadAcc();
 				flag_accPin = 0;
 			}
+			
+			/* update the value to be displayed */
 			if (displayTimer) {
 					display(pitch);
 					displayTimer = 0;
 				}
 
-			//if keypad interrupt ...
+			/* read which keypad button is pressed */
 			input_Keypad = readKeypad();
-//			if (input_Keypad != 'n') {
-//				printf("%c\n",input_Keypad);
-//			}
 			if (input_Keypad == '#') {
 				system_State = inputState;
 			}
 		}
 
-		//input destination angle and press enter
+		/************* INPUT STATE *****************/
+		/* input destination angle and press enter */
 		if (system_State == inputState){
+			
+			/* update lcd display */
 			clearDisplay();
-			returnHome(); 													/* just makes sure that start writing at the right place */
+			returnHome(); 																/* just makes sure that start writing at the right place */
 			LCD_WriteString("   Input Angle"); 						/* The 2 initial space are for centering */
 		}
 		while (system_State == inputState) {
+			
+			/* update pitch value to be displayed */
 			if (displayTimer) {
 					display(input_angle_float);
 					displayTimer = 0;
 				}
-			//if keypad interrupt ...
+			
+				
+			/* read input from keypad */
 			input_Keypad = readKeypad();
 			if (input_Keypad == '#') {
 				if(input_angle_float <= 180){
@@ -115,7 +130,7 @@ int main(void)
 				}
 				else {
 				clearDisplay();
-				returnHome(); 													/* just makes sure that start writing at the right place */
+				returnHome(); 																	/* just makes sure that start writing at the right place */
 				LCD_WriteString("Max Angle = 180"); 						/* The 2 initial space are for centering */
 				}
 			}
@@ -130,46 +145,46 @@ int main(void)
 				}
 			}
 		}
-		//try to position the board at the right angle
+		
+		/**************** MOVESTATE *********************/
+		/* try to position the board at the right angle */
 		while (system_State == moveState) {
+			
+			/* read acceleration */
 			if(flag_accPin){
 				ReadAcc();
 				flag_accPin = 0;
 			}
-
+	
+			/* update pitch value to be displayed */
 			if (displayTimer) {
 					display(pitch);
 					displayTimer = 0;
 				}
 
-//			//if keypad interrupt ...
-//			input_Keypad = readKeypad();
-//			if (input_Keypad == '#') {
-//				system_State = startState;
-//			}
 
-
-			//visual feedback for helping the user orient the board
+			/* calculate error between goal and actual pitch value */
 			delta_angle = input_angle_float - pitch;
 
+			/* check if goal acheived */
 			if(abs(delta_angle) <= 5) {
 				system_State = endState;
 			}
 			else if (delta_angle > 0) {
-				//display something on LCD
+				/* display something on LCD */
 				if(clear_display == 0){
 					clearDisplay();
 					clear_display = 1;
-					returnHome(); 													/* just makes sure that start writing at the right place */
+					returnHome(); 														/* just makes sure that start writing at the right place */
 					LCD_WriteString("     Go up"); 						/* The 2 initial space are for centering */
 				}
 			}
 			else {
-				//display something on LCD
+				/* display something on LCD */
 				if(clear_display == 0){
 					clearDisplay();
 					clear_display = 1;
-					returnHome(); 													/* just makes sure that start writing at the right place */
+					returnHome(); 															/* just makes sure that start writing at the right place */
 					LCD_WriteString("    Go down"); 						/* The 2 initial space are for centering */
 				}
 
@@ -177,8 +192,9 @@ int main(void)
 
 
 		}
-
-		//display win message
+	
+		/****** ENDSTATE *******/
+		/* display win message */
 		if (system_State == endState){
 			clear_display = 0;
 			if(clear_display == 0){
@@ -186,21 +202,19 @@ int main(void)
 				clear_display = 1;
 			}
 			clearDisplay();
-			returnHome(); 													/* just makes sure that start writing at the right place */
+			returnHome(); 																/* just makes sure that start writing at the right place */
 			LCD_WriteString("   Bravo Harsh"); 						/* The 2 initial space are for centering */
 		}
 		while (system_State == endState) {
+			
+			/* set the pitch value displayed to the goal value */
 			if (displayTimer) {
 					display(input_angle_float);
 					displayTimer = 0;
-					//printf("endState\n");
 				}
-
-			//returnHome(); 													/* just makes sure that start writing at the right place */
-			//LCD_WriteString("WIN"); 			/* The 2 initial space are for centering */
 		}
 
-		//safety if the state gets weird
+		/* error checking */
 		if(system_State != 0 && system_State != 1 && system_State != 2 && system_State != 3){
 				system_State = 0;
 		}
