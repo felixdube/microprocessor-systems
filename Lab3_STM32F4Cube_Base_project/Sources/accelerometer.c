@@ -19,6 +19,7 @@
 float accValue[3] = {0, 0, 0};
 float pitch = 0;
 float tmp0, tmp1, tmp2;
+int counter_display_slower = 0;
 
 
 /**
@@ -135,7 +136,11 @@ void ReadAcc(void){
 	/* DON'T DELETE printf for matlab script */
 	//printf("%f,%f,%f,%f,%f,%f\n",accValue[2], zState->q,zState->r, zState->x, zState->p, zState->k);
 	/* Calc pitch */
-	pitch = calcPitch(xState->x, yState->x, zState->x);
+	counter_display_slower++;
+	if(counter_display_slower >= 6) {
+		pitch = calcPitch(xState->x, yState->x, zState->x);
+		counter_display_slower = 0;
+	}
 	//printf("%f %f %f pitch: %f\n", xState->x,yState->x,zState->x, pitch);
 	//printf("%f %f %f;\n", xState->x,yState->x,zState->x);
 }

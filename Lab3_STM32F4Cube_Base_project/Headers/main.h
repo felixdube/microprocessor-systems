@@ -44,6 +44,11 @@
 
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
+
+#define startState 0
+#define inputState 1
+#define moveState 2
+#define endState 3
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
 

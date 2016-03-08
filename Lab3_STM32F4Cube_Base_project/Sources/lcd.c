@@ -23,7 +23,7 @@ volatile int lcdtimer;
 	*/
 void initLCD(void){
 	GPIO_InitTypeDef GPIO_InitDef; 										/* Initialize struct */
-	__HAL_RCC_GPIOE_CLK_ENABLE(); 										/* Enable clock for GPOIE */
+	__HAL_RCC_GPIOF_CLK_ENABLE(); 										/* Enable clock for GPOIE */
 	GPIO_InitDef.Pin = RS | RW | E | DB0 | DB1 | DB2 | DB3 | DB4 | DB5 | DB6 | DB7; /* All will have same mode */
 	GPIO_InitDef.Mode = GPIO_MODE_OUTPUT_PP;   				/* push pull */
 	GPIO_InitDef.Pull = GPIO_NOPULL;

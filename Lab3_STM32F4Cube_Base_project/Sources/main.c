@@ -9,6 +9,9 @@
   */
 	
 /* Includes ------------------------------------------------------------------*/
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 #include "stm32f4xx_hal.h"
 #include "supporting_functions.h"
 #include "lis3dsh.h"
@@ -28,7 +31,13 @@ int debounce = 0;
 int keyLock = 1;
 char input_Keypad;
 int flag_accPin = 0;
-int system_State = 0;
+int system_State = startState;
+char input_angle[5] = "000";
+float input_angle_float = 0;
+float display_number = 0;
+int input_count = 0;
+float delta_angle = 100; // not initialized at 0 to avoid direct win 
+
 
 /* Private variables ---------------------------------------------------------*/
 
@@ -56,40 +65,113 @@ int main(void)
 	/* Initialize Keypad*/
 	Keypad_Config();
 	
+//	initLCD(); 															/* configure LCD */
+	
   
   while (1){
-		if (system_State == startState)
 		
-		if(flag_accPin){
-			ReadAcc();
-			flag_accPin = 0;
-		}
-	
-		if (displayTimer) {
-				display(pitch);
-				displayTimer = 0;
+		//start state, just display angle and wait for enter 
+		while (system_State == startState) {
+			if(flag_accPin){
+				ReadAcc();
+				flag_accPin = 0;
 			}
+			if (displayTimer) {
+					display(pitch);
+					displayTimer = 0;
+				}
 		
-		//if keypad interrupt ...
-		input_Keypad = readKeypad();
+			//if keypad interrupt ...
+			input_Keypad = readKeypad();
+//			if (input_Keypad != 'n') {
+//				printf("%c\n",input_Keypad);
+//			}
+			if (input_Keypad == '#') {
+				system_State = inputState;
+			}
+		}
 		
+		//input destination angle and press enter
+		while (system_State == inputState) {
+			if (displayTimer) {
+					display(input_angle_float);
+					displayTimer = 0;
+				}
+			//if keypad interrupt ...
+			input_Keypad = readKeypad();
+			if (input_Keypad == '#') {
+				system_State = moveState;
+			}
+			else if (input_Keypad != 'n'  && input_Keypad != '*') {
+				input_angle[input_count] = input_Keypad;
+				input_count++;
+				input_angle_float = atof(input_angle);
+				printf("%c\n",input_Keypad);
+				printf("%f\n",input_angle_float);
+				if (input_count >= 3){
+					input_count = 0;
+				}
+			}
+		}
+		//try to position the board at the right angle
+		while (system_State == moveState) {
+			if(flag_accPin){
+				ReadAcc();
+				flag_accPin = 0;
+			}
+			
+			if (displayTimer) {
+					
+					display(pitch);
+					displayTimer = 0;
+				}
+		
+			//if keypad interrupt ...
+			input_Keypad = readKeypad();
+			if (input_Keypad == '#') {
+				system_State = startState;
+			}
+			
+			
+			//visual feedback for helping the user orient the board
+			delta_angle = input_angle_float - pitch;
+			
+			if(abs(delta_angle) <= 5) {
+				system_State = endState;
+			}
+			else if (delta_angle > 0) {
+			//display something on LCD
+				printf("go up\n");
+			}
+			else {
+			//display something on LCD
+				printf("go down\n");
+			}
+			
+			
+		}
+		
+		//display win message
+		while (system_State == endState) {
+			if (displayTimer) {
+					display(pitch);
+					displayTimer = 0;
+					printf("endState\n");
+				}
+			
+			//returnHome(); 													/* just makes sure that start writing at the right place */
+			//LCD_WriteString("WIN"); 			/* The 2 initial space are for centering */				
+		}
+		
+		//safety if the state gets weird
+		if(system_State != 0 && system_State != 1 && system_State != 2 && system_State != 3){
+				system_State = 0;
+		}			
   }
 }
 
 
 
-#ifdef USE_FULL_ASSERT
-
-/**
-   * @brief Reports the name of the source file and the source line number
-   * where the assert_param error has occurred.
-   * @param file: pointer to the source file name
-   * @param line: assert_param error line source number
-   * @retval None
-   */
-void assert_failed(uint8_t* file, uint32_t line){
-}
-#endif
 /**
   * @brief  Callback from the Timers
 	* @param  Timer handler

@@ -7,6 +7,7 @@
 	* Date							 : February 2016
   ******************************************************************************
   */
+#include <stdio.h>
 #include "stm32f4xx_hal.h"	
 #include "keypad.h"
 
@@ -73,12 +74,13 @@ char readKeypad(void) {
 			debounce++;
 			
 			/* debounce for button pressed */
-			if(debounce > 100){
+			if(debounce > 400){
 				keyLock = 0;
 				col = 1;
 				row = findRow();
 				a = convertToChar(col, row);
-				printf("%c\n", a);
+				//printf("%c\n", a);
+				return a;
 			}
 		}
 		
@@ -86,12 +88,13 @@ char readKeypad(void) {
 			debounce++;
 			
 			/* debounce for button pressed */
-			if (debounce > 100){
+			if (debounce > 400){
 				keyLock = 0;
 				col = 2;
 				row = findRow();
 				a = convertToChar(col, row);
-				printf("%c\n", a);
+				//printf("%c\n", a);
+				return a;
 			}
 		}
 		
@@ -99,15 +102,15 @@ char readKeypad(void) {
 			debounce++;
 			
 			/* debounce for button pressed */
-			if (debounce > 100) {
+			if (debounce > 400) {
 				keyLock = 0;
 				col = 3;
 				row = findRow();
 				a = convertToChar(col, row);
-				printf("%c\n", a);
+				//printf("%c\n", a);
+				return a;
 			}
 		}
-		return a;
 	}
 	else{
 		
@@ -123,6 +126,7 @@ char readKeypad(void) {
 			keyLock = 1;
 		}
 	}
+	return 'n';
 }
 
 /**
