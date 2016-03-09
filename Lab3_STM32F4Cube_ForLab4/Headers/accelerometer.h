@@ -45,6 +45,7 @@ void EXTI0_IRQHandler (void);
 float calcPitch (float x, float y, float z);
 void Calibrate(float* out);
 void ReadAcc(void);
+float calcRoll (float x, float y, float z);
 
 
 

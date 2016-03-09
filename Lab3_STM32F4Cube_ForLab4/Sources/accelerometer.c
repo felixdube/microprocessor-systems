@@ -116,6 +116,29 @@ float calcPitch (float x, float y, float z) {
 	return pitch;
 }
 
+/**
+  * @brief  Calculate the roll using 3D acceleration
+	* @param  x:	acceleration in x axis
+	* @param 	y:	acceleration in y axis
+	* @param	z:	acceleration in z axis
+  * @retval pitch in degrees
+  */
+float calcRoll (float x, float y, float z) {
+	float roll = atan2(y, (sqrt(x*x+z*z))) * 180.0 / PI;
+	
+	//Normalize the pitch to a value between 0-180
+	if ( z < 0 && roll < 0){
+		roll = 180 + roll;
+	}
+	else if( z < 0 && roll > 0) {
+			roll = 180 - roll;
+	}
+	else if ( pitch < 0 ){
+		roll = -roll;
+	}
+	return roll;
+}
+
 
 /**
   * @brief  Calibrate the accelerometer data
