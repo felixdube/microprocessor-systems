@@ -11,6 +11,8 @@
 #include "cmsis_os.h"                   // ARM::CMSIS:RTOS:Keil RTX
 #include "RTE_Components.h"             // Component selection
 #include "system_clock.h"
+#include "Thread_Acc.h"
+#include "main.h"
 
 extern void initializeLED_IO			(void);
 extern void start_Thread_LED			(void);
@@ -38,9 +40,9 @@ int main (void) {
   SystemClock_Config();                     /* Configure the System Clock     */
 
 	/* User codes goes here*/
-  initializeLED_IO();                       /* Initialize LED GPIO Buttons    */
-  start_Thread_LED();                       /* Create LED thread              */
+  start_Thread_Acc();                       /* Create LED thread              */
 	/* User codes ends here*/
   
 	osKernelStart();                          /* start thread execution         */
 }
+
