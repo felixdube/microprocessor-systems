@@ -32,8 +32,13 @@
 #define cal_X43 -0.0246509358276086
 
 /* kalman parameters */
+#define INIT_q 0.5 				/* this parameter controls the speed of convergence the higher, the faster it converges */
+#define INIT_r 2 					/* this parameter controls the speed of convergence */
+#define INIT_x 0 			  	/* starting on a flat surface in mg */
 #define INIT_y 0 			  	/* starting on a flat surface in mg */
 #define INIT_z 1000 			/* starting on a flat surface in mg */
+#define INIT_p 0.780776 	/* this was set to the value it converges to when the filter runs for a while */
+#define INIT_k 0.390388 	/* this was set to the value it converges to when the filter runs for a while */
 
 extern float accValue[3];
 extern float pitch;
