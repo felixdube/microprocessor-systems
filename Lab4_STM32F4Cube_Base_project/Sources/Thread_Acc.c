@@ -70,11 +70,6 @@ void Thread_Acc (void const *argument) {
 */
 void CreateMutexAcc (void)  { 
   pitchMutex = osMutexCreate (osMutex (MutexIsr1));
-  if (pitchMutex != NULL){
-    // Mutex object created
-  }
-  rollMutex = osMutexCreate (osMutex (MutexIsr2));
-  if (rollMutex != NULL){
-    // Mutex object created
-  }     
+
+  rollMutex = osMutexCreate (osMutex (MutexIsr2));    
 }
