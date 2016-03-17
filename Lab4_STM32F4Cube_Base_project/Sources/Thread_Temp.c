@@ -92,7 +92,4 @@ void Thread_Temperature (void const *argument) {
 	*/
 void CreateMutexTemp (void)  { 
   temperatureMutex = osMutexCreate (osMutex (MutexIsr));
-  if (temperatureMutex != NULL){
-    // Mutex object created
-  }   
 }
