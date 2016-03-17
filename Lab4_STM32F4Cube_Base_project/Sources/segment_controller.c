@@ -151,6 +151,22 @@ void flash_segment(void) {
 	flash_counter %= FLASH_TOTAL_PERIOD;
 }
 
+void flash_segment_urgent(void) {
+	if (flash_counter < FLASH_TOTAL_PERIOD_URGENT/3){
+		HAL_GPIO_WritePin(GPIOB, sel1, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(GPIOB, sel2, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(GPIOB, sel3, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(GPIOB, segDP, GPIO_PIN_RESET);
+		__HAL_RCC_GPIOB_CLK_DISABLE();
+	}
+	else {
+		__HAL_RCC_GPIOB_CLK_ENABLE();
+	}
+	
+	flash_counter++;
+	flash_counter %= FLASH_TOTAL_PERIOD_URGENT;
+}
+
 void display_degree(int on) {
 	if (on) {
 		HAL_GPIO_WritePin(GPIOB, segDegree, GPIO_PIN_SET);

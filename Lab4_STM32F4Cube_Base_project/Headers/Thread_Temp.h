@@ -23,6 +23,7 @@
 #define INIT_TEMP_k 0.022112 	/* this was set to the value it converges to when the filter runs for a while */
 
 #define THRESHHOLD_TEMP 40
+#define THRESHHOLD_TEMP_URGENT 45
 
 extern osThreadId tid_Thread_Temperature; 
 

@@ -13,6 +13,7 @@
 #define SEGMENT_CONTROLLER_H
 
 #define FLASH_TOTAL_PERIOD 150  //multiply by SEGMENT_DELAY to get the actual period in milliseconds
+#define FLASH_TOTAL_PERIOD_URGENT 70 //multiply by SEGMENT_DELAY to get the actual period in milliseconds
 
 #define segA GPIO_PIN_0
 #define segB GPIO_PIN_1
@@ -47,6 +48,7 @@ void display(float value);
 int getDigit(float value, int place);
 void setPins(int number);
 void flash_segment(void);
+void flash_segment_urgent(void);
 void display_degree(int on);
 
 #endif

@@ -137,7 +137,7 @@ float calcRoll (float x, float y, float z) {
 	else if( z < 0 && roll > 0) {
 			roll = 180 - roll;
 	}
-	else if ( pitchAngle < 0 ){
+	else if ( roll < 0 ){
 		roll = -roll;
 	}
 	return roll;

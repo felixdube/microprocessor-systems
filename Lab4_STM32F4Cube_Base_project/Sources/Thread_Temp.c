@@ -70,6 +70,12 @@ void Thread_Temperature (void const *argument) {
 		} else {
 			flash_alarm = 0;
 		}
+		
+		if (temperature > THRESHHOLD_TEMP_URGENT) {
+			flash_alarm_urgent = 1;
+		} else {
+			flash_alarm_urgent = 0;
+		}
 				
 		osDelay(TEMP_DELAY);
 	}

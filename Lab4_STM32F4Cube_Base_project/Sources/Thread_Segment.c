@@ -18,6 +18,7 @@
 volatile float display_value = 0;
 volatile int degree_on = 1;
 volatile int flash_alarm = 0;
+volatile int flash_alarm_urgent = 0;
 volatile int stateAngleTemp = 0; //state of the angle temp selection 0 being angle
 volatile int stateRollPitch = 0; //state of the roll pitch selection 0 being pitch
 
@@ -47,9 +48,13 @@ int start_Thread_Segment(void) {
 void Thread_Segment(void const *argument) {
 
 	while(1) {
-		if (flash_alarm) {
+		if (flash_alarm_urgent) {
+			flash_segment_urgent();
+		}
+		else if (flash_alarm){
 			flash_segment();
-		} else {
+		}
+		else {
 			__HAL_RCC_GPIOB_CLK_ENABLE();
 		}
 		
@@ -71,6 +76,7 @@ void Thread_Segment(void const *argument) {
 			updateDisplayDataCounter++;
 		}
 		display(display_value);
+		printf("%f\n",display_value);
 		digitTimer++;
 		osDelay(SEGMENT_DELAY);
 	}

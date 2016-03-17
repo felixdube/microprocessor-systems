@@ -29,6 +29,7 @@ extern osThreadId tid_Thread_Segment;
 extern volatile float display_value;
 extern volatile int degree_on;
 extern volatile int flash_alarm;
+extern volatile int flash_alarm_urgent;
 extern volatile int stateAngleTemp;
 extern volatile int stateRollPitch;
 
