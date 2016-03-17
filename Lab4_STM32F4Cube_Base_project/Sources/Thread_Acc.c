@@ -7,7 +7,7 @@
   ******************************************************************************
   */
 	
-#include "cmsis_os.h"                   // ARM::CMSIS:RTOS:Keil RTX
+#include "cmsis_os.h"                  									 	// ARM::CMSIS:RTOS:Keil RTX
 #include "stm32f4xx_hal.h"
 #include "Thread_Acc.h"
 #include "lis3dsh.h"
@@ -16,12 +16,12 @@
 #include <stdlib.h>
 #include <math.h>
 
-void Thread_Acc (void const *argument);                 // thread function
-osThreadId tid_Thread_Acc;                              // thread id
+void Thread_Acc (void const *argument);                 	// thread function
+osThreadId tid_Thread_Acc;                             	 	// thread id
 osThreadDef(Thread_Acc, osPriorityHigh, 1, 0);
-osMutexDef (MutexIsr1);                                     // Mutex name definition
+osMutexDef (MutexIsr1);                                   // Mutex protecting the pitch variable
 osMutexId pitchMutex; 
-osMutexDef (MutexIsr2);                                     // Mutex name definition
+osMutexDef (MutexIsr2);                                   // Mutex protecting the roll variable
 osMutexId rollMutex;  
 
 
@@ -46,6 +46,12 @@ int start_Thread_Acc (void) {
  /*----------------------------------------------------------------------------
 *      Thread  'LED_Thread': Toggles Acc
  *---------------------------------------------------------------------------*/
+
+/**
+* @brief Thread that read the accelerometer
+* @param argument: 
+* @retval None
+*/
 void Thread_Acc (void const *argument) {
 		while(1){
 			//Wait for the interrupt to issue a flag before reading the value
@@ -57,6 +63,11 @@ void Thread_Acc (void const *argument) {
 			}
 	}
 
+/**
+* @brief Create mutex needed to protect roll and pitch variable
+* @param None
+* @retval None
+*/
 void CreateMutexAcc (void)  { 
   pitchMutex = osMutexCreate (osMutex (MutexIsr1));
   if (pitchMutex != NULL){

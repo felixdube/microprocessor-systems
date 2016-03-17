@@ -7,14 +7,14 @@
   ******************************************************************************
   */
 #include <stdio.h>
-#include "cmsis_os.h"                   // ARM::CMSIS:RTOS:Keil RTX
+#include "cmsis_os.h"                   									// ARM::CMSIS:RTOS:Keil RTX
 #include "stm32f4xx_hal.h"
 #include "Thread_Keypad.h"
 #include "keypad.h"
 #include "Thread_Segment.h"
 
 
-osThreadId tid_Thread_Keypad;       // thread id
+osThreadId tid_Thread_Keypad;       											// thread id
 osThreadDef(Thread_Keypad, osPriorityNormal, 1, 0);
 GPIO_InitTypeDef 				Keypad_configuration;
 
@@ -38,6 +38,11 @@ int start_Thread_Keypad (void) {
  /*----------------------------------------------------------------------------
 *      Thread  'Keypad_Thread': Toggles Keypad
  *---------------------------------------------------------------------------*/
+/**
+* @brief Thread that poll for keypad press
+* @param None
+* @retval None
+*/
 void Thread_Keypad (void const *argument) {
 	while(1){
 		//Wait for the interrupt to issue a flag before reading the value

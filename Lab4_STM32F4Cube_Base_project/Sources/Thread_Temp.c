@@ -11,19 +11,19 @@
 #include <stdlib.h>
 
 #include "Thread_Temp.h"
-#include "cmsis_os.h"                   // ARM::CMSIS:RTOS:Keil RTX
+#include "cmsis_os.h"                   										// ARM::CMSIS:RTOS:Keil RTX
 #include "stm32f4xx_hal.h"
 #include "ADC_config.h"
 #include "temperature.h"
 #include "kalmanFilter.h"
 #include "Thread_Segment.h"
 
-osThreadId tid_Thread_Temperature;                              // thread id
+osThreadId tid_Thread_Temperature;                        	// thread id
 osThreadDef(Thread_Temperature, osPriorityHigh, 1, 0);
 
-osMutexDef (MutexIsr);                                     // Mutex name definition
+osMutexDef (MutexIsr);                                     	// mutex for temperature variable
 osMutexId temperatureMutex;  
-kalmanState *adcState;
+kalmanState *adcState;																			// kalman filter for adc values
 
 int adc_val = 0;
 volatile float temperature = 0;
@@ -53,18 +53,21 @@ int start_Thread_Temperature(void) {
 void Thread_Temperature (void const *argument) {
 
 	while(1) {
-		HAL_ADC_Start(&ADC1_Handle); 								/* start ADC conversion */
+		HAL_ADC_Start(&ADC1_Handle); 																				/* start ADC conversion */
 			
-		/* wait for the conversion to be done and get data */
-		if (HAL_ADC_PollForConversion(&ADC1_Handle, 10000) == HAL_OK) { 
-			adc_val = HAL_ADC_GetValue(&ADC1_Handle); /* get the value */
-			kalmanUpdate(adcState, adc_val); 					/* filter the data and update the filter parameters */
+		if (HAL_ADC_PollForConversion(&ADC1_Handle, 10000) == HAL_OK) { 		/* wait for the conversion to be done and get data */
+			adc_val = HAL_ADC_GetValue(&ADC1_Handle); 												/* get the value */
+			kalmanUpdate(adcState, adc_val); 																	/* filter the data and update the filter parameters */
+			
 			osMutexWait(temperatureMutex, osWaitForever);
 			temperature = convertTemp(adcState->x);
 			osMutexRelease(temperatureMutex);
+			
 			__HAL_ADC_CLEAR_FLAG(&ADC1_Handle, ADC_FLAG_EOC);
 		}
-				
+		
+		
+		// check if the alarm needs to be triggered
 		if (temperature > THRESHHOLD_TEMP) {
 			flash_alarm = 1;
 		} else {
@@ -81,6 +84,12 @@ void Thread_Temperature (void const *argument) {
 	}
 }
   
+
+/**
+	* @brief Create mutex for temperature variable
+	* @param none
+	* @retval none
+	*/
 void CreateMutexTemp (void)  { 
   temperatureMutex = osMutexCreate (osMutex (MutexIsr));
   if (temperatureMutex != NULL){

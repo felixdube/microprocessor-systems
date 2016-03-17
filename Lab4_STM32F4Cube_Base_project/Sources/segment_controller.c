@@ -135,6 +135,12 @@ void setPins(int digit) {
 	}
 }
 
+
+/**
+	* @brief Turn on and off the 7-segment display with a specific period
+	* @param flas_period: flasshing period of the display
+	* @retval None
+	*/
 void flash_segment(int flash_period) {
 	if (flash_counter < flash_period / 3){
 		HAL_GPIO_WritePin(GPIOB, sel1, GPIO_PIN_RESET);
@@ -151,6 +157,12 @@ void flash_segment(int flash_period) {
 	flash_counter %= flash_period;
 }
 
+
+/**
+	* @brief Turn on or off the degree sign on the display
+	* @param on: 1 means to turn it on, 0 to turn it off
+	* @retval None
+	*/
 void display_degree(int on) {
 	if (on) {
 		HAL_GPIO_WritePin(GPIOB, segDegree, GPIO_PIN_SET);

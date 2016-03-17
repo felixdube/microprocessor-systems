@@ -15,12 +15,12 @@
 #include "accelerometer.h"
 #include "Thread_Temp.h"
 
-volatile float display_value = 0;
-volatile int degree_on = 1;
-volatile int flash_alarm = 0;
-volatile int flash_alarm_urgent = 0;
-volatile int stateAngleTemp = 0; //state of the angle temp selection 0 being angle
-volatile int stateRollPitch = 0; //state of the roll pitch selection 0 being pitch
+volatile float display_value = 0;				// value displayed on the 7-seg display
+volatile int degree_on = 1;							// boolean for degree sign
+volatile int flash_alarm = 0;						// boolean for alarm
+volatile int flash_alarm_urgent = 0;		// boolean for urgent alarm
+volatile int stateAngleTemp = 0; 				//state of the angle temp selection 0 being angle, 1 being temp
+volatile int stateRollPitch = 0; 				//state of the roll pitch selection 0 being pitch, 1 being roll
 
 int updateDisplayDataCounter = 0;
 
@@ -48,6 +48,8 @@ int start_Thread_Segment(void) {
 void Thread_Segment(void const *argument) {
 
 	while(1) {
+		
+		// check if an alarm is triggered
 		if (flash_alarm_urgent) {
 			flash_segment(FLASH_TOTAL_PERIOD_URGENT);
 		}
@@ -58,8 +60,11 @@ void Thread_Segment(void const *argument) {
 			__HAL_RCC_GPIOB_CLK_ENABLE();
 		}
 
+		// update what is being displayed
 		if (updateDisplayDataCounter >= UPDATE_DATA_DELAY){
 			updateDisplayDataCounter = 0;
+			
+			// ANGLE
 			if(stateAngleTemp == ANGLE){
 				if(stateRollPitch == PITCH){
 					display_value = pitchAngle;
@@ -68,10 +73,14 @@ void Thread_Segment(void const *argument) {
 					display_value = rollAngle;
 				}
 			}
+			
+			// TEMPRATURE
 			else if(stateAngleTemp == TEMP){
 				display_value = temperature;
 			}
 		}
+		
+		// used as a delay
 		else{
 			updateDisplayDataCounter++;
 		}

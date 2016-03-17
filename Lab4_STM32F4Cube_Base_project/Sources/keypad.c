@@ -51,7 +51,7 @@ void Keypad_Config(void) {
 	/* COLUMN */
 	/* input */
 	Column_GPIO_InitDef.Pin = col1 | col2 | col3;
-	Column_GPIO_InitDef.Mode = GPIO_MODE_INPUT;   			/* INPUT */
+	Column_GPIO_InitDef.Mode = GPIO_MODE_INPUT;   				/* INPUT */
 	Column_GPIO_InitDef.Pull = GPIO_PULLUP;
 	Column_GPIO_InitDef.Speed = GPIO_SPEED_FREQ_MEDIUM;		/* max frequency for our processor is 84MHz */
 

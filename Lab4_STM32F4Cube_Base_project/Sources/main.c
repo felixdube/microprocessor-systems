@@ -29,12 +29,12 @@ uint32_t HAL_GetTick(void) {
 
 
 int main (void) {
-  osKernelInitialize();                     /* initialize CMSIS-RTOS          */
-  HAL_Init();                               /* Initialize the HAL Library     */
-  SystemClock_Config();                     /* Configure the System Clock     */
-  start_Thread_Temperature();
-  start_Thread_Acc();                       /* Create LED thread              */
-  start_Thread_Segment();
-  start_Thread_Keypad();
-  osKernelStart();                          /* start thread execution         */
+  osKernelInitialize();                     /* initialize CMSIS-RTOS */
+  HAL_Init();                               /* Initialize the HAL Library */
+  SystemClock_Config();                     /* Configure the System Clock */
+  start_Thread_Temperature();								/* Create a thread for sampling CPU temperature */
+  start_Thread_Acc();                       /* Create LED thread */
+  start_Thread_Segment();										/* Create thread for 7-seg display */
+  start_Thread_Keypad();										/* Create thread for the keypad */
+  osKernelStart();                          /* start thread execution */
 }
