@@ -11,18 +11,10 @@
 #include "cmsis_os.h"                   // ARM::CMSIS:RTOS:Keil RTX
 #include "RTE_Components.h"             // Component selection
 #include "system_clock.h"
-<<<<<<< HEAD
 #include "Thread_Temp.h"
 #include "Thread_Segment.h"
-=======
 #include "Thread_Acc.h"
-#include "main.h"
->>>>>>> 87650f9d1b334c1599e6c236c9aedd7c330c4996
 
-extern void initializeLED_IO			(void);
-extern void start_Thread_LED			(void);
-extern void Thread_LED(void const *argument);
-extern osThreadId tid_Thread_LED;
 
 /**
 	These lines are mandatory to make CMSIS-RTOS RTX work with te new Cube HAL
@@ -43,20 +35,14 @@ int main (void) {
 
   SystemClock_Config();                     /* Configure the System Clock     */
 
-<<<<<<< HEAD
-	start_Thread_Temperature();
-	start_Thread_Segment();
-	
-=======
-	/* User codes goes here*/
+  start_Thread_Temperature();
+  start_Thread_Segment();
   start_Thread_Acc();                       /* Create LED thread              */
-	/* User codes ends here*/
-  
->>>>>>> 87650f9d1b334c1599e6c236c9aedd7c330c4996
-	osKernelStart();                          /* start thread execution         */
-	while(1) {
-		display_value = temp;
-		osDelay(500);
-	}
+
+  osKernelStart();                          /* start thread execution         */
+  while(1) {
+    display_value = temp;
+    osDelay(500);
+  }
 }
 
