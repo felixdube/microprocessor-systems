@@ -34,7 +34,7 @@ osThreadDef(Thread_Segment, osPriorityHigh, 1, 0);
 	*/
 int start_Thread_Segment(void) {
 	Display_GPIO_Config();
-	display_degree(degree_on);	
+	display_degree(degree_on);
   tid_Thread_Segment = osThreadCreate(osThread(Thread_Segment), NULL);
   if (!tid_Thread_Segment) return -1;
 	return 0;
@@ -49,15 +49,15 @@ void Thread_Segment(void const *argument) {
 
 	while(1) {
 		if (flash_alarm_urgent) {
-			flash_segment_urgent();
+			flash_segment(FLASH_TOTAL_PERIOD_URGENT);
 		}
-		else if (flash_alarm){
-			flash_segment();
+		else if (flash_alarm) {
+			flash_segment(FLASH_TOTAL_PERIOD);
 		}
 		else {
 			__HAL_RCC_GPIOB_CLK_ENABLE();
 		}
-		
+
 		if (updateDisplayDataCounter >= UPDATE_DATA_DELAY){
 			updateDisplayDataCounter = 0;
 			if(stateAngleTemp == ANGLE){
