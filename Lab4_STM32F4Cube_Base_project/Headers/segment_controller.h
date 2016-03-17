@@ -47,8 +47,7 @@ void Display_GPIO_Config(void);
 void display(float value);
 int getDigit(float value, int place);
 void setPins(int number);
-void flash_segment(void);
-void flash_segment_urgent(void);
+void flash_segment(int flash_period);
 void display_degree(int on);
 
 #endif

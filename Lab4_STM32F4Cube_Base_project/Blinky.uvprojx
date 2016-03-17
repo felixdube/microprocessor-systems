@@ -124,47 +124,6 @@
             <HexOffset>0</HexOffset>
             <Oh166RecLen>16</Oh166RecLen>
           </OPTHX>
-          <Simulator>
-            <UseSimulator>0</UseSimulator>
-            <LoadApplicationAtStartup>1</LoadApplicationAtStartup>
-            <RunToMain>1</RunToMain>
-            <RestoreBreakpoints>1</RestoreBreakpoints>
-            <RestoreWatchpoints>1</RestoreWatchpoints>
-            <RestoreMemoryDisplay>1</RestoreMemoryDisplay>
-            <RestoreFunctions>1</RestoreFunctions>
-            <RestoreToolbox>1</RestoreToolbox>
-            <LimitSpeedToRealTime>0</LimitSpeedToRealTime>
-            <RestoreSysVw>1</RestoreSysVw>
-          </Simulator>
-          <Target>
-            <UseTarget>1</UseTarget>
-            <LoadApplicationAtStartup>0</LoadApplicationAtStartup>
-            <RunToMain>0</RunToMain>
-            <RestoreBreakpoints>1</RestoreBreakpoints>
-            <RestoreWatchpoints>1</RestoreWatchpoints>
-            <RestoreMemoryDisplay>1</RestoreMemoryDisplay>
-            <RestoreFunctions>0</RestoreFunctions>
-            <RestoreToolbox>1</RestoreToolbox>
-            <RestoreTracepoints>0</RestoreTracepoints>
-            <RestoreSysVw>1</RestoreSysVw>
-          </Target>
-          <RunDebugAfterBuild>0</RunDebugAfterBuild>
-          <TargetSelection>12</TargetSelection>
-          <SimDlls>
-            <CpuDll></CpuDll>
-            <CpuDllArguments></CpuDllArguments>
-            <PeripheralDll></PeripheralDll>
-            <PeripheralDllArguments></PeripheralDllArguments>
-            <InitializationFile></InitializationFile>
-          </SimDlls>
-          <TargetDlls>
-            <CpuDll></CpuDll>
-            <CpuDllArguments></CpuDllArguments>
-            <PeripheralDll></PeripheralDll>
-            <PeripheralDllArguments></PeripheralDllArguments>
-            <InitializationFile>.\Debug_RAM.ini</InitializationFile>
-            <Driver>STLink\ST-LINKIII-KEIL_SWO.dll</Driver>
-          </TargetDlls>
         </DebugOption>
         <Utilities>
           <Flash1>
@@ -421,19 +380,9 @@
               <FilePath>.\Sources\main.c</FilePath>
             </File>
             <File>
-              <FileName>Thread_LED.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Sources\Thread_LED.c</FilePath>
-            </File>
-            <File>
               <FileName>ADC_config.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Sources\ADC_config.c</FilePath>
-            </File>
-            <File>
-              <FileName>alarm.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Sources\alarm.c</FilePath>
             </File>
             <File>
               <FileName>kalmanfilter.c</FileName>
@@ -456,11 +405,6 @@
               <FilePath>.\Sources\temperature.c</FilePath>
             </File>
             <File>
-              <FileName>Thread_Acc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Thread_Acc.c</FilePath>
-            </File>
-            <File>
               <FileName>fput_debug.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Sources\fput_debug.c</FilePath>
@@ -471,9 +415,34 @@
               <FilePath>.\Sources\stm32f4xx_it.c</FilePath>
             </File>
             <File>
-              <FileName>Thread_Keyboard.c</FileName>
+              <FileName>Thread_Acc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Thread_Keyboard.c</FilePath>
+              <FilePath>.\Sources\Thread_Acc.c</FilePath>
+            </File>
+            <File>
+              <FileName>Thread_Keypad.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\Thread_Keypad.c</FilePath>
+            </File>
+            <File>
+              <FileName>Thread_Segment.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\Thread_Segment.c</FilePath>
+            </File>
+            <File>
+              <FileName>Thread_Temp.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\Thread_Temp.c</FilePath>
+            </File>
+            <File>
+              <FileName>accelerometer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\accelerometer.c</FilePath>
+            </File>
+            <File>
+              <FileName>keypad.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\keypad.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -614,47 +583,6 @@
             <HexOffset>0</HexOffset>
             <Oh166RecLen>16</Oh166RecLen>
           </OPTHX>
-          <Simulator>
-            <UseSimulator>0</UseSimulator>
-            <LoadApplicationAtStartup>1</LoadApplicationAtStartup>
-            <RunToMain>1</RunToMain>
-            <RestoreBreakpoints>1</RestoreBreakpoints>
-            <RestoreWatchpoints>1</RestoreWatchpoints>
-            <RestoreMemoryDisplay>1</RestoreMemoryDisplay>
-            <RestoreFunctions>1</RestoreFunctions>
-            <RestoreToolbox>1</RestoreToolbox>
-            <LimitSpeedToRealTime>0</LimitSpeedToRealTime>
-            <RestoreSysVw>1</RestoreSysVw>
-          </Simulator>
-          <Target>
-            <UseTarget>1</UseTarget>
-            <LoadApplicationAtStartup>1</LoadApplicationAtStartup>
-            <RunToMain>1</RunToMain>
-            <RestoreBreakpoints>1</RestoreBreakpoints>
-            <RestoreWatchpoints>1</RestoreWatchpoints>
-            <RestoreMemoryDisplay>1</RestoreMemoryDisplay>
-            <RestoreFunctions>0</RestoreFunctions>
-            <RestoreToolbox>1</RestoreToolbox>
-            <RestoreTracepoints>0</RestoreTracepoints>
-            <RestoreSysVw>1</RestoreSysVw>
-          </Target>
-          <RunDebugAfterBuild>0</RunDebugAfterBuild>
-          <TargetSelection>11</TargetSelection>
-          <SimDlls>
-            <CpuDll></CpuDll>
-            <CpuDllArguments></CpuDllArguments>
-            <PeripheralDll></PeripheralDll>
-            <PeripheralDllArguments></PeripheralDllArguments>
-            <InitializationFile></InitializationFile>
-          </SimDlls>
-          <TargetDlls>
-            <CpuDll></CpuDll>
-            <CpuDllArguments></CpuDllArguments>
-            <PeripheralDll></PeripheralDll>
-            <PeripheralDllArguments></PeripheralDllArguments>
-            <InitializationFile></InitializationFile>
-            <Driver>STLink\ST-LINKIII-KEIL_SWO.dll</Driver>
-          </TargetDlls>
         </DebugOption>
         <Utilities>
           <Flash1>
@@ -911,19 +839,9 @@
               <FilePath>.\Sources\main.c</FilePath>
             </File>
             <File>
-              <FileName>Thread_LED.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Sources\Thread_LED.c</FilePath>
-            </File>
-            <File>
               <FileName>ADC_config.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Sources\ADC_config.c</FilePath>
-            </File>
-            <File>
-              <FileName>alarm.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Sources\alarm.c</FilePath>
             </File>
             <File>
               <FileName>kalmanfilter.c</FileName>
@@ -946,11 +864,6 @@
               <FilePath>.\Sources\temperature.c</FilePath>
             </File>
             <File>
-              <FileName>Thread_Acc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Thread_Acc.c</FilePath>
-            </File>
-            <File>
               <FileName>fput_debug.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Sources\fput_debug.c</FilePath>
@@ -961,9 +874,34 @@
               <FilePath>.\Sources\stm32f4xx_it.c</FilePath>
             </File>
             <File>
-              <FileName>Thread_Keyboard.c</FileName>
+              <FileName>Thread_Acc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Thread_Keyboard.c</FilePath>
+              <FilePath>.\Sources\Thread_Acc.c</FilePath>
+            </File>
+            <File>
+              <FileName>Thread_Keypad.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\Thread_Keypad.c</FilePath>
+            </File>
+            <File>
+              <FileName>Thread_Segment.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\Thread_Segment.c</FilePath>
+            </File>
+            <File>
+              <FileName>Thread_Temp.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\Thread_Temp.c</FilePath>
+            </File>
+            <File>
+              <FileName>accelerometer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\accelerometer.c</FilePath>
+            </File>
+            <File>
+              <FileName>keypad.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\keypad.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1103,47 +1041,6 @@
             <HexOffset>0</HexOffset>
             <Oh166RecLen>16</Oh166RecLen>
           </OPTHX>
-          <Simulator>
-            <UseSimulator>0</UseSimulator>
-            <LoadApplicationAtStartup>1</LoadApplicationAtStartup>
-            <RunToMain>1</RunToMain>
-            <RestoreBreakpoints>1</RestoreBreakpoints>
-            <RestoreWatchpoints>1</RestoreWatchpoints>
-            <RestoreMemoryDisplay>1</RestoreMemoryDisplay>
-            <RestoreFunctions>1</RestoreFunctions>
-            <RestoreToolbox>1</RestoreToolbox>
-            <LimitSpeedToRealTime>0</LimitSpeedToRealTime>
-            <RestoreSysVw>1</RestoreSysVw>
-          </Simulator>
-          <Target>
-            <UseTarget>1</UseTarget>
-            <LoadApplicationAtStartup>1</LoadApplicationAtStartup>
-            <RunToMain>1</RunToMain>
-            <RestoreBreakpoints>1</RestoreBreakpoints>
-            <RestoreWatchpoints>1</RestoreWatchpoints>
-            <RestoreMemoryDisplay>1</RestoreMemoryDisplay>
-            <RestoreFunctions>0</RestoreFunctions>
-            <RestoreToolbox>1</RestoreToolbox>
-            <RestoreTracepoints>0</RestoreTracepoints>
-            <RestoreSysVw>1</RestoreSysVw>
-          </Target>
-          <RunDebugAfterBuild>0</RunDebugAfterBuild>
-          <TargetSelection>12</TargetSelection>
-          <SimDlls>
-            <CpuDll></CpuDll>
-            <CpuDllArguments></CpuDllArguments>
-            <PeripheralDll></PeripheralDll>
-            <PeripheralDllArguments></PeripheralDllArguments>
-            <InitializationFile></InitializationFile>
-          </SimDlls>
-          <TargetDlls>
-            <CpuDll></CpuDll>
-            <CpuDllArguments></CpuDllArguments>
-            <PeripheralDll></PeripheralDll>
-            <PeripheralDllArguments></PeripheralDllArguments>
-            <InitializationFile></InitializationFile>
-            <Driver>STLink\ST-LINKIII-KEIL_SWO.dll</Driver>
-          </TargetDlls>
         </DebugOption>
         <Utilities>
           <Flash1>
@@ -1400,19 +1297,9 @@
               <FilePath>.\Sources\main.c</FilePath>
             </File>
             <File>
-              <FileName>Thread_LED.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Sources\Thread_LED.c</FilePath>
-            </File>
-            <File>
               <FileName>ADC_config.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Sources\ADC_config.c</FilePath>
-            </File>
-            <File>
-              <FileName>alarm.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Sources\alarm.c</FilePath>
             </File>
             <File>
               <FileName>kalmanfilter.c</FileName>
@@ -1435,11 +1322,6 @@
               <FilePath>.\Sources\temperature.c</FilePath>
             </File>
             <File>
-              <FileName>Thread_Acc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Thread_Acc.c</FilePath>
-            </File>
-            <File>
               <FileName>fput_debug.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Sources\fput_debug.c</FilePath>
@@ -1450,9 +1332,34 @@
               <FilePath>.\Sources\stm32f4xx_it.c</FilePath>
             </File>
             <File>
-              <FileName>Thread_Keyboard.c</FileName>
+              <FileName>Thread_Acc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Thread_Keyboard.c</FilePath>
+              <FilePath>.\Sources\Thread_Acc.c</FilePath>
+            </File>
+            <File>
+              <FileName>Thread_Keypad.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\Thread_Keypad.c</FilePath>
+            </File>
+            <File>
+              <FileName>Thread_Segment.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\Thread_Segment.c</FilePath>
+            </File>
+            <File>
+              <FileName>Thread_Temp.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\Thread_Temp.c</FilePath>
+            </File>
+            <File>
+              <FileName>accelerometer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\accelerometer.c</FilePath>
+            </File>
+            <File>
+              <FileName>keypad.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\keypad.c</FilePath>
             </File>
           </Files>
         </Group>
