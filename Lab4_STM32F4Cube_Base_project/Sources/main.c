@@ -17,7 +17,7 @@
 #include "Thread_Keypad.h"
 
 /**
-	These lines are mandatory to make CMSIS-RTOS RTX work with te new Cube HAL
+  These lines are mandatory to make CMSIS-RTOS RTX work with te new Cube HAL
 */
 #ifdef RTE_CMSIS_RTOS_RTX
 extern uint32_t os_time;
@@ -33,9 +33,8 @@ int main (void) {
   HAL_Init();                               /* Initialize the HAL Library     */
   SystemClock_Config();                     /* Configure the System Clock     */
   start_Thread_Temperature();
-	start_Thread_Acc();                       /* Create LED thread              */
+  start_Thread_Acc();                       /* Create LED thread              */
   start_Thread_Segment();
-	start_Thread_Keypad();
+  start_Thread_Keypad();
   osKernelStart();                          /* start thread execution         */
 }
-
