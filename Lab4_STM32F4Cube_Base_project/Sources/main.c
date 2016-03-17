@@ -14,7 +14,7 @@
 #include "Thread_Temp.h"
 #include "Thread_Segment.h"
 #include "Thread_Acc.h"
-
+#include "Thread_Keypad.h"
 
 /**
 	These lines are mandatory to make CMSIS-RTOS RTX work with te new Cube HAL
@@ -30,19 +30,12 @@ uint32_t HAL_GetTick(void) {
 
 int main (void) {
   osKernelInitialize();                     /* initialize CMSIS-RTOS          */
-
   HAL_Init();                               /* Initialize the HAL Library     */
-
   SystemClock_Config();                     /* Configure the System Clock     */
-
   start_Thread_Temperature();
+	start_Thread_Acc();                       /* Create LED thread              */
   start_Thread_Segment();
-  start_Thread_Acc();                       /* Create LED thread              */
-
+	start_Thread_Keypad();
   osKernelStart();                          /* start thread execution         */
-  while(1) {
-    display_value = temp;
-    osDelay(500);
-  }
 }
 

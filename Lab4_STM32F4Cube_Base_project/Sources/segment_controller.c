@@ -136,7 +136,7 @@ void setPins(int digit) {
 }
 
 void flash_segment(void) {
-	if (flash_counter < 300){
+	if (flash_counter < FLASH_TOTAL_PERIOD/3){
 		HAL_GPIO_WritePin(GPIOB, sel1, GPIO_PIN_RESET);
 		HAL_GPIO_WritePin(GPIOB, sel2, GPIO_PIN_RESET);
 		HAL_GPIO_WritePin(GPIOB, sel3, GPIO_PIN_RESET);
@@ -148,7 +148,7 @@ void flash_segment(void) {
 	}
 	
 	flash_counter++;
-	flash_counter %= 600;
+	flash_counter %= FLASH_TOTAL_PERIOD;
 }
 
 void display_degree(int on) {

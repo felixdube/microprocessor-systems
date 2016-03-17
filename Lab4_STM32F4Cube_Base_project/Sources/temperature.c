@@ -13,10 +13,10 @@
 /**
 	* @brief Convert the output of the ADC to a temperature in °C
 	* @param adc_ouput: value sampled by the ADC
-	* @retval temp: temperature in °C
+	* @retval temperature: temperature in °C
 	*/
 float convertTemp(int adc_output) {
 	float voltage = VREF * adc_output / MAX_12_BIT;
-	float temp = 400 * voltage - 279;
-	return temp;
+	float temperature = 400 * voltage - 279;
+	return temperature;
 }

@@ -16,6 +16,7 @@
 
 #define accPin GPIO_PIN_0
 
+#define DELAY_UPDATE_ACC_VALUE 6
 #define PI 3.1415926535
 
 #define cal_X11 1.01149016032271
@@ -40,12 +41,9 @@
 #define INIT_p 0.780776 	/* this was set to the value it converges to when the filter runs for a while */
 #define INIT_k 0.390388 	/* this was set to the value it converges to when the filter runs for a while */
 
-extern float accValue[3];
-extern float pitch;
-extern int flag_accPin;
-extern kalmanState *xState;
-extern kalmanState *yState;
-extern kalmanState *zState;
+extern float pitchAngle;
+extern float rollAngle;
+
 
 void Accelerometer_Config(void);
 void Accelerometer_Interrupt_Config(void);

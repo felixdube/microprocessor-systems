@@ -229,6 +229,7 @@
             <useUlib>1</useUlib>
             <EndSel>0</EndSel>
             <uLtcg>0</uLtcg>
+            <nSecure>0</nSecure>
             <RoSelD>3</RoSelD>
             <RwSelD>3</RwSelD>
             <CodeSel>0</CodeSel>
@@ -365,6 +366,8 @@
             <useXO>0</useXO>
             <v6Lang>0</v6Lang>
             <v6LangP>0</v6LangP>
+            <vShortEn>0</vShortEn>
+            <vShortWch>0</vShortWch>
             <VariousControls>
               <MiscControls></MiscControls>
               <Define>HSE_VALUE=8000000, VECT_TAB_SRAM</Define>
@@ -428,6 +431,11 @@
               <FilePath>.\Sources\ADC_config.c</FilePath>
             </File>
             <File>
+              <FileName>alarm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\alarm.c</FilePath>
+            </File>
+            <File>
               <FileName>kalmanfilter.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Sources\kalmanfilter.c</FilePath>
@@ -448,19 +456,9 @@
               <FilePath>.\Sources\temperature.c</FilePath>
             </File>
             <File>
-              <FileName>keypad.c</FileName>
+              <FileName>Thread_Acc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Sources\keypad.c</FilePath>
-            </File>
-            <File>
-              <FileName>accelerometer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Sources\accelerometer.c</FilePath>
-            </File>
-            <File>
-              <FileName>Thread_Temp.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Sources\Thread_Temp.c</FilePath>
+              <FilePath>.\Thread_Acc.c</FilePath>
             </File>
             <File>
               <FileName>fput_debug.c</FileName>
@@ -468,9 +466,14 @@
               <FilePath>.\Sources\fput_debug.c</FilePath>
             </File>
             <File>
-              <FileName>Thread_Segment.c</FileName>
+              <FileName>stm32f4xx_it.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Sources\Thread_Segment.c</FilePath>
+              <FilePath>.\Sources\stm32f4xx_it.c</FilePath>
+            </File>
+            <File>
+              <FileName>Thread_Keyboard.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Thread_Keyboard.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -496,6 +499,7 @@
       <TargetName>Lab4</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
+      <pCCUsed>5060061::V5.06 update 1 (build 61)::ARMCC</pCCUsed>
       <TargetOption>
         <TargetCommonOption>
           <Device>STM32F407VGTx</Device>
@@ -715,6 +719,7 @@
             <useUlib>1</useUlib>
             <EndSel>0</EndSel>
             <uLtcg>0</uLtcg>
+            <nSecure>0</nSecure>
             <RoSelD>3</RoSelD>
             <RwSelD>3</RwSelD>
             <CodeSel>0</CodeSel>
@@ -851,6 +856,8 @@
             <useXO>0</useXO>
             <v6Lang>0</v6Lang>
             <v6LangP>0</v6LangP>
+            <vShortEn>0</vShortEn>
+            <vShortWch>0</vShortWch>
             <VariousControls>
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER, STM32F407xx ,  __FPU_PRESENT=1 , HSE_VALUE=8000000</Define>
@@ -914,6 +921,11 @@
               <FilePath>.\Sources\ADC_config.c</FilePath>
             </File>
             <File>
+              <FileName>alarm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\alarm.c</FilePath>
+            </File>
+            <File>
               <FileName>kalmanfilter.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Sources\kalmanfilter.c</FilePath>
@@ -934,19 +946,9 @@
               <FilePath>.\Sources\temperature.c</FilePath>
             </File>
             <File>
-              <FileName>keypad.c</FileName>
+              <FileName>Thread_Acc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Sources\keypad.c</FilePath>
-            </File>
-            <File>
-              <FileName>accelerometer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Sources\accelerometer.c</FilePath>
-            </File>
-            <File>
-              <FileName>Thread_Temp.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Sources\Thread_Temp.c</FilePath>
+              <FilePath>.\Thread_Acc.c</FilePath>
             </File>
             <File>
               <FileName>fput_debug.c</FileName>
@@ -954,9 +956,14 @@
               <FilePath>.\Sources\fput_debug.c</FilePath>
             </File>
             <File>
-              <FileName>Thread_Segment.c</FileName>
+              <FileName>stm32f4xx_it.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Sources\Thread_Segment.c</FilePath>
+              <FilePath>.\Sources\stm32f4xx_it.c</FilePath>
+            </File>
+            <File>
+              <FileName>Thread_Keyboard.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Thread_Keyboard.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1201,6 +1208,7 @@
             <useUlib>1</useUlib>
             <EndSel>0</EndSel>
             <uLtcg>0</uLtcg>
+            <nSecure>0</nSecure>
             <RoSelD>3</RoSelD>
             <RwSelD>3</RwSelD>
             <CodeSel>0</CodeSel>
@@ -1337,6 +1345,8 @@
             <useXO>0</useXO>
             <v6Lang>0</v6Lang>
             <v6LangP>0</v6LangP>
+            <vShortEn>0</vShortEn>
+            <vShortWch>0</vShortWch>
             <VariousControls>
               <MiscControls></MiscControls>
               <Define>HSE_VALUE=8000000</Define>
@@ -1400,6 +1410,11 @@
               <FilePath>.\Sources\ADC_config.c</FilePath>
             </File>
             <File>
+              <FileName>alarm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\alarm.c</FilePath>
+            </File>
+            <File>
               <FileName>kalmanfilter.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Sources\kalmanfilter.c</FilePath>
@@ -1420,19 +1435,9 @@
               <FilePath>.\Sources\temperature.c</FilePath>
             </File>
             <File>
-              <FileName>keypad.c</FileName>
+              <FileName>Thread_Acc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Sources\keypad.c</FilePath>
-            </File>
-            <File>
-              <FileName>accelerometer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Sources\accelerometer.c</FilePath>
-            </File>
-            <File>
-              <FileName>Thread_Temp.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Sources\Thread_Temp.c</FilePath>
+              <FilePath>.\Thread_Acc.c</FilePath>
             </File>
             <File>
               <FileName>fput_debug.c</FileName>
@@ -1440,9 +1445,14 @@
               <FilePath>.\Sources\fput_debug.c</FilePath>
             </File>
             <File>
-              <FileName>Thread_Segment.c</FileName>
+              <FileName>stm32f4xx_it.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Sources\Thread_Segment.c</FilePath>
+              <FilePath>.\Sources\stm32f4xx_it.c</FilePath>
+            </File>
+            <File>
+              <FileName>Thread_Keyboard.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Thread_Keyboard.c</FilePath>
             </File>
           </Files>
         </Group>

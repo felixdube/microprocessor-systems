@@ -12,6 +12,8 @@
 #ifndef SEGMENT_CONTROLLER_H
 #define SEGMENT_CONTROLLER_H
 
+#define FLASH_TOTAL_PERIOD 150  //multiply by SEGMENT_DELAY to get the actual period in milliseconds
+
 #define segA GPIO_PIN_0
 #define segB GPIO_PIN_1
 #define segC GPIO_PIN_2

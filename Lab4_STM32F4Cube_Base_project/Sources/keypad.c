@@ -13,7 +13,7 @@
 
 int debounce = 0;												// used to debounced the keypad
 int keyLock = 1;												// mutex for keypressed
-char a;
+char charConverted;
 
 /* Initialize struct */
 GPIO_InitTypeDef Row_GPIO_InitDef;
@@ -58,6 +58,7 @@ void Keypad_Config(void) {
 	HAL_GPIO_Init(GPIOC, &Column_GPIO_InitDef);
 }
 
+
 /**
 	* @brief Check is a button is pressed on the keypad
 	* @param None
@@ -75,13 +76,13 @@ char readKeypad(void) {
 			debounce++;
 
 			/* debounce for button pressed */
-			if(debounce > 400){
+			if(debounce > DEBOUNCE_CYCLES){
 				keyLock = 0;
 				col = 1;
 				row = findRow();
-				a = convertToChar(col, row);
+				charConverted = convertToChar(col, row);
 				//printf("%c\n", a);
-				return a;
+				return charConverted;
 			}
 		}
 
@@ -89,13 +90,13 @@ char readKeypad(void) {
 			debounce++;
 
 			/* debounce for button pressed */
-			if (debounce > 400){
+			if (debounce > DEBOUNCE_CYCLES){
 				keyLock = 0;
 				col = 2;
 				row = findRow();
-				a = convertToChar(col, row);
+				charConverted = convertToChar(col, row);
 				//printf("%c\n", a);
-				return a;
+				return charConverted;
 			}
 		}
 
@@ -103,13 +104,13 @@ char readKeypad(void) {
 			debounce++;
 
 			/* debounce for button pressed */
-			if (debounce > 400) {
+			if (debounce > DEBOUNCE_CYCLES) {
 				keyLock = 0;
 				col = 3;
 				row = findRow();
-				a = convertToChar(col, row);
+				charConverted = convertToChar(col, row);
 				//printf("%c\n", a);
-				return a;
+				return charConverted;
 			}
 		}
 	}
@@ -210,6 +211,7 @@ char convertToChar(int col, int row){
 					return '*';
 			}
 
+
 		case 2:
 			switch(row){
 				case 1:
@@ -221,6 +223,7 @@ char convertToChar(int col, int row){
 				case 4:
 					return '0';
 			}
+
 
 		case 3:
 			switch(row){
@@ -236,4 +239,6 @@ char convertToChar(int col, int row){
 	}
 
 	return 'E';
+
 }
+

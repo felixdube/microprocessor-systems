@@ -11,6 +11,8 @@
 #ifndef KEYPAD_H
 #define KEYPAD_H
 
+#define DEBOUNCE_CYCLES 1
+
 /* from top view of the keypad, the pins are labeled 1 to 8 from left to right
 hence pin 8 is unoccupied
 */

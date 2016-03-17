@@ -21,10 +21,12 @@
 osThreadId tid_Thread_Temperature;                              // thread id
 osThreadDef(Thread_Temperature, osPriorityHigh, 1, 0);
 
+osMutexDef (MutexIsr);                                     // Mutex name definition
+osMutexId temperatureMutex;  
 kalmanState *adcState;
 
 int adc_val = 0;
-volatile float temp = 0;
+volatile float temperature = 0;
 
 /**
 	* @brief Start temperature monitoring thread
@@ -34,9 +36,9 @@ volatile float temp = 0;
 int start_Thread_Temperature(void) {
 	/* configure temperature ADC */
 	ADC1_Config();
-	
+	CreateMutexTemp();
 	adcState = malloc(sizeof(kalmanState)); /* Init Kalman Filter */
-	kalmanInit(adcState, INIT_q, INIT_r, INIT_x, INIT_p, INIT_k);
+	kalmanInit(adcState, INIT_TEMP_q, INIT_TEMP_r, INIT_TEMP_x, INIT_TEMP_p, INIT_TEMP_k);
 	
   tid_Thread_Temperature = osThreadCreate(osThread(Thread_Temperature), NULL);
   if (!tid_Thread_Temperature) return -1;
@@ -57,16 +59,25 @@ void Thread_Temperature (void const *argument) {
 		if (HAL_ADC_PollForConversion(&ADC1_Handle, 10000) == HAL_OK) { 
 			adc_val = HAL_ADC_GetValue(&ADC1_Handle); /* get the value */
 			kalmanUpdate(adcState, adc_val); 					/* filter the data and update the filter parameters */
-			temp = convertTemp(adcState->x);
+			osMutexWait(temperatureMutex, osWaitForever);
+			temperature = convertTemp(adcState->x);
+			osMutexRelease(temperatureMutex);
 			__HAL_ADC_CLEAR_FLAG(&ADC1_Handle, ADC_FLAG_EOC);
 		}
 				
-		if (temp > THRESHHOLD_TEMP) {
+		if (temperature > THRESHHOLD_TEMP) {
 			flash_alarm = 1;
 		} else {
 			flash_alarm = 0;
 		}
 				
-		osDelay(50);
+		osDelay(TEMP_DELAY);
 	}
+}
+  
+void CreateMutexTemp (void)  { 
+  temperatureMutex = osMutexCreate (osMutex (MutexIsr));
+  if (temperatureMutex != NULL){
+    // Mutex object created
+  }   
 }

@@ -14,11 +14,12 @@
 #include "kalmanFilter.h"
 #include <stdlib.h>
 #include <math.h>
+#include "Thread_Acc.h"
 
 float accValue[3] = {0, 0, 0};				//{AccX, AccY, AccZ}
-float pitch = 0;											//Pitch angle in degrees 0-180
+float pitchAngle = 0;									//Pitch angle in degrees 0-180
+float rollAngle = 0;									//Pitch angle in degrees 0-180
 float tmp0, tmp1, tmp2;								//Temp variable used for calibration
-int counter_display_slower = 0;				//prevent the display value to change too fast
 
 kalmanState *xState;
 kalmanState *yState;
@@ -136,7 +137,7 @@ float calcRoll (float x, float y, float z) {
 	else if( z < 0 && roll > 0) {
 			roll = 180 - roll;
 	}
-	else if ( pitch < 0 ){
+	else if ( pitchAngle < 0 ){
 		roll = -roll;
 	}
 	return roll;
@@ -176,11 +177,13 @@ void ReadAcc(void){
 	/* DON'T DELETE printf for matlab script */
 	//printf("%f,%f,%f,%f,%f,%f\n",accValue[2], zState->q,zState->r, zState->x, zState->p, zState->k);
 	/* Calc pitch */
-	counter_display_slower++;
-	if(counter_display_slower >= 6) {
-		pitch = calcPitch(xState->x, yState->x, zState->x);
-		counter_display_slower = 0;
-	}
+	osMutexWait(pitchMutex, osWaitForever);
+	pitchAngle = calcPitch(xState->x, yState->x, zState->x);	
+	osMutexRelease(pitchMutex);
+	osMutexWait(rollMutex, osWaitForever);
+	rollAngle = calcRoll(xState->x, yState->x, zState->x);	
+	osMutexRelease(rollMutex);
+
 	//printf("%f %f %f pitch: %f\n", xState->x,yState->x,zState->x, pitch);
 	//printf("%f %f %f;\n", xState->x,yState->x,zState->x);
 }
