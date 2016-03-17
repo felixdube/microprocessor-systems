@@ -16,7 +16,7 @@
 	* @retval temp: temperature in °C
 	*/
 float convertTemp(int adc_output) {
-	float voltage = adc_output / MAX_12_BIT * VREF;
+	float voltage = VREF * adc_output / MAX_12_BIT;
 	float temp = 400 * voltage - 279;
 	return temp;
 }

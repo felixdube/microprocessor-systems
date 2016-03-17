@@ -11,6 +11,8 @@
 #include "cmsis_os.h"                   // ARM::CMSIS:RTOS:Keil RTX
 #include "RTE_Components.h"             // Component selection
 #include "system_clock.h"
+#include "Thread_Temp.h"
+#include "Thread_Segment.h"
 
 extern void initializeLED_IO			(void);
 extern void start_Thread_LED			(void);
@@ -30,17 +32,18 @@ uint32_t HAL_GetTick(void) {
 
 
 int main (void) {
-
   osKernelInitialize();                     /* initialize CMSIS-RTOS          */
 
   HAL_Init();                               /* Initialize the HAL Library     */
 
   SystemClock_Config();                     /* Configure the System Clock     */
 
-	/* User codes goes here*/
-  initializeLED_IO();                       /* Initialize LED GPIO Buttons    */
-  start_Thread_LED();                       /* Create LED thread              */
-	/* User codes ends here*/
-  
+	start_Thread_Temperature();
+	start_Thread_Segment();
+	
 	osKernelStart();                          /* start thread execution         */
+	while(1) {
+		display_value = temp;
+		osDelay(500);
+	}
 }

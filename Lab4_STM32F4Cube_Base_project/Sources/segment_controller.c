@@ -11,27 +11,33 @@
 #include "stm32f4xx_hal.h"
 #include "segment_controller.h"
 
-int flash_bool = 1;
-int flash_counter = 0;
-volatile int digitToDisplay = 0;
-volatile int timeDisplay1DigitTimer = 0;
+volatile int digitTimer = 0;			// timer to change the digit to be updated
+int tmp;													// temp value to be displayed
+int dotPosition = 1;							// decimal position
+int flash = 0;										// timer for flashing a digit on the 7-segment display
 const uint8_t patterns[10] = {ZERO, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE};
 const int segments[7] = {segA, segB, segC, segD, segE, segF, segG};
+int flash_counter = 0;
 
-/* GPIO configuration */
+
+/**
+	* @brief GPIO for 7-segments display init
+	* @param None
+	* @retval None
+	*/
 void Display_GPIO_Config(void) {
 	/* Initialize struct */
 	GPIO_InitTypeDef GPIO_InitDef;
-	
+
 	/* Enable clock for GPOIB */
 	__HAL_RCC_GPIOB_CLK_ENABLE();
-	 
+
 	/* All will have same mode */
 	GPIO_InitDef.Pin = segA | segB | segC | segD | segE | segF | segG | segDP | segDegree | sel1 | sel2 | sel3;
 	GPIO_InitDef.Mode = GPIO_MODE_OUTPUT_PP;   			/* push pull */
 	GPIO_InitDef.Pull = GPIO_NOPULL;
 	GPIO_InitDef.Speed = GPIO_SPEED_FREQ_MEDIUM;		/* max frequency for our processor is 84MHz */
-	 
+
 	HAL_GPIO_Init(GPIOB, &GPIO_InitDef);
 }
 
@@ -41,12 +47,8 @@ void Display_GPIO_Config(void) {
 	* @retval None
 	*/
 void display(float value) {
-		/* change the digit to be viewed slower for the 7-segment slower for better display */
-		if (timeDisplay1DigitTimer >= TIME_DISPLAY_1_DIGIT_PERIOD) {
-			timeDisplay1DigitTimer = 0;
-			digitToDisplay = (digitToDisplay + 1) % 3;
-		}
-	setPins(getDigit(value, digitToDisplay));
+	digitTimer %= 3;
+	setPins(getDigit(value, digitTimer));
 }
 
 /**
@@ -56,7 +58,19 @@ void display(float value) {
 	* @retval value of the digit
 	*/
 int getDigit(float value, int place) {
-	int tmp = (int) (value * 10);
+	if(value >= 100){
+		tmp = (int) (value);
+		dotPosition = 2;
+	}
+	else if(value >= 10){
+		tmp = (int) (value * 10);
+		dotPosition = 1;
+	}
+	else {
+		tmp = (int) (value * 100);
+		dotPosition = 0;
+	}
+
 	switch (place) {
 		case 0:
 			return (tmp - tmp % 100) / 100;
@@ -67,6 +81,7 @@ int getDigit(float value, int place) {
 		default:
 			return 0;
 	}
+
 }
 
 /**
@@ -75,31 +90,41 @@ int getDigit(float value, int place) {
 	* @retval None
 	*/
 void setPins(int digit) {
-	uint8_t pattern;
 	int i;
-	uint16_t displayPin;
+	uint8_t pattern;
 	pattern = patterns[digit];
-	
-	HAL_GPIO_WritePin(GPIOB, segDegree, GPIO_PIN_SET);
-	
+
 	/* select which display will be updated according to the systick */
-	switch (digitToDisplay) {
+	switch (digitTimer) {
 		case 0:
-			displayPin = sel1;
-			HAL_GPIO_WritePin(GPIOB, segDP, GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(GPIOB, sel1, GPIO_PIN_SET);
+			HAL_GPIO_WritePin(GPIOB, sel2, GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(GPIOB, sel3, GPIO_PIN_RESET);
+			if (dotPosition == 0){
+				HAL_GPIO_WritePin(GPIOB, segDP, GPIO_PIN_SET);
+			}
+			else {
+				HAL_GPIO_WritePin(GPIOB, segDP, GPIO_PIN_RESET);
+			}
 		break;
 		case 1:
-			displayPin = sel2;
-			HAL_GPIO_WritePin(GPIOB, segDP, GPIO_PIN_SET);
+			HAL_GPIO_WritePin(GPIOB, sel1, GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(GPIOB, sel2, GPIO_PIN_SET);
+			HAL_GPIO_WritePin(GPIOB, sel3, GPIO_PIN_RESET);
+			if (dotPosition == 1){
+				HAL_GPIO_WritePin(GPIOB, segDP, GPIO_PIN_SET);
+			}
+			else {
+				HAL_GPIO_WritePin(GPIOB, segDP, GPIO_PIN_RESET);
+			}
 		break;
 		case 2:
-			displayPin = sel3;
+			HAL_GPIO_WritePin(GPIOB, sel1, GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(GPIOB, sel2, GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(GPIOB, sel3, GPIO_PIN_SET);
 			HAL_GPIO_WritePin(GPIOB, segDP, GPIO_PIN_RESET);
 	}
-	
-	HAL_GPIO_WritePin(GPIOB, displayPin, GPIO_PIN_SET);
-	
-	
+
 	/* update the 7-segment based on the digit value and the preset pattern */
 	for (i = 0; i < 7; i++) {
 		if ((pattern & (1 << (6 - i))) >> (6 - i) == 1) {
@@ -108,23 +133,28 @@ void setPins(int digit) {
 			HAL_GPIO_WritePin(GPIOB, segments[i], GPIO_PIN_RESET);
 		}
 	}
-	HAL_GPIO_WritePin(GPIOB, displayPin, GPIO_PIN_RESET);
 }
 
 void flash_segment(void) {
-	if(flash_counter == 50){
+	if (flash_counter < 300){
+		HAL_GPIO_WritePin(GPIOB, sel1, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(GPIOB, sel2, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(GPIOB, sel3, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(GPIOB, segDP, GPIO_PIN_RESET);
 		__HAL_RCC_GPIOB_CLK_DISABLE();
-		flash_bool = 0;
-	}
-	else if (flash_counter == 0) {
-		__HAL_RCC_GPIOB_CLK_ENABLE();
-		flash_bool = 1;
-	}
-	
-	if (flash_bool == 0) {
-		flash_counter--;
 	}
 	else {
-		flash_counter++;
+		__HAL_RCC_GPIOB_CLK_ENABLE();
+	}
+	
+	flash_counter++;
+	flash_counter %= 600;
+}
+
+void display_degree(int on) {
+	if (on) {
+		HAL_GPIO_WritePin(GPIOB, segDegree, GPIO_PIN_SET);
+	} else {
+		HAL_GPIO_WritePin(GPIOB, segDegree, GPIO_PIN_RESET);
 	}
 }

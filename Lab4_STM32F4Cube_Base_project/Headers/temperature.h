@@ -12,7 +12,7 @@
 #define TEMPERATURE_H
 
 #define VREF 3.0
-#define MAX_12_BIT 4096.0
+#define MAX_12_BIT 4096
 
 float convertTemp(int adc_output);
 

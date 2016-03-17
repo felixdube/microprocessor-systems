@@ -1,20 +1,16 @@
 /**
   ******************************************************************************
-	* @file    segment_controller.h
+	* @file    segment_controller.c
   * @author  Auguste Lalande, Felix Dube, Juan Morency Trudel
 	* @version 1.0.0
   * @date    February-2016
   * @brief   Implements methods for controlling a multiplexed 7-segment display array
   ******************************************************************************
   */
-	
-	
+
+
 #ifndef SEGMENT_CONTROLLER_H
 #define SEGMENT_CONTROLLER_H
-
-#define TIME_DISPLAY_1_DIGIT_PERIOD 2000 	/* if too high causes flickering */
-#define DISPLAY_7_SEGMENT_PERIOD 1 				/* if too high causes dimming */
-
 
 #define segA GPIO_PIN_0
 #define segB GPIO_PIN_1
@@ -41,15 +37,14 @@
 #define EIGHT (uint8_t)0x7F
 #define NINE  (uint8_t)0x7B
 
-extern volatile int displayTick;
-extern volatile int timeDisplay1DigitTimer;
+extern volatile int digitTimer;
 
+void Display_GPIO_Config(void);
 
 void display(float value);
 int getDigit(float value, int place);
 void setPins(int number);
 void flash_segment(void);
-
-void Display_GPIO_Config(void);
+void display_degree(int on);
 
 #endif

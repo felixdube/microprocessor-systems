@@ -11,7 +11,6 @@
 #include "stm32f4xx_hal.h"
 #include "alarm.h"
 
-volatile int alarmLedTimer = 0;
 
 /**
 	* @brief Configure the GPIO pins for controlling the LED for the alarm
@@ -35,9 +34,8 @@ void Alarm_GPIO_Config(void) {
 	* @param None
 	* @retval None
 	*/
-void trigger_alarm(void) {
-	/* each LED is on for DISPLAY_TIME_1_LED_ALARM */
-	switch((alarmLedTimer / DISPLAY_TIME_1_LED_ALARM)%4) {
+void trigger_alarm(int LED) {
+	switch(LED) {
 		case 0:
 		  HAL_GPIO_WritePin(GPIOD, LED1, GPIO_PIN_SET);
 			HAL_GPIO_WritePin(GPIOD, LED2, GPIO_PIN_RESET);
@@ -70,7 +68,6 @@ void trigger_alarm(void) {
 	* @retval None
 	*/
 void shutoff_alarm(void) {
-	alarmLedTimer =0;
 	HAL_GPIO_WritePin(GPIOD, LED1, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(GPIOD, LED2, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(GPIOD, LED3, GPIO_PIN_RESET);
