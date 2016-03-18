@@ -20,9 +20,7 @@
 
 osThreadId tid_Thread_Temperature;                        	// thread id
 osThreadDef(Thread_Temperature, osPriorityHigh, 1, 0);
-
-osMutexDef (MutexIsr);                                     	// mutex for temperature variable
-osMutexId temperatureMutex;  
+ 
 kalmanState *adcState;																			// kalman filter for adc values
 
 int adc_val = 0;
@@ -36,7 +34,6 @@ volatile float temperature = 0;
 int start_Thread_Temperature(void) {
 	/* configure temperature ADC */
 	ADC1_Config();
-	CreateMutexTemp();
 	adcState = malloc(sizeof(kalmanState)); /* Init Kalman Filter */
 	kalmanInit(adcState, INIT_TEMP_q, INIT_TEMP_r, INIT_TEMP_x, INIT_TEMP_p, INIT_TEMP_k);
 	
@@ -58,11 +55,7 @@ void Thread_Temperature (void const *argument) {
 		if (HAL_ADC_PollForConversion(&ADC1_Handle, 10000) == HAL_OK) { 		/* wait for the conversion to be done and get data */
 			adc_val = HAL_ADC_GetValue(&ADC1_Handle); 												/* get the value */
 			kalmanUpdate(adcState, adc_val); 																	/* filter the data and update the filter parameters */
-			
-			osMutexWait(temperatureMutex, osWaitForever);
 			temperature = convertTemp(adcState->x);
-			osMutexRelease(temperatureMutex);
-			
 			__HAL_ADC_CLEAR_FLAG(&ADC1_Handle, ADC_FLAG_EOC);
 		}
 		
@@ -82,14 +75,4 @@ void Thread_Temperature (void const *argument) {
 				
 		osDelay(TEMP_DELAY);
 	}
-}
-  
-
-/**
-	* @brief Create mutex for temperature variable
-	* @param none
-	* @retval none
-	*/
-void CreateMutexTemp (void)  { 
-  temperatureMutex = osMutexCreate (osMutex (MutexIsr));
 }

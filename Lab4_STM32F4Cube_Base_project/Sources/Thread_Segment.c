@@ -25,7 +25,7 @@ volatile int stateRollPitch = 0; 				//state of the roll pitch selection 0 being
 int updateDisplayDataCounter = 0;
 
 osThreadId tid_Thread_Segment;                              // thread id
-osThreadDef(Thread_Segment, osPriorityHigh, 1, 0);
+osThreadDef(Thread_Segment, osPriorityNormal, 1, 0);
 
 /**
 	* @brief Start 7-segment display thread
@@ -85,7 +85,7 @@ void Thread_Segment(void const *argument) {
 			updateDisplayDataCounter++;
 		}
 		display(display_value);
-		printf("%f\n",display_value);
+		//printf("%f\n",display_value);
 		digitTimer++;
 		osDelay(SEGMENT_DELAY);
 	}

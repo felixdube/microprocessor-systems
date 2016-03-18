@@ -15,8 +15,8 @@
 
 
 osThreadId tid_Thread_Keypad;       											// thread id
-osThreadDef(Thread_Keypad, osPriorityNormal, 1, 0);
-GPIO_InitTypeDef 				Keypad_configuration;
+osThreadDef(Thread_Keypad, osPriorityLow, 1, 0);
+GPIO_InitTypeDef Keypad_configuration;
 
 
 char keypadChar;
