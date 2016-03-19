@@ -1,9 +1,9 @@
 /*******************************************************************************
   * @file    main.c
   * @author  Auguste Lalande, Felix Dube, Juan Morency Trudel
-	* @version 1.0.0
+  * @version 1.0.0
   * @date    16-March-2016
-  * @brief   
+  * @brief
   ******************************************************************************
   */
 
@@ -22,8 +22,8 @@
 #ifdef RTE_CMSIS_RTOS_RTX
 extern uint32_t os_time;
 
-uint32_t HAL_GetTick(void) { 
-  return os_time; 
+uint32_t HAL_GetTick(void) {
+  return os_time;
 }
 #endif
 
@@ -32,9 +32,9 @@ int main (void) {
   osKernelInitialize();                     /* initialize CMSIS-RTOS */
   HAL_Init();                               /* Initialize the HAL Library */
   SystemClock_Config();                     /* Configure the System Clock */
-  start_Thread_Temperature();								/* Create a thread for sampling CPU temperature */
-  start_Thread_Acc();                       /* Create LED thread */
-  start_Thread_Segment();										/* Create thread for 7-seg display */
-  start_Thread_Keypad();										/* Create thread for the keypad */
+  start_Thread_Temperature();               /* Create a thread for sampling CPU temperature */
+  start_Thread_Acc();                       /* Create a thread for sampling accelerometer data */
+  start_Thread_Segment();                   /* Create a thread for using the 7-seg display */
+  start_Thread_Keypad();                    /* Create a thread for reading the keypad */
   osKernelStart();                          /* start thread execution */
 }
