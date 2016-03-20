@@ -10,6 +10,12 @@
 #ifndef RTE_COMPONENTS_H
 #define RTE_COMPONENTS_H
 
+
+/*
+ * Define the Device Header File: 
+ */
+#define CMSIS_device_header "stm32f4xx.h"
+
 #define RTE_DEVICE_FRAMEWORK_CLASSIC
 #define RTE_DEVICE_HAL_ADC
 #define RTE_DEVICE_HAL_COMMON
