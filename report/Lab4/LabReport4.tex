@@ -20,7 +20,7 @@
 \clearpage
 
 \section{Abstract}
-
+Lab 4 encapsulates the features developed in the previous labs: pitch and roll measurement, temperature measurement, Kalman Filter, 7-segment display, user interface (keypad). In addition, an operating system is being used in order to create and manage the different threads needed for the user interface and the data processing. The OS is also responsible for the inter-process communication. This system have been implemented on the STM32F4DISCOVERY board’s STM32F4407VGT6 processor.
 
 \section{Problem Statement}
 The objective of this experiment is to take input from the accelerometer, the temperature sensor, and the user (through a keypad) and output some feedback on a 7-segment display in a multithreaded real time operating system (RTOS).
@@ -56,7 +56,6 @@ Accelerometers such as the one on the discovery board are composed of springs wh
 For this particular application, the accelerometer was set to continuously sample the acceleration and trigger a hardware interrupt when new data was available. The interrupt would indicate to the CPU that the accelerometer had finished processing data. The CPU would then call the interrupt service routine (ISR) which contained the necessary information to sample the accelerometer data.
 %Shouldn't this go into implementation mode
 
-\subsection{Accelerometer Calibration}
 
 Multiple methods can be used to calibrate any sensor. A quite common one is the least square method which is used in linear regression of an overdetermined system \cite{bjorck1996numerical}. For a 3D accelerometer, three value have to be calibrated, the x, y and z values of the acceleration. One way to apply the least square method is to measure the x, y, z acceleration at 6 known positions to then approximate the linear parameters \cite{AN3182ApplicationNote}. Once these parameters are know, this simple matrix multiplication can be applied to calibrate the raw values:
 \begin{equation} \label{cal_eq:1}
@@ -142,8 +141,7 @@ The accelerometer was used with a data rate a 25Hz, a bandwidth of 50Hz, and a f
 
 The 6 know position measurements were done using the tables in the Lab for z = ±1g. The right angle of the windows in the lab were used to position the board for the measurement of y = ±1 and x = ±1. about 30 measurements were taken in each position an a mean was calculated for each. Then the parameters for the calibration matrix we extracted using equation \ref{cal_eq:2}. The calibration on the raw data was then simply implemented using \ref{cal_eq:1}
 
-\subsection{Keypad}
-\label{implementation:keypad}
+\subsection{Keypad} \label{implementation:keypad}
 To detect a button press, all column pins were set to high and the value of the row pins was continuously monitored. If a button was pressed it would create a short between one column pin and one row pin which could be read by the microcontroller. The column pins were then set to high impedance and the row pins to logic high. The column pins where then checked to see which corresponded to the pressed button. Since each button corresponded to a unique pattern of column and row, the pressed button could then be identified.
 
 \subsection{Threads}
@@ -203,6 +201,8 @@ The precision of the accelerometer was assessed by measuring the board's angle w
 \end{tabular}
 \end{table}
 
+\newpage
+
 \subsection{Thread timing}
 Thread timing was verified using the Keil event viewer thread visualisation tool (figure \ref{fig:threadstiming}). The execution time for each thread was measured and is reported in table \ref{Table_threads}. As can be seen from the table, 97.74\% of the time is spent in idle state which is far more than our hypothesis. This justifies the use of threads in this system.
 
@@ -229,7 +229,10 @@ Idle & \textgreater977440 & 1 & 977.44 \\ \hline
 \end{tabular}
 \end{table}
 
+\newpage
+
 \section{Conclusion}
+The RTOS operating system allowed the system to concurrently sample the CPU temperature, sample the accelerometer, display some value on the 7-segment display, and poll the keypad for user input. As the results suggest all the features could be done at specific frequency without a thread affecting other threads functionalities.
 
 \newpage
 \section{Bibliography}
