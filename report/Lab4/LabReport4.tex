@@ -23,11 +23,8 @@
 Lab 4 encapsulates the features developed in the previous labs: pitch and roll measurement, temperature measurement, Kalman Filter, 7-segment display, user interface (keypad). In addition, an operating system is being used in order to create and manage the different threads needed for the user interface and the data processing. The OS is also responsible for the inter-process communication. This system have been implemented on the STM32F4DISCOVERY board’s STM32F4407VGT6 processor.
 
 \section{Problem Statement}
-The objective of this experiment is to take input from the accelerometer, the temperature sensor, and the user (through a keypad) and output some feedback on a 7-segment display in a multithreaded real time operating system (RTOS).
+The objective of this experiment is to take input from the accelerometer, the temperature sensor, and the user (through a keypad) and output some feedback on a 7-segment display in a multithreaded real time operating system (RTOS). The system has to be designed for maximum efficiency of the processor (most idle time), hence the thread should be optimized for speed. Table \ref{Table_tasks} shows the major goals of lab 4 with their associated pass criteria.
 
-The system has to be designed for maximum efficiency of the processor (most idle time), hence the thread should be optimized for speed.
-
-Table \ref{Table_tasks} shows the major goals of lab 4 with their associated pass criteria.
 \begin{table}[!h]
 \centering
 \caption{Task and pass criteria for lab 4}
@@ -38,7 +35,7 @@ Table \ref{Table_tasks} shows the major goals of lab 4 with their associated pas
 Measurement of the tilt and roll angle of the development board with the accelerometer readings. Also the accelerometer should be calibrated. & The value of the calculated angles should be within \SI{4}{\degree} of the actual physical angle measured with a protractor. \\ \hline
 Use an external interrupt to signal when data is ready from the accelerometer at 25 Hz & Interrupt callback function is accessed by the software (Verified in Keil debug mode with breakpoint). \\ \hline
 Read the data from the temperature sensor at 100 Hz with an ADC and convert the raw value to temperature. & Verify that the temperature is within range of the datasheet (25°-35°) and that the data is actually being polled 100 times per second (by using the Keil RTOS thread visualisation tool). \\ \hline
-Set up the 7-segment display to show the temperature or the angle reading. Adjust the decimal point depending on how big the number is (\textgreater= 100, 0 digits after the decimal point, \textgreater= 10, 1 digit, otherwise, 2 digits). & No flickering on the display. Switching between number precision with no noticeable delay. \\ \hline
+Set up the 7-segment display to show the temperature or the angle reading. Adjust the decimal point depending on how big the number is. & No flickering on the display. Switching between number precision with no noticeable delay. \\ \hline
 Use a 3x4 keypad for user input. A button is used to change between temperature and angle visualisation on the 7-segment. Another button is used for switching between pitch and roll within the angle mode. & Any button press should be captured correctly (even fast button press) and only one key should be recorded for a long button press. No false positive should be present. \\ \hline
 The system should be implemented within using the CMSIS RTOS. The program should manage multiple threads and implement safe communication between these threads. & Using Keil's RTOS thread visualisation tool, verify that all the threads are active and are being activated at their respective frequency. Also verify that most of the time (\textgreater 50 percent) is spent in idle. \\ \hline
 The 7-segment display should flash when the temperature is over a certain threshold no matter which mode the display is currently in. & Verify that the display actually flashes after the threshold and stops flashing when the temperature drops down. \\ \hline
@@ -50,11 +47,11 @@ The 7-segment display should flash when the temperature is over a certain thresh
 \subsection{Accelerometer}
 Accelerometers are electromechanical components used to measure the acceleration of objects. This can be useful in applications which require a precise angle such as photography, or instruments which must be held in a still position to work properly such as computer hard-drives.
 
-Accelerometers such as the one on the discovery board are composed of springs which compress under acceleration, modifying the capacitance across them. The capacitance can then be measured and converted to a digital signal.
-%need a quote for the first sentence of this paragraph
+Accelerometers such as the one on the discovery board are composed of springs which compress under acceleration, modifying the capacitance across them. The capacitance can then be measured and converted to a digital signal. \cite{AN3182ApplicationNote}
+
 
 For this particular application, the accelerometer was set to continuously sample the acceleration and trigger a hardware interrupt when new data was available. The interrupt would indicate to the CPU that the accelerometer had finished processing data. The CPU would then call the interrupt service routine (ISR) which contained the necessary information to sample the accelerometer data.
-%Shouldn't this go into implementation mode
+
 
 
 Multiple methods can be used to calibrate any sensor. A quite common one is the least square method which is used in linear regression of an overdetermined system \cite{bjorck1996numerical}. For a 3D accelerometer, three value have to be calibrated, the x, y and z values of the acceleration. One way to apply the least square method is to measure the x, y, z acceleration at 6 known positions to then approximate the linear parameters \cite{AN3182ApplicationNote}. Once these parameters are know, this simple matrix multiplication can be applied to calibrate the raw values:
@@ -96,8 +93,8 @@ The keypad used in this lab was a simple button array with three rows and four c
 
 
 \subsection{Real-Time Operating System}
-Real-Time Operating Systems (RTOS), are useful for applications which run in real time; that is to say applications which require data to be processed as it comes in. RTOS are particularly useful to split tasks into threads so that data sampling and processing can both occur continuously and with precise timing.
-%Not elaborate enough. Maybe should a quote or 2 from general books
+Real-Time Operating Systems (RTOS), are useful for applications which run in real time; that is to say applications which require data to be processed as it comes in. RTOS are particularly useful to split tasks into threads so that data sampling and processing can both occur continuously and with precise timing. The os is also responsible mutual exclusion of shared data, and inter-process communications.
+
 
 \subsection{Kalman Filter}
 The data gathered from the accelerometer need to be filtered. This was accomplished using a Kalman Filter. The kalman filter equations are presented below (equations \ref{kalman_eq1} to \ref{kalman_eq4}) where q is the process noise covariance, r is the measurement noise covariance, x is the estimated value, p is the estimation error covariance, and k is the adaptive gain. More information of this filtering algorithm can be found in our previous report \cite{Lab2report}.
