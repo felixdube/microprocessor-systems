@@ -1,4 +1,4 @@
-﻿\documentclass[12pt]{article}
+\documentclass[12pt]{article}
 \usepackage{mathtools, amsmath, amsfonts, amssymb, siunitx,array}
 \usepackage{hyperref, graphicx, wrapfig, geometry}
 \usepackage[makeroom]{cancel}
@@ -125,25 +125,13 @@ Using the accelerometer data it is possible to calculate the roll and pitch angl
 Roll=arctan(\frac{A_{y1}}{\sqrt{(A_{x1}equation)^2+(A_{z1})^2}})
 \end{equation}
 
-\begin{figure}[!htb]
- \centering
- \includegraphics[scale=0.50]{images/roll.png}
- \caption{Measurement of Roll Angle}
- \label{fig:roll}
-\end{figure}
-
-\begin{figure}[!htb]
- \centering
- \includegraphics[scale=0.50]{images/pitch.png}
- \caption{Measurement of Pitch Angle}
- \label{fig:pitch}
-\end{figure}
-
-\subsection{Hypothesis}
-The complete list of requirements is synthesised in table \ref{Table_tasks}. Our team predicts that all the criteria will be achieved. Furthermore, it is believed that a precision within \SI{2}{\degree} for the roll and pitch angle can be achieved. Finally, since the program requirements remains simple, the threads should not take more than 10\% of the processor time, the remaining 90\% being idle time.
 \begin{equation}
 Pitch=arctan(\frac{A_{x1}}{\sqrt{(A_{y1}equation)^2+(A_{z1})^2}})
 \end{equation}
+
+\subsection{Hypothesis}
+The complete list of requirements is synthesised in table \ref{Table_tasks}. Our team predicts that all the criteria will be achieved. Furthermore, it is believed that a precision within \SI{2}{\degree} for the roll and pitch angle can be achieved. Finally, since the program requirements remains simple, the threads should not take more than 10\% of the processor time, the remaining 90\% being idle time.
+
 
 
 \section{Implementation}
