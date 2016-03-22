@@ -1,5 +1,5 @@
 \documentclass[12pt]{article}
-\usepackage{mathtools, amsmath, amsfonts, amssymb}
+\usepackage{mathtools, amsmath, amsfonts, amssymb, siunitx,array}
 \usepackage{hyperref, graphicx, wrapfig, geometry}
 \usepackage[makeroom]{cancel}
 \usepackage{placeins}
@@ -23,9 +23,9 @@
 
 
 \section{Problem Statement}
-The objective of this laboratory is to take input from the accelerometer, the temperature sensor, and the user (through a keypad) and output some feedback on a 7-segment display in a multithreaded real time operating system (RTOS). 
+The objective of this experiment is to take input from the accelerometer, the temperature sensor, and the user (through a keypad) and output some feedback on a 7-segment display in a multithreaded real time operating system (RTOS). 
 
-The system has to be designed for maximum efficiency of the processor (most idle time), hence the thread should be as fast as possible.
+The system has to be designed for maximum efficiency of the processor (most idle time), hence the thread should be optimized for speed.
 
 Table \ref{Table_tasks} shows the major goals of lab 4 with their associated pass criteria.
 \begin{table}[!h]
@@ -35,10 +35,10 @@ Table \ref{Table_tasks} shows the major goals of lab 4 with their associated pas
 \begin{tabular}{|p{0.5\linewidth}|p{0.5\linewidth}|}
 \hline
 \textbf{Task to be accomplished}                                                                                                                                                                                                              & \textbf{Criteria for success}                                                                                                                                                                                            \\ \hline
-Measurement of the tilt and roll angle of the development board with the accelerometer readings. Also the accelerometer should be calibrated.                                                                                                 & The value of the calculated angles should be within 4° of the actual physical angle measured with a protractor.                                                                                                          \\ \hline
-Use an external interrupts to signal when data is ready from the accelerometer at 25 Hz                                                                                                                                                       & Interrupt callback function is accessed by the software (Verified in Keil debug mode with breakpoint).                                                                                                                   \\ \hline
+Measurement of the tilt and roll angle of the development board with the accelerometer readings. Also the accelerometer should be calibrated.                                                                                                 & The value of the calculated angles should be within \SI{4}{\degree} of the actual physical angle measured with a protractor.                                                                                                          \\ \hline
+Use an external interrupt to signal when data is ready from the accelerometer at 25 Hz                                                                                                                                                       & Interrupt callback function is accessed by the software (Verified in Keil debug mode with breakpoint).                                                                                                                   \\ \hline
 Read the data from the temperature sensor at 100 Hz with an ADC and convert the raw value to temperature.                                                                                                                                     & Verify that the temperature is within range of the datasheet (25°-35°) and that the data is actually being polled 100 times per second (by using the Keil RTOS thread visualisation tool).                               \\ \hline
-Set up the 7-segment display to show the temperature or the angle reading. Adjust the decimal point depending on now big the number is (\textgreater= 100, 0 digits after the decimal point, \textgreater= 10, 1 digit, otherwise, 2 digits). & No flickering on the display. Switching between number precision with no noticeable delay.                                                                                                                               \\ \hline
+Set up the 7-segment display to show the temperature or the angle reading. Adjust the decimal point depending on how big the number is (\textgreater= 100, 0 digits after the decimal point, \textgreater= 10, 1 digit, otherwise, 2 digits). & No flickering on the display. Switching between number precision with no noticeable delay.                                                                                                                               \\ \hline
 Use a 3x4 keypad for user input. A button is used to change between temperature and angle visualisation on the 7-segment. Another button is used for switching between pitch and roll within the angle mode.                                  & Any button press should be captured correctly (even fast button press) and only one key should be recorded for a long button press. No false positive should be present.                                                 \\ \hline
 The system should be implemented within using the CMSIS RTOS. The program should manage multiple threads and implement safe communication between these threads.                                                                              & Using Keil's RTOS thread visualisation tool, verify that all the threads are active and are being activated at their respective frequency. Also verify that most of the time (\textgreater 50 percent) is spent in idle. \\ \hline
 The 7-segment display should flash when the temperature is over a certain threshold no matter which mode the display is currently in.                                                                                                         & Verify that the display actually flashes after the threshold and stops flashing when the temperature drops down.                                                                                                         \\ \hline
@@ -51,10 +51,14 @@ The 7-segment display should flash when the temperature is over a certain thresh
 Accelerometers are electromechanical components used to measure the acceleration of objects. This can be useful in applications which require a precise angle such as photography, or instruments which must be held in a still position to work properly such as computer hard-drives.
 
 Accelerometers such as the one on the discovery board are composed of springs which compress under acceleration, modifying the capacitance across them. The capacitance can then be measured and converted to a digital signal.
+%need a quote for the first sentence of this paragraph
 
-For this particular application, the accelerometer was set to continuously sample the acceleration and trigger a hardware interrupt when new data was available. The interrupt would indicate to the CPU that the accelerometer had finished processing data. The CPU would then call the interrupt service routine (ISR) which contained the neccesary information to sample the accelerometer data.
+For this particular application, the accelerometer was set to continuously sample the acceleration and trigger a hardware interrupt when new data was available. The interrupt would indicate to the CPU that the accelerometer had finished processing data. The CPU would then call the interrupt service routine (ISR) which contained the necessary information to sample the accelerometer data.
+%Shouldn't this go into implementation mode
 
-Multiple methods can be used to calibrate any sensor. A quite common one is the least square method which is used in linear regression of an overdetermined system \cite{bjorck1996numerical}. For a 3D accelerometer, three value have to be calibrated, the x, y and z values of the acceleration. One way to apply the least square method is to measure the x, y, z acceleration at 6 key positions know positions to then approximate the linear parameters /cite{AN3182ApplicationNote}. Once these parameters are know, this simple matrix multiplication can be applied to calibrate the raw values:
+\subsection{Accelerometer Calibration}
+
+Multiple methods can be used to calibrate any sensor. A quite common one is the least square method which is used in linear regression of an overdetermined system \cite{bjorck1996numerical}. For a 3D accelerometer, three value have to be calibrated, the x, y and z values of the acceleration. One way to apply the least square method is to measure the x, y, z acceleration at 6 known positions to then approximate the linear parameters \cite{AN3182ApplicationNote}. Once these parameters are know, this simple matrix multiplication can be applied to calibrate the raw values:
 \begin{equation} \label{cal_eq:1}
  \begin{bmatrix}A_{xout} & A_{yout} & A_{zout}\end{bmatrix} = \begin{bmatrix}A_{xraw} & A_{yraw} & A_{zraw} & 1\end{bmatrix} *
 \begin{bmatrix}ACC_{11} & ACC_{12} & ACC_{13} \\
@@ -89,13 +93,17 @@ Where the w and Y matrix are equal to:
                       \end{bmatrix}
 \end{equation}
 \subsection{Keypad}
-The keypad used in this lab was a simple button array with three rows and four columns. Each row and column was connected to an external pin. To detect a button press, all column pins were set to high and the value of the row pins was continuously monitored. If a button was pressed it would create a short between one column pin and one row pin which could be read by the microcontroller. The column pins were then set to high impedance and the row pins to logic high. The column pins where then checked to see which corresponded to the pressed button. Since each button corresponded to a unique pattern of column and row, the pressed button could then be identified.
+The keypad used in this lab was a simple button array with three rows and four columns. Each row and column was connected to an external pin.
+
+%I think all this is implementation
+
+To detect a button press, all column pins were set to high and the value of the row pins was continuously monitored. If a button was pressed it would create a short between one column pin and one row pin which could be read by the microcontroller. The column pins were then set to high impedance and the row pins to logic high. The column pins where then checked to see which corresponded to the pressed button. Since each button corresponded to a unique pattern of column and row, the pressed button could then be identified.
 \subsection{Real-Time Operating System}
-Real-Time Operating Systems (RTOS), are useful for applications which run in real time; that is to say applications which require data to be processed as it comes in. RTOS are particularly useful split tasks into threads so that data sampling and processing can both occur continuously and with precise timing.
-\subsection{Accelerometer Calibration}
+Real-Time Operating Systems (RTOS), are useful for applications which run in real time; that is to say applications which require data to be processed as it comes in. RTOS are particularly useful to split tasks into threads so that data sampling and processing can both occur continuously and with precise timing.
+%Not elaborate enough. Maybe should a quote or 2 from general books
 
 \subsection{Kalman Filter}
-The data gathered from the accelerometer need to be filtered. This was accomplished using a Kalman Filter. The equations of the filter are presented in \ref{fig:kalman} where q is the process noise covariance, r is the measurement noise covariance, x is the extimated value, p is the estimation error covariance, and k is the adaptive gain.
+The data gathered from the accelerometer need to be filtered. This was accomplished using a Kalman Filter. The equations of the filter are presented in figure \ref{fig:kalman} where q is the process noise covariance, r is the measurement noise covariance, x is the extimated value, p is the estimation error covariance, and k is the adaptive gain. More information of this filtering algorithm can be found in our previous report \cite{Lab2report}.
 
 \begin{figure}[!htb]
  \centering
@@ -123,7 +131,8 @@ Using the accelerometer data it is possible to calculate the roll and pitch angl
  \label{fig:pitch}
 \end{figure}
 
-
+\subsection{Hypothesis}
+The complete list of requirements is synthesised in table \ref{Table_tasks}. Our team predicts that all the criteria will be achieved. Furthermore, it is believed that a precision within \SI{2}{\degree} for the roll and pitch angle can be achieved. Finally, since the program requirements remains simple, the threads should not take more than 10\% of the processor time, the remaining 90\% being idle time.
 
 \section{Implementation}
 \subsection{Accelerometer}
@@ -142,8 +151,79 @@ The 6 know position measurements were done using the tables in the Lab for z = �
 
 
 \section{Testing and Observations}
-\subsection{Thread Visualization}
-\subsection{}
+Multiple criterias were met directly by having a fully functional system and looking at the output on the 7-segment display and in the debug (printf) viewer. Also,by using checkpoints to verify if the code was branching to the right place at the right moment (e.g. interrupt the accelerometer data conversion), correct code was verified. Additional tests were conducted for the 7-segment, the Keypad, the accelerometer, and the thread timing.
+
+\subsection{7-Segment Display and alarm}
+All the testing of the 7-segment and the alarm was done by simply looking at the display and verifying that all 3 members could not detect any flickering or other timing problems. The display was then left on for a minute to see the consistency of the implementation. The alarm was triggered 5 times without fail.
+\subsection{Keypad}
+The Keypad was tested to make sure all button press output are interpreted as the right character, that the fastest user input was detected and that slow user input was detected only once. The longest user input tested was 10 seconds long recorded with a chronometer and the shortest was 0.15 seconds. After more than 10 samples for every key, no problems or error were detected. 
+
+\subsection{Accelerometer}
+The precision of the accelerometer was assessed by measuring the board's angle with a protractor and comparing with the value displayed on the 7-segments. 5 Measurements were done for pitch and roll for 0, 90 and 45 degree and the mean values measured are reported in table\ref{Table_acc_roll} and table  \ref{Table_acc_pitch}. Note that the measured value had a limited precision to about \SI{1}{\degree} due to human error.
+
+\begin{table}[!h]
+\centering
+\caption{Mean roll angle measurements at \SI{0}{\degree}, \SI{45}{\degree} and \SI{90}{\degree}}
+\label{Table_acc_roll}
+\begin{tabular}{lllll}
+\hline
+\textbf{Degree}                                                                                                                                                                                                             & \textbf{0} & \textbf{45} & \textbf{90} & \textbf{Mean Error for Roll}
+\\ \hline
+\textbf{Before Calibration}                                                                                                                                                                                                         & 2.9 & 46.8 & 92.7
+\\ \hline
+\textbf{Mean Error Before Calibration}                                                                                                                                                                                                             & 2.9 & 1.8 & 2.7 & \multicolumn{1}{c}{\textbf{2.47}}
+\\ \hline
+\textbf{After	 Calibration}                                                                                                                                                                                                              & 0.5 & 45.6 & 89.0
+\\ \hline
+\textbf{Mean Error After Calibration}                                                                                                                                                                                                             & 0.5 & 0.6 & 1 & \multicolumn{1}{c}{\textbf{0.7}}
+\\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[!h]
+\centering
+\caption{Mean pitch angle measurements at \SI{0}{\degree}, \SI{45}{\degree} and \SI{90}{\degree}}
+\label{Table_acc_pitch}
+\begin{tabular}{lllll}
+\hline
+\textbf{Degree}                                                                                                                                                                                                             & \textbf{0} & \textbf{45} & \textbf{90} & \textbf{Mean Error for Pitch}
+\\ \hline
+\textbf{Before Calibration}                                                                                                                                                                                                         & 1.93 & 45.6 & 88.2
+\\ \hline
+\textbf{Mean Error Before Calibration}                                                                                                                                                                                                             & 1.93 & 0.6 & 1.8 & \multicolumn{1}{c}{\textbf{1.44}}
+\\ \hline
+\textbf{After	 Calibration}                                                                                                                                                                                                              & 0.9 & 44.8 & 90.5
+\\ \hline
+\textbf{Mean Error After Calibration}                                                                                                                                                                                                             & 0.9 & 0.2 & 0.5 & \multicolumn{1}{c}{\textbf{0.53}}
+\end{tabular}
+\end{table}
+
+\subsection{Thread timing}
+Thread timing was verified using the Keil event viewer thread visualisation tool (figure \ref{fig:threadstiming}  ). The execution time for each thread was measured and is reported in table \ref{Table_threads}. As can be seen from the table, 97.74\% of the time is spent in idle state which is far more than our hypothesis. This justifies the use of threads in this system.
+
+\begin{figure}[!htb]
+ \centering
+ \includegraphics[scale=0.50]{images/threads1.png}
+ \caption{Thread Timing Diagram}
+ \label{fig:threadstiming}
+\end{figure}
+
+
+
+\begin{table}[]
+\centering
+\caption{Execution time and frequency for each thread}
+\label{Table_threads}
+\begin{tabular}{|l|c|c|c|}
+\hline
+\textbf{Thread} & \multicolumn{1}{l|}{\textbf{Execution time (us)}} & \multicolumn{1}{l|}{\textbf{Frequency (Hz)}} & \multicolumn{1}{l|}{\textbf{Total time per second (ms)}} \\ \hline
+Temperature     & 50                                           & 100                                     & 5.00                                                \\ \hline
+Acceleration    & 130                                          & 25                                      & 3.25                                                \\ \hline
+7-Segment       & 40                                           & 341                                     & 13.64                                               \\ \hline
+Keypad          & \textless10                                  & 67                                      & 0.67                                                \\ \hline
+Idle            & \textgreater977440                           & 1                                       & 977.44                                              \\ \hline
+\end{tabular}
+\end{table}
 
 
 
