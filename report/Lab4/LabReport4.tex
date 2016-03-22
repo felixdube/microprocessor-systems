@@ -1,4 +1,4 @@
-\documentclass[12pt]{article}
+﻿\documentclass[12pt]{article}
 \usepackage{mathtools, amsmath, amsfonts, amssymb, siunitx,array}
 \usepackage{hyperref, graphicx, wrapfig, geometry}
 \usepackage[makeroom]{cancel}
@@ -105,17 +105,25 @@ Real-Time Operating Systems (RTOS), are useful for applications which run in rea
 \subsection{Kalman Filter}
 The data gathered from the accelerometer need to be filtered. This was accomplished using a Kalman Filter. The equations of the filter are presented in figure \ref{fig:kalman} where q is the process noise covariance, r is the measurement noise covariance, x is the extimated value, p is the estimation error covariance, and k is the adaptive gain. More information of this filtering algorithm can be found in our previous report \cite{Lab2report}.
 
-\begin{figure}[!htb]
- \centering
- \includegraphics[scale=0.50]{images/kalman.png}
- \caption{Kalman Filter Equations}
- \label{fig:kalman}
-\end{figure}
+\begin{equation}
+p=p+q
+\end{equation}
+\begin{equation}
+k=p/(p+r)
+\end{equation}
+\begin{equation}
+x=x+k*(measurement-x)
+\end{equation}
+\begin{equation}
+p=(1-k)*p
+\end{equation}
 
 \subsection{Roll and Pitch Measurement}
 Using the accelerometer data it is possible to calculate the roll and pitch angle of the board with constant sensitivity using the following equations, where A\textsubscript{x1}, A\textsubscript{y1}, and A\textsubscript{z1} are the acceleration the the x, y and z axis respectively:
 
-
+\begin{equation}
+Roll=arctan(\frac{A_{y1}}{\sqrt{(A_{x1}equation)^2+(A_{z1})^2}})
+\end{equation}
 
 \begin{figure}[!htb]
  \centering
@@ -133,6 +141,10 @@ Using the accelerometer data it is possible to calculate the roll and pitch angl
 
 \subsection{Hypothesis}
 The complete list of requirements is synthesised in table \ref{Table_tasks}. Our team predicts that all the criteria will be achieved. Furthermore, it is believed that a precision within \SI{2}{\degree} for the roll and pitch angle can be achieved. Finally, since the program requirements remains simple, the threads should not take more than 10\% of the processor time, the remaining 90\% being idle time.
+\begin{equation}
+Pitch=arctan(\frac{A_{x1}}{\sqrt{(A_{y1}equation)^2+(A_{z1})^2}})
+\end{equation}
+
 
 \section{Implementation}
 \subsection{Accelerometer}
