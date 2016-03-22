@@ -23,7 +23,7 @@
 
 
 \section{Problem Statement}
-The objective of this experiment is to take input from the accelerometer, the temperature sensor, and the user (through a keypad) and output some feedback on a 7-segment display in a multithreaded real time operating system (RTOS). 
+The objective of this experiment is to take input from the accelerometer, the temperature sensor, and the user (through a keypad) and output some feedback on a 7-segment display in a multithreaded real time operating system (RTOS).
 
 The system has to be designed for maximum efficiency of the processor (most idle time), hence the thread should be optimized for speed.
 
@@ -64,28 +64,28 @@ Multiple methods can be used to calibrate any sensor. A quite common one is the 
 \begin{bmatrix}ACC_{11} & ACC_{12} & ACC_{13} \\
 ACC_{21} & ACC_{22} & ACC_{23} \\
 ACC_{31} & ACC_{32} & ACC_{33} \end{bmatrix}
-\end{equation} 
+\end{equation}
 The parameters $ ACC_{XX} $ can be calculated from measurements of 6 known positions which are 1g and -1g for x, y and z. Once the measurements are taken, the parameters can be found using the following equation:
 
 \begin{equation} \label{cal_eq:2}
- X = (\begin{bmatrix} w^{T}*w \end{bmatrix})^{-1}*w^{T} * Y 
+ X = (\begin{bmatrix} w^{T}*w \end{bmatrix})^{-1}*w^{T} * Y
  \end{equation}
 
-Where the w and Y matrix are equal to: 
+Where the w and Y matrix are equal to:
 
 \begin{equation} \label{cal_eq:3}
  Y = \begin{bmatrix} 0 & 0 & 1  \\
-					  0 & 0 & -1 \\
+            0 & 0 & -1 \\
                       0 & 1 & 0  \\
                       0 & -1 & 0 \\
                       1 & 0 & 0  \\
                       0 & -1 & 0
                       \end{bmatrix}
 \end{equation}
-                      
+
 \begin{equation} \label{cal_eq:4}
  Y = \begin{bmatrix} A_{x@z=1} & A_{y@z=1} & A_{z@z1} & 1 \\
-					  A_{x@z=-1} & A_{y@z=-1} & A_{z@z-1} & 1 \\
+            A_{x@z=-1} & A_{y@z=-1} & A_{z@z-1} & 1 \\
                       A_{x@y=1} & A_{y@y=1} & A_{z@y1} & 1 \\
                       A_{x@y=-1} & A_{y@y=-1} & A_{z@y-1} & 1 \\
                       A_{x@x=1} & A_{y@x=1} & A_{z@x1} & 1 \\
@@ -93,19 +93,18 @@ Where the w and Y matrix are equal to:
                       \end{bmatrix}
 \end{equation}
 \subsection{Keypad}
-The keypad used in this lab was a simple button array with three rows and four columns. Each row and column was connected to an external pin.
+The keypad used in this lab was a simple button array with three rows and four columns. Each row and column was connected to an external pin. A button press would short one row pin with one column pin. Details on how to identify the pressed button can be found in section \ref{implementation:keypad}.
 
-%I think all this is implementation
 
-To detect a button press, all column pins were set to high and the value of the row pins was continuously monitored. If a button was pressed it would create a short between one column pin and one row pin which could be read by the microcontroller. The column pins were then set to high impedance and the row pins to logic high. The column pins where then checked to see which corresponded to the pressed button. Since each button corresponded to a unique pattern of column and row, the pressed button could then be identified.
 \subsection{Real-Time Operating System}
 Real-Time Operating Systems (RTOS), are useful for applications which run in real time; that is to say applications which require data to be processed as it comes in. RTOS are particularly useful to split tasks into threads so that data sampling and processing can both occur continuously and with precise timing.
 %Not elaborate enough. Maybe should a quote or 2 from general books
 
 \subsection{Kalman Filter}
-The data gathered from the accelerometer need to be filtered. This was accomplished using a Kalman Filter. The equations of the filter are presented in figure \ref{fig:kalman} where q is the process noise covariance, r is the measurement noise covariance, x is the extimated value, p is the estimation error covariance, and k is the adaptive gain. More information of this filtering algorithm can be found in our previous report \cite{Lab2report}.
+The data gathered from the accelerometer need to be filtered. This was accomplished using a Kalman Filter. The kalman filter equations are presented below (equations \ref{kalman_eq1} to \ref{kalman_eq4}) where q is the process noise covariance, r is the measurement noise covariance, x is the estimated value, p is the estimation error covariance, and k is the adaptive gain. More information of this filtering algorithm can be found in our previous report \cite{Lab2report}.
 
 \begin{equation}
+\label{kalman_eq1}
 p=p+q
 \end{equation}
 \begin{equation}
@@ -115,18 +114,21 @@ k=p/(p+r)
 x=x+k*(measurement-x)
 \end{equation}
 \begin{equation}
+\label{kalman_eq4}
 p=(1-k)*p
 \end{equation}
 
 \subsection{Roll and Pitch Measurement}
-Using the accelerometer data it is possible to calculate the roll and pitch angle of the board with constant sensitivity using the following equations, where A\textsubscript{x1}, A\textsubscript{y1}, and A\textsubscript{z1} are the acceleration the the x, y and z axis respectively:
+Using the accelerometer data it is possible to calculate the roll and pitch angle of the board with constant sensitivity using equations \ref{roll_eq} and \ref{pitch_eq}, where A\textsubscript{x1}, A\textsubscript{y1}, and A\textsubscript{z1} are the acceleration the the x, y and z axis respectively:
 
 \begin{equation}
-Roll=arctan(\frac{A_{y1}}{\sqrt{(A_{x1}equation)^2+(A_{z1})^2}})
+\label{roll_eq}
+Roll = arctan \Bigg( \frac{A_{y1}}{\sqrt{(A_{x1}equation)^2+(A_{z1})^2}} \Bigg)
 \end{equation}
 
 \begin{equation}
-Pitch=arctan(\frac{A_{x1}}{\sqrt{(A_{y1}equation)^2+(A_{z1})^2}})
+\label{pitch_eq}
+Pitch=arctan \Bigg( \frac{A_{x1}}{\sqrt{(A_{y1}equation)^2+(A_{z1})^2}} \Bigg)
 \end{equation}
 
 \subsection{Hypothesis}
@@ -140,23 +142,26 @@ The accelerometer was used with a data rate a 25Hz, a bandwidth of 50Hz, and a f
 
 The 6 know position measurements were done using the tables in the Lab for z = ±1g. The right angle of the windows in the lab were used to position the board for the measurement of y = ±1 and x = ±1. about 30 measurements were taken in each position an a mean was calculated for each. Then the parameters for the calibration matrix we extracted using equation \ref{cal_eq:2}. The calibration on the raw data was then simply implemented using \ref{cal_eq:1}
 
+\subsection{Keypad}
+\label{implementation:keypad}
+To detect a button press, all column pins were set to high and the value of the row pins was continuously monitored. If a button was pressed it would create a short between one column pin and one row pin which could be read by the microcontroller. The column pins were then set to high impedance and the row pins to logic high. The column pins where then checked to see which corresponded to the pressed button. Since each button corresponded to a unique pattern of column and row, the pressed button could then be identified.
+
 \subsection{Threads}
+A total of four threads were used in this lab. Details of their implementation can be seen in figure \ref{fig:threads} in the appendix.
 
-\begin{figure}[!htb]
- \centering
- \includegraphics[scale=0.40]{images/threads.png}
- \caption{Threads Diagram Representation}
- \label{fig:threads}
-\end{figure}
+Two of the threads were dedicated to data sampling (Thread\_Acc and Thread\_Temp). Thread\_Acc was set to sample the accelerometer data whenever data was available. Once the accelerometer had finished sampling data, it would trigger an interrupt which would make the CPU call the associated interrupt service routine, which would in turn signal the waiting thread so that it could start receiving the data. After the data received, the thread would then filter the data and calculate the pitch and roll of the board. It would then update global variables with the pitch and roll so that other threads (specifically the display thread) could use them. The temperature thread used a simpler implementation whereby it would wait a specific delay, then start the adc, wait for completion of data conversion, filter the data, convert it to temperature, and finally make it globally available; then wait for another delay before restarting the process.
 
+One thread was dedicated to monitoring the keypad (Thread\_Keypad). This thread, similarly to the temperature thread would wait a delay then check a button had been pressed. The process for detecting button presses is detailed in section \ref{implementation:keypad}. If it had it would switch some global flags indicating to the display thread what actions to take. If not it would wait another delay before checking again.
+
+The last thread (Thread\_Segment) was in charge of updating the 7-segment displays. This thread also functioned using osDelays, although the delay had to be much shorter then in the other threads so that no flickering would occur. The purpose of this thread was twofold, it first checked the flags set by the keypad thread to decided which of the temperature, the pitch ,or the roll needed to be displayed. It then checked the alarm flag set by the temperature thread (indicating whether or not the CPU was overheating), to determine if the display should start flashing. Details on operating the 7-segment displays can be found in our previous lab report \cite{Lab2report}.
 
 \section{Testing and Observations}
-Multiple criterias were met directly by having a fully functional system and looking at the output on the 7-segment display and in the debug (printf) viewer. Also,by using checkpoints to verify if the code was branching to the right place at the right moment (e.g. interrupt the accelerometer data conversion), correct code was verified. Additional tests were conducted for the 7-segment, the Keypad, the accelerometer, and the thread timing.
+Multiple criterion were met directly by having a fully functional system and looking at the output on the 7-segment display and in the debug (printf) viewer. Also,by using checkpoints to verify if the code was branching to the right place at the right moment (e.g. interrupt the accelerometer data conversion), correct code was verified. Additional tests were conducted for the 7-segment, the Keypad, the accelerometer, and the thread timing.
 
 \subsection{7-Segment Display and alarm}
 All the testing of the 7-segment and the alarm was done by simply looking at the display and verifying that all 3 members could not detect any flickering or other timing problems. The display was then left on for a minute to see the consistency of the implementation. The alarm was triggered 5 times without fail.
 \subsection{Keypad}
-The Keypad was tested to make sure all button press output are interpreted as the right character, that the fastest user input was detected and that slow user input was detected only once. The longest user input tested was 10 seconds long recorded with a chronometer and the shortest was 0.15 seconds. After more than 10 samples for every key, no problems or error were detected. 
+The Keypad was tested to make sure all button press output are interpreted as the right character, that the fastest user input was detected and that slow user input was detected only once. The longest user input tested was 10 seconds long recorded with a chronometer and the shortest was 0.15 seconds. After more than 10 samples for every key, no problems or error were detected.
 
 \subsection{Accelerometer}
 The precision of the accelerometer was assessed by measuring the board's angle with a protractor and comparing with the value displayed on the 7-segments. 5 Measurements were done for pitch and roll for 0, 90 and 45 degree and the mean values measured are reported in table\ref{Table_acc_roll} and table  \ref{Table_acc_pitch}. Note that the measured value had a limited precision to about \SI{1}{\degree} due to human error.
@@ -173,7 +178,7 @@ The precision of the accelerometer was assessed by measuring the board's angle w
 \\ \hline
 \textbf{Mean Error Before Calibration}                                                                                                                                                                                                             & 2.9 & 1.8 & 2.7 & \multicolumn{1}{c}{\textbf{2.47}}
 \\ \hline
-\textbf{After	 Calibration}                                                                                                                                                                                                              & 0.5 & 45.6 & 89.0
+\textbf{After  Calibration}                                                                                                                                                                                                              & 0.5 & 45.6 & 89.0
 \\ \hline
 \textbf{Mean Error After Calibration}                                                                                                                                                                                                             & 0.5 & 0.6 & 1 & \multicolumn{1}{c}{\textbf{0.7}}
 \\ \hline
@@ -192,7 +197,7 @@ The precision of the accelerometer was assessed by measuring the board's angle w
 \\ \hline
 \textbf{Mean Error Before Calibration}                                                                                                                                                                                                             & 1.93 & 0.6 & 1.8 & \multicolumn{1}{c}{\textbf{1.44}}
 \\ \hline
-\textbf{After	 Calibration}                                                                                                                                                                                                              & 0.9 & 44.8 & 90.5
+\textbf{After  Calibration}                                                                                                                                                                                                              & 0.9 & 44.8 & 90.5
 \\ \hline
 \textbf{Mean Error After Calibration}                                                                                                                                                                                                             & 0.9 & 0.2 & 0.5 & \multicolumn{1}{c}{\textbf{0.53}}
 \end{tabular}
@@ -232,5 +237,15 @@ Idle            & \textgreater977440                           & 1              
 \newpage
 \section{Bibliography}
 \bibliographystyle{unsrt}
-\bibliography{LabReport4} 
+\bibliography{LabReport4}
+
+\newpage
+\section{Appendix}
+\begin{figure}[!htb]
+ \centering
+ \includegraphics[scale=0.40]{images/threads.png}
+ \caption{Threads Diagram Representation}
+ \label{fig:threads}
+\end{figure}
+
 \end{document}
