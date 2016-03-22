@@ -34,14 +34,14 @@ Table \ref{Table_tasks} shows the major goals of lab 4 with their associated pas
 \label{Table_tasks}
 \begin{tabular}{|p{0.5\linewidth}|p{0.5\linewidth}|}
 \hline
-\textbf{Task to be accomplished}                                                                                                                                                                                                              & \textbf{Criteria for success}                                                                                                                                                                                            \\ \hline
-Measurement of the tilt and roll angle of the development board with the accelerometer readings. Also the accelerometer should be calibrated.                                                                                                 & The value of the calculated angles should be within \SI{4}{\degree} of the actual physical angle measured with a protractor.                                                                                                          \\ \hline
-Use an external interrupt to signal when data is ready from the accelerometer at 25 Hz                                                                                                                                                       & Interrupt callback function is accessed by the software (Verified in Keil debug mode with breakpoint).                                                                                                                   \\ \hline
-Read the data from the temperature sensor at 100 Hz with an ADC and convert the raw value to temperature.                                                                                                                                     & Verify that the temperature is within range of the datasheet (25°-35°) and that the data is actually being polled 100 times per second (by using the Keil RTOS thread visualisation tool).                               \\ \hline
-Set up the 7-segment display to show the temperature or the angle reading. Adjust the decimal point depending on how big the number is (\textgreater= 100, 0 digits after the decimal point, \textgreater= 10, 1 digit, otherwise, 2 digits). & No flickering on the display. Switching between number precision with no noticeable delay.                                                                                                                               \\ \hline
-Use a 3x4 keypad for user input. A button is used to change between temperature and angle visualisation on the 7-segment. Another button is used for switching between pitch and roll within the angle mode.                                  & Any button press should be captured correctly (even fast button press) and only one key should be recorded for a long button press. No false positive should be present.                                                 \\ \hline
-The system should be implemented within using the CMSIS RTOS. The program should manage multiple threads and implement safe communication between these threads.                                                                              & Using Keil's RTOS thread visualisation tool, verify that all the threads are active and are being activated at their respective frequency. Also verify that most of the time (\textgreater 50 percent) is spent in idle. \\ \hline
-The 7-segment display should flash when the temperature is over a certain threshold no matter which mode the display is currently in.                                                                                                         & Verify that the display actually flashes after the threshold and stops flashing when the temperature drops down.                                                                                                         \\ \hline
+\textbf{Task to be accomplished} & \textbf{Criteria for success} \\ \hline
+Measurement of the tilt and roll angle of the development board with the accelerometer readings. Also the accelerometer should be calibrated. & The value of the calculated angles should be within \SI{4}{\degree} of the actual physical angle measured with a protractor. \\ \hline
+Use an external interrupt to signal when data is ready from the accelerometer at 25 Hz & Interrupt callback function is accessed by the software (Verified in Keil debug mode with breakpoint). \\ \hline
+Read the data from the temperature sensor at 100 Hz with an ADC and convert the raw value to temperature. & Verify that the temperature is within range of the datasheet (25°-35°) and that the data is actually being polled 100 times per second (by using the Keil RTOS thread visualisation tool). \\ \hline
+Set up the 7-segment display to show the temperature or the angle reading. Adjust the decimal point depending on how big the number is (\textgreater= 100, 0 digits after the decimal point, \textgreater= 10, 1 digit, otherwise, 2 digits). & No flickering on the display. Switching between number precision with no noticeable delay. \\ \hline
+Use a 3x4 keypad for user input. A button is used to change between temperature and angle visualisation on the 7-segment. Another button is used for switching between pitch and roll within the angle mode. & Any button press should be captured correctly (even fast button press) and only one key should be recorded for a long button press. No false positive should be present. \\ \hline
+The system should be implemented within using the CMSIS RTOS. The program should manage multiple threads and implement safe communication between these threads. & Using Keil's RTOS thread visualisation tool, verify that all the threads are active and are being activated at their respective frequency. Also verify that most of the time (\textgreater 50 percent) is spent in idle. \\ \hline
+The 7-segment display should flash when the temperature is over a certain threshold no matter which mode the display is currently in. & Verify that the display actually flashes after the threshold and stops flashing when the temperature drops down. \\ \hline
 \end{tabular}
 \end{table}
 
@@ -156,7 +156,7 @@ One thread was dedicated to monitoring the keypad (Thread\_Keypad). This thread,
 The last thread (Thread\_Segment) was in charge of updating the 7-segment displays. This thread also functioned using osDelays, although the delay had to be much shorter then in the other threads so that no flickering would occur. The purpose of this thread was twofold, it first checked the flags set by the keypad thread to decided which of the temperature, the pitch ,or the roll needed to be displayed. It then checked the alarm flag set by the temperature thread (indicating whether or not the CPU was overheating), to determine if the display should start flashing. Details on operating the 7-segment displays can be found in our previous lab report \cite{Lab2report}.
 
 \section{Testing and Observations}
-Multiple criterion were met directly by having a fully functional system and looking at the output on the 7-segment display and in the debug (printf) viewer. Also,by using checkpoints to verify if the code was branching to the right place at the right moment (e.g. interrupt the accelerometer data conversion), correct code was verified. Additional tests were conducted for the 7-segment, the Keypad, the accelerometer, and the thread timing.
+Multiple criterion were met directly by having a fully functional system and looking at the output on the 7-segment display and in the debug (printf) viewer. Also, by using checkpoints to verify if the code was branching to the right place at the right moment (e.g. interrupt the accelerometer data conversion), correct code was verified. Additional tests were conducted for the 7-segment, the Keypad, the accelerometer, and the thread timing.
 
 \subsection{7-Segment Display and alarm}
 All the testing of the 7-segment and the alarm was done by simply looking at the display and verifying that all 3 members could not detect any flickering or other timing problems. The display was then left on for a minute to see the consistency of the implementation. The alarm was triggered 5 times without fail.
@@ -164,7 +164,7 @@ All the testing of the 7-segment and the alarm was done by simply looking at the
 The Keypad was tested to make sure all button press output are interpreted as the right character, that the fastest user input was detected and that slow user input was detected only once. The longest user input tested was 10 seconds long recorded with a chronometer and the shortest was 0.15 seconds. After more than 10 samples for every key, no problems or error were detected.
 
 \subsection{Accelerometer}
-The precision of the accelerometer was assessed by measuring the board's angle with a protractor and comparing with the value displayed on the 7-segments. 5 Measurements were done for pitch and roll for 0, 90 and 45 degree and the mean values measured are reported in table\ref{Table_acc_roll} and table  \ref{Table_acc_pitch}. Note that the measured value had a limited precision to about \SI{1}{\degree} due to human error.
+The precision of the accelerometer was assessed by measuring the board's angle with a protractor and comparing with the value displayed on the 7-segments. 5 Measurements were done for pitch and roll for 0, 90 and 45 degree and the mean values measured are reported in table \ref{Table_acc_roll} and table \ref{Table_acc_pitch}. Note that the measured value had a limited precision to about \SI{1}{\degree} due to human error.
 
 \begin{table}[!h]
 \centering
@@ -172,15 +172,15 @@ The precision of the accelerometer was assessed by measuring the board's angle w
 \label{Table_acc_roll}
 \begin{tabular}{lllll}
 \hline
-\textbf{Degree}                                                                                                                                                                                                             & \textbf{0} & \textbf{45} & \textbf{90} & \textbf{Mean Error for Roll}
+\textbf{Degree} & \textbf{0} & \textbf{45} & \textbf{90} & \textbf{Mean Error for Roll}
 \\ \hline
-\textbf{Before Calibration}                                                                                                                                                                                                         & 2.9 & 46.8 & 92.7
+\textbf{Before Calibration} 2.9 & 46.8 & 92.7
 \\ \hline
-\textbf{Mean Error Before Calibration}                                                                                                                                                                                                             & 2.9 & 1.8 & 2.7 & \multicolumn{1}{c}{\textbf{2.47}}
+\textbf{Mean Error Before Calibration} & 2.9 & 1.8 & 2.7 & \multicolumn{1}{c}{\textbf{2.47}}
 \\ \hline
-\textbf{After  Calibration}                                                                                                                                                                                                              & 0.5 & 45.6 & 89.0
+\textbf{After Calibration} & 0.5 & 45.6 & 89.0
 \\ \hline
-\textbf{Mean Error After Calibration}                                                                                                                                                                                                             & 0.5 & 0.6 & 1 & \multicolumn{1}{c}{\textbf{0.7}}
+\textbf{Mean Error After Calibration} & 0.5 & 0.6 & 1 & \multicolumn{1}{c}{\textbf{0.7}}
 \\ \hline
 \end{tabular}
 \end{table}
@@ -191,22 +191,22 @@ The precision of the accelerometer was assessed by measuring the board's angle w
 \label{Table_acc_pitch}
 \begin{tabular}{lllll}
 \hline
-\textbf{Degree}                                                                                                                                                                                                             & \textbf{0} & \textbf{45} & \textbf{90} & \textbf{Mean Error for Pitch}
+\textbf{Degree} & \textbf{0} & \textbf{45} & \textbf{90} & \textbf{Mean Error for Pitch}
 \\ \hline
-\textbf{Before Calibration}                                                                                                                                                                                                         & 1.93 & 45.6 & 88.2
+\textbf{Before Calibration} & 1.93 & 45.6 & 88.2
 \\ \hline
-\textbf{Mean Error Before Calibration}                                                                                                                                                                                                             & 1.93 & 0.6 & 1.8 & \multicolumn{1}{c}{\textbf{1.44}}
+\textbf{Mean Error Before Calibration} & 1.93 & 0.6 & 1.8 & \multicolumn{1}{c}{\textbf{1.44}}
 \\ \hline
-\textbf{After  Calibration}                                                                                                                                                                                                              & 0.9 & 44.8 & 90.5
+\textbf{After Calibration} & 0.9 & 44.8 & 90.5
 \\ \hline
-\textbf{Mean Error After Calibration}                                                                                                                                                                                                             & 0.9 & 0.2 & 0.5 & \multicolumn{1}{c}{\textbf{0.53}}
+\textbf{Mean Error After Calibration} & 0.9 & 0.2 & 0.5 & \multicolumn{1}{c}{\textbf{0.53}}
 \end{tabular}
 \end{table}
 
 \subsection{Thread timing}
-Thread timing was verified using the Keil event viewer thread visualisation tool (figure \ref{fig:threadstiming}  ). The execution time for each thread was measured and is reported in table \ref{Table_threads}. As can be seen from the table, 97.74\% of the time is spent in idle state which is far more than our hypothesis. This justifies the use of threads in this system.
+Thread timing was verified using the Keil event viewer thread visualisation tool (figure \ref{fig:threadstiming}). The execution time for each thread was measured and is reported in table \ref{Table_threads}. As can be seen from the table, 97.74\% of the time is spent in idle state which is far more than our hypothesis. This justifies the use of threads in this system.
 
-\begin{figure}[!htb]
+\begin{figure}[!h]
  \centering
  \includegraphics[scale=0.50]{images/threads1.png}
  \caption{Thread Timing Diagram}
@@ -214,23 +214,20 @@ Thread timing was verified using the Keil event viewer thread visualisation tool
 \end{figure}
 
 
-
-\begin{table}[]
+\begin{table}[!h]
 \centering
 \caption{Execution time and frequency for each thread}
 \label{Table_threads}
 \begin{tabular}{|l|c|c|c|}
 \hline
-\textbf{Thread} & \multicolumn{1}{l|}{\textbf{Execution time (us)}} & \multicolumn{1}{l|}{\textbf{Frequency (Hz)}} & \multicolumn{1}{l|}{\textbf{Total time per second (ms)}} \\ \hline
-Temperature     & 50                                           & 100                                     & 5.00                                                \\ \hline
-Acceleration    & 130                                          & 25                                      & 3.25                                                \\ \hline
-7-Segment       & 40                                           & 341                                     & 13.64                                               \\ \hline
-Keypad          & \textless10                                  & 67                                      & 0.67                                                \\ \hline
-Idle            & \textgreater977440                           & 1                                       & 977.44                                              \\ \hline
+\textbf{Thread} & \multicolumn{1}{l|}{\textbf{Execution time ($\mu s$)}} & \multicolumn{1}{l|}{\textbf{Frequency ($Hz$)}} & \multicolumn{1}{l|}{\textbf{Total time per second ($ms$)}} \\ \hline
+Temperature & 50 & 100 & 5.00 \\ \hline
+Acceleration & 130 & 25 & 3.25 \\ \hline
+7-Segment & 40 & 341 & 13.64 \\ \hline
+Keypad & \textless10 & 67 & 0.67 \\ \hline
+Idle & \textgreater977440 & 1 & 977.44 \\ \hline
 \end{tabular}
 \end{table}
-
-
 
 \section{Conclusion}
 
