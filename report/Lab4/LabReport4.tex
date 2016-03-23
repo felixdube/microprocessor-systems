@@ -20,7 +20,7 @@
 \clearpage
 
 \section{Abstract}
-Lab 4 encapsulates the features developed in the previous labs: pitch and roll measurement, temperature measurement, Kalman Filter, 7-segment display, user interface (keypad). In addition, an operating system is being used in order to create and manage the different threads needed for the user interface and the data processing. The OS is also responsible for the inter-process communication. This system have been implemented on the STM32F4DISCOVERY board’s STM32F4407VGT6 processor using the CMSIS RTOS.
+Lab 4 encapsulates the features developed in the previous labs: pitch and roll measurement, temperature measurement, Kalman Filter, 7-segment display, user interface (keypad). In addition, an operating system is being used in order to create and manage the different threads needed for the user interface and data processing. The OS is also responsible for the inter-process communications. This system have been implemented on the STM32F4DISCOVERY board’s STM32F4407VGT6 processor using the CMSIS RTOS.
 
 \section{Problem Statement}
 The objective of this experiment is to take input from the accelerometer, the temperature sensor, and the user (through a keypad) and output some feedback on a 7-segment display in a multithreaded real time operating system (RTOS). The system has to be designed for maximum efficiency of the processor (most idle time), hence the thread should be optimized for speed. Table \ref{Table_tasks} shows the major goals of lab 4 with their associated pass criteria.
@@ -32,7 +32,7 @@ The objective of this experiment is to take input from the accelerometer, the te
 \begin{tabular}{|p{0.5\linewidth}|p{0.5\linewidth}|}
 \hline
 \textbf{Task to be accomplished} & \textbf{Criteria for success} \\ \hline
-Measurement of the tilt and roll angle of the development board with the accelerometer readings. Also the accelerometer should be calibrated. & The value of the calculated angles should be within \SI{4}{\degree} of the actual physical angle measured with a protractor. \\ \hline
+Measurement of the pitch and roll angle of the development board with the accelerometer's readings. Also the accelerometer should be calibrated. & The value of the calculated angles should be within \SI{4}{\degree} of the actual physical angle measured with a protractor. \\ \hline
 Use an external interrupt to signal when data is ready from the accelerometer at 25 Hz & Interrupt callback function is accessed by the software (Verified in Keil debug mode with breakpoint). \\ \hline
 Read the data from the temperature sensor at 100 Hz with an ADC and convert the raw value to temperature. & Verify that the temperature is within range of the datasheet (25°-35°) and that the data is actually being polled 100 times per second (by using the Keil RTOS thread visualisation tool). \\ \hline
 Set up the 7-segment display to show the temperature or the angle reading. Adjust the decimal point depending on how big the number is. & No flickering on the display. Switching between number precision with no noticeable delay. \\ \hline
@@ -93,7 +93,7 @@ The keypad used in this lab was a simple button array with three rows and four c
 
 
 \subsection{Real-Time Operating System}
-Real-Time Operating Systems (RTOS), are useful for applications which run in real time; that is to say applications which require data to be processed as it comes in. At the expense of performance, the use of an RTOS reduce development time due to hardware level abstraction and multiple function already available. An RTOS is particularly useful to split tasks into threads so that data sampling and processing can both occur continuously and with precise timing. The OS is also responsible for mutual exclusion of shared data, and inter-process communications.
+Real-Time Operating Systems (RTOS) are useful for applications which run in real time; that is to say applications which require data to be processed as it comes in. At the expense of performance, the use of an RTOS reduce development time due to hardware level abstraction and multiple function already available. An RTOS is particularly useful to split tasks into threads so that data sampling and processing can both occur continuously and with precise timing. The OS is also responsible for mutual exclusion of shared data, and inter-process communications.
 
 
 \subsection{Kalman Filter}
