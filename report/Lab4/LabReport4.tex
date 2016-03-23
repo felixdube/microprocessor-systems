@@ -20,7 +20,7 @@
 \clearpage
 
 \section{Abstract}
-Lab 4 encapsulates the features developed in the previous labs: pitch and roll measurement, temperature measurement, Kalman Filter, 7-segment display, user interface (keypad). In addition, an operating system is being used in order to create and manage the different threads needed for the user interface and the data processing. The OS is also responsible for the inter-process communication. This system have been implemented on the STM32F4DISCOVERY board’s STM32F4407VGT6 processor.
+Lab 4 encapsulates the features developed in the previous labs: pitch and roll measurement, temperature measurement, Kalman Filter, 7-segment display, user interface (keypad). In addition, an operating system is being used in order to create and manage the different threads needed for the user interface and the data processing. The OS is also responsible for the inter-process communication. This system have been implemented on the STM32F4DISCOVERY board’s STM32F4407VGT6 processor using the CMSIS RTOS.
 
 \section{Problem Statement}
 The objective of this experiment is to take input from the accelerometer, the temperature sensor, and the user (through a keypad) and output some feedback on a 7-segment display in a multithreaded real time operating system (RTOS). The system has to be designed for maximum efficiency of the processor (most idle time), hence the thread should be optimized for speed. Table \ref{Table_tasks} shows the major goals of lab 4 with their associated pass criteria.
@@ -67,7 +67,7 @@ The parameters $ ACC_{XX} $ can be calculated from measurements of 6 known posit
  X = (\begin{bmatrix} w^{T}*w \end{bmatrix})^{-1}*w^{T} * Y
  \end{equation}
 
-Where the w and Y matrix are equal to:
+Where the W and Y matrix are equal to:
 
 \begin{equation} \label{cal_eq:3}
  Y = \begin{bmatrix} 0 & 0 & 1  \\
@@ -93,11 +93,11 @@ The keypad used in this lab was a simple button array with three rows and four c
 
 
 \subsection{Real-Time Operating System}
-Real-Time Operating Systems (RTOS), are useful for applications which run in real time; that is to say applications which require data to be processed as it comes in. RTOS are particularly useful to split tasks into threads so that data sampling and processing can both occur continuously and with precise timing. The os is also responsible mutual exclusion of shared data, and inter-process communications.
+Real-Time Operating Systems (RTOS), are useful for applications which run in real time; that is to say applications which require data to be processed as it comes in. At the expense of performance, the use of an RTOS reduce development time due to hardware level abstraction and multiple function already available. An RTOS is particularly useful to split tasks into threads so that data sampling and processing can both occur continuously and with precise timing. The OS is also responsible for mutual exclusion of shared data, and inter-process communications.
 
 
 \subsection{Kalman Filter}
-The data gathered from the accelerometer need to be filtered. This was accomplished using a Kalman Filter. The kalman filter equations are presented below (equations \ref{kalman_eq1} to \ref{kalman_eq4}) where q is the process noise covariance, r is the measurement noise covariance, x is the estimated value, p is the estimation error covariance, and k is the adaptive gain. More information of this filtering algorithm can be found in our previous report \cite{Lab2report}.
+The data gathered from the accelerometer needs to be filtered. This was accomplished using a Kalman Filter. The kalman filter equations are presented below (equations \ref{kalman_eq1} to \ref{kalman_eq4}) where q is the process noise covariance, r is the measurement noise covariance, x is the estimated value, p is the estimation error covariance, and k is the adaptive gain. More information of this filtering algorithm can be found in our previous report \cite{Lab2report}.
 
 \begin{equation}
 \label{kalman_eq1}
@@ -115,7 +115,7 @@ p=(1-k)*p
 \end{equation}
 
 \subsection{Roll and Pitch Measurement}
-Using the accelerometer data it is possible to calculate the roll and pitch angle of the board with constant sensitivity using equations \ref{roll_eq} and \ref{pitch_eq}, where A\textsubscript{x1}, A\textsubscript{y1}, and A\textsubscript{z1} are the acceleration the the x, y and z axis respectively:
+From the accelerometer data, it is possible to calculate the roll and pitch angle of the board with constant sensitivity using equations \ref{roll_eq} and \ref{pitch_eq}, where A\textsubscript{x1}, A\textsubscript{y1}, and A\textsubscript{z1} are the acceleration for the x, y and z axis respectively:
 
 \begin{equation}
 \label{roll_eq}
@@ -128,38 +128,38 @@ Pitch=arctan \Bigg( \frac{A_{x1}}{\sqrt{(A_{y1}equation)^2+(A_{z1})^2}} \Bigg)
 \end{equation}
 
 \subsection{Hypothesis}
-The complete list of requirements is synthesised in table \ref{Table_tasks}. Our team predicts that all the criteria will be achieved. Furthermore, it is believed that a precision within \SI{2}{\degree} for the roll and pitch angle can be achieved. Finally, since the program requirements remains simple, the threads should not take more than 10\% of the processor time, the remaining 90\% being idle time.
+The complete list of requirements is synthesised in table \ref{Table_tasks}. Our team predicts that all the criteria will be achieved. Furthermore, it is believed that a precision within \SI{2}{\degree} for the roll and pitch angle can be achieved. Finally, since the program requirements remain simple, the threads should not take more than 10\% of the processor time, the remaining 90\% being idle time.
 
 
 
 \section{Implementation}
 \subsection{Accelerometer}
-The accelerometer was used with a data rate a 25Hz, a bandwidth of 50Hz, and a full scale of 2g. The accelerometer tell the microcontroller that data is ready by using a pulsed interrupt on the GPIO port E pin 1. The interrupt is set as active high with a priority of 1. After calibrating the sensor, the acceleration data of the x, y and z axis have been filter using the Kalman Filter and then used to measure the roll and pitch angle of the board. \\
+The accelerometer was used with a polling rate a 25Hz, a bandwidth of 50Hz, and a full scale of 2g. The accelerometer tell the microcontroller that data is ready by using a pulsed interrupt on pin 1 of GPIO port E. The interrupt is set as active high with a priority of 1. After calibrating the sensor, the acceleration data of the x, y and z axis have been filter using the Kalman Filter and then used to measure the roll and pitch angle of the board. \\
 
-The 6 know position measurements were done using the tables in the Lab for z = ±1g. The right angle of the windows in the lab were used to position the board for the measurement of y = ±1 and x = ±1. about 30 measurements were taken in each position an a mean was calculated for each. Then the parameters for the calibration matrix we extracted using equation \ref{cal_eq:2}. The calibration on the raw data was then simply implemented using \ref{cal_eq:1}
+The 6 know position measurements for calibration were done using the desks in the lab space for z = ±1g. The right angle of the windows in the lab were used to position the board for the measurement of y = ±1 and x = ±1. 180 measurements (30 per position) were taken an a mean was calculated for each position. Then the parameters for the calibration matrix were extracted using equation \ref{cal_eq:2}. The calibration on the raw data was then simply implemented using \ref{cal_eq:1}
 
 \subsection{Keypad} \label{implementation:keypad}
-To detect a button press, all column pins were set to high and the value of the row pins was continuously monitored. If a button was pressed it would create a short between one column pin and one row pin which could be read by the microcontroller. The column pins were then set to high impedance and the row pins to logic high. The column pins where then checked to see which corresponded to the pressed button. Since each button corresponded to a unique pattern of column and row, the pressed button could then be identified. In order, to prevent bouncing the keypad is deactivated for a short amount of time when a key is pressed and depressed. Also when a key is pressed, the keypad is locked (using a variable) in order to prevent the keypad from detecting multiple key presses when the key is actually pressed only once.
+To detect a button press, all column pins were set to high and the value of the row pins was continuously monitored. If a button was pressed it would create a short between one column pin and one row pin which could be read by the microcontroller. The column pins were then set to high impedance and the row pins to logic high. The column pins where then checked to see which corresponded to the pressed button. Since each button corresponded to a unique pattern of column and row, the pressed button could then be identified. In order to prevent bouncing, the keypad is deactivated for a short amount of time when a key is pressed and depressed. Also when a key is pressed, the keypad is locked until it is depressed (using a variable) in order to prevent the keypad from detecting multiple key presses when the key is actually pressed only once.
 
 \subsection{Threads}
 A total of four threads were used in this lab. Details of their implementation can be seen in figure \ref{fig:threads} in the appendix.
 
 Two of the threads were dedicated to data sampling (Thread\_Acc and Thread\_Temp). Thread\_Acc was set to sample the accelerometer data whenever data was available. Once the accelerometer had finished sampling data, it would trigger an interrupt which would make the CPU call the associated interrupt service routine, which would in turn signal the waiting thread so that it could start receiving the data. After the data received, the thread would then filter the data and calculate the pitch and roll of the board. It would then update global variables with the pitch and roll so that other threads (specifically the display thread) could use them. The temperature thread used a simpler implementation whereby it would wait a specific delay, then start the adc, wait for completion of data conversion, filter the data, convert it to temperature, and finally make it globally available; then wait for another delay before restarting the process.
 
-One thread was dedicated to monitoring the keypad (Thread\_Keypad). This thread, similarly to the temperature thread would wait a delay then check a button had been pressed. The process for detecting button presses is detailed in section \ref{implementation:keypad}. If it had it would switch some global flags indicating to the display thread what actions to take. If not it would wait another delay before checking again.
+One thread was dedicated to monitoring the keypad (Thread\_Keypad). This thread, similarly to the temperature thread would wait a delay then check a button had been pressed. The process for detecting button presses is detailed in section \ref{implementation:keypad}. If a push was detected, the thread would switch some global flags indicating to the display thread what actions to take. If not it would wait another delay before checking again.
 
 The last thread (Thread\_Segment) was in charge of updating the 7-segment displays. This thread also functioned using osDelays, although the delay had to be much shorter then in the other threads so that no flickering would occur. The purpose of this thread was twofold, it first checked the flags set by the keypad thread to decided which of the temperature, the pitch ,or the roll needed to be displayed. It then checked the alarm flag set by the temperature thread (indicating whether or not the CPU was overheating), to determine if the display should start flashing. Details on operating the 7-segment displays can be found in our previous lab report \cite{Lab2report}.
 
 \section{Testing and Observations}
-Multiple criterion were met directly by having a fully functional system and looking at the output on the 7-segment display and in the debug (printf) viewer. Also, by using checkpoints to verify if the code was branching to the right place at the right moment (e.g. interrupt the accelerometer data conversion), correct code was verified. Additional tests were conducted for the 7-segment, the Keypad, the accelerometer, and the thread timing.
+Multiple criteria were met directly by having a fully functional system and looking at the output on the 7-segment display and in the debug (printf) viewer. Also, by using checkpoints to verify if the code was branching to the right place at the right moment (e.g. interrupt the accelerometer data conversion), correct code behaviour was verified. Additional tests were conducted for the 7-segment, the Keypad, the accelerometer, and the thread timing.
 
 \subsection{7-Segment Display and alarm}
-All the testing of the 7-segment and the alarm was done by simply looking at the display and verifying that all 3 members could not detect any flickering or other timing problems. The display was then left on for a minute to see the consistency of the implementation. The alarm was triggered 5 times without fail.
+All the testing of the 7-segment and the alarm was done by simply looking at the display and verifying that all 3 members could not detect any flickering or other timing problems. The display was then left on for a minute to see the consistency of the implementation. The alarm was triggered and stopped 5 times without fail.
 \subsection{Keypad}
-The Keypad was tested to make sure all button press output are interpreted as the right character, that the fastest user input was detected and that slow user input was detected only once. The longest user input tested was 10 seconds long recorded with a chronometer and the shortest was 0.15 seconds. After more than 10 samples for every key, no problems or error were detected.
+The Keypad was tested to make sure all button press output were interpreted as the right character, that the fastest user input was detected and that slow user input was detected only once. The longest user input tested was 10 seconds long recorded with a chronometer and the shortest was 0.15 seconds. After more than 10 samples for every key, no problems or error were detected on the final system.
 
 \subsection{Accelerometer}
-The precision of the accelerometer was assessed by measuring the board's angle with a protractor and comparing with the value displayed on the 7-segments. 5 Measurements were done for pitch and roll for 0, 90 and 45 degree and the mean values measured are reported in table \ref{Table_acc_roll} and table \ref{Table_acc_pitch}. Note that the measured value had a limited precision to about \SI{1}{\degree} due to human error.
+The precision of the accelerometer was assessed by measuring the board's angle with a protractor and comparing with the value displayed on the 7-segments. 5 Measurements were done for pitch and roll at 0, 45 and 90 degrees and their respective mean values are reported in table \ref{Table_acc_roll} and table \ref{Table_acc_pitch}. Note that the measured angles had a limited precision to about \SI{1}{\degree} due to human error.
 
 \begin{table}[!h]
 \centering
@@ -195,13 +195,14 @@ The precision of the accelerometer was assessed by measuring the board's angle w
 \textbf{After Calibration} & 0.9 & 44.8 & 90.5
 \\ \hline
 \textbf{Mean Error After Calibration} & 0.9 & 0.2 & 0.5 & \multicolumn{1}{c}{\textbf{0.53}}
+\\ \hline
 \end{tabular}
 \end{table}
 
 \newpage
 
 \subsection{Thread timing}
-Thread timing was verified using the Keil event viewer thread visualisation tool (figure \ref{fig:threadstiming}). The execution time for each thread was measured and is reported in table \ref{Table_threads}. As can be seen from the table, 97.74\% of the time is spent in idle state which is far more than our hypothesis. This justifies the use of threads in this system.
+Thread timing was verified using the Keil event viewer thread visualisation tool (figure \ref{fig:threadstiming}). The execution time for each thread was measured using this tool and is reported in table \ref{Table_threads}. As can be seen from the table, 97.74\% of the time is spent in idle state which is far more than our hypothesis.
 
 \begin{figure}[!h]
  \centering
@@ -229,7 +230,7 @@ Idle & \textgreater977440 & 1 & 977.44 \\ \hline
 \newpage
 
 \section{Conclusion}
-The use of an RTOS allowed the system to concurrently sample the CPU temperature, sample the accelerometer, display some value on the 7-segment display, and poll the keypad for user input. As the results suggest all the features could be done at specific frequencies without one thread affecting another's functionality.
+The use of an RTOS allowed the system to concurrently sample the CPU temperature, sample the accelerometer, display some value on the 7-segment display, and poll the keypad for user input. As the results suggest all the features could be done at specific frequencies without one thread affecting another's functionality. The 97,7\% mean idle time exceeded our expectations.    This shows that the use of an RTOS in this scenario is justified because simplicity was more important than performance.
 
 \newpage
 \section{Bibliography}
