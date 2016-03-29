@@ -417,7 +417,7 @@ void setConnectable(void)
 {  
   tBleStatus ret;
   
-  const char local_name[] = {AD_TYPE_COMPLETE_LOCAL_NAME,'B','l','u','e','N','R','G'};
+  const char local_name[] = {AD_TYPE_COMPLETE_LOCAL_NAME,'B','L','E','-','G','0','1'};
   
   /* disable scan response */
   hci_le_set_scan_resp_data(0,NULL);

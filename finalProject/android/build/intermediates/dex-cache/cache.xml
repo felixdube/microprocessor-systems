@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/Users/felixdube/Documents/workspace/ecse426/git/finalProject/android/Application/build/intermediates/exploded-aar/com.android.support/support-v4/23.1.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="ddde541c289c8b816a8f8fd6c325d80788c522a6">
+        <dex dex="/Users/felixdube/Documents/workspace/ecse426/git/finalProject/android/Application/build/intermediates/pre-dexed/debug/classes-1216c12343d535f50537b57e90006acd16912cce.jar" />
+    </item>
+    <item
+        jar="/Users/felixdube/Documents/workspace/ecse426/git/finalProject/android/Application/build/intermediates/exploded-aar/com.android.support/cardview-v7/23.1.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="d96886efea7cc74fbb3abd0e3b51d5638fc57be0">
+        <dex dex="/Users/felixdube/Documents/workspace/ecse426/git/finalProject/android/Application/build/intermediates/pre-dexed/debug/classes-941e8ee81fe638762f3fcdfb0c00771e4e0f5674.jar" />
+    </item>
+    <item
+        jar="/Users/felixdube/Documents/workspace/ecse426/git/finalProject/android/Application/build/intermediates/exploded-aar/com.android.support/support-v13/23.1.0/jars/libs/internal_impl-23.1.0.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="076c7d9e22cc325b8008ff799e0c06dfb8eefdf3">
+        <dex dex="/Users/felixdube/Documents/workspace/ecse426/git/finalProject/android/Application/build/intermediates/pre-dexed/debug/internal_impl-23.1.0-c70c28fb2670a818a22971e4bb4dd442c6108545.jar" />
+    </item>
+    <item
+        jar="/Users/felixdube/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/23.1.0/support-annotations-23.1.0.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="92e3fc113ec3ee36b64603a38857b95700025633">
+        <dex dex="/Users/felixdube/Documents/workspace/ecse426/git/finalProject/android/Application/build/intermediates/pre-dexed/debug/support-annotations-23.1.0-34fae33aaf371a599c0657f64cae7fb5aabef4ba.jar" />
+    </item>
+    <item
+        jar="/Users/felixdube/Documents/workspace/ecse426/git/finalProject/android/Application/build/intermediates/exploded-aar/com.android.support/support-v13/23.1.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="1a57337a520bf40b9ad1e074cb780527dffa1aac">
+        <dex dex="/Users/felixdube/Documents/workspace/ecse426/git/finalProject/android/Application/build/intermediates/pre-dexed/debug/classes-32a95d046fa7c307e6eddcf307b95d17190973e9.jar" />
+    </item>
+    <item
+        jar="/Users/felixdube/Documents/workspace/ecse426/git/finalProject/android/Application/build/intermediates/exploded-aar/com.android.support/support-v4/23.1.0/jars/libs/internal_impl-23.1.0.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="8716243bf04bae8d6c9ca94d27b9a9be7236f0a3">
+        <dex dex="/Users/felixdube/Documents/workspace/ecse426/git/finalProject/android/Application/build/intermediates/pre-dexed/debug/internal_impl-23.1.0-79c5b2649590777528c1db0ff82eca2a9d352d73.jar" />
+    </item>
+
+</items>
