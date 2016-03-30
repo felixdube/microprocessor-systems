@@ -241,35 +241,6 @@ int main(void)
   else
     PRINTF("Error while adding Acc service.\n");
   
-  ret = Add_Environmental_Sensor_Service();
-  
-  if(ret == BLE_STATUS_SUCCESS)
-    PRINTF("Environmental Sensor service added successfully.\n");
-  else
-    PRINTF("Error while adding Environmental Sensor service.\n");
-
-#if NEW_SERVICES
-  /* Instantiate Timer Service with two characteristics:
-   * - seconds characteristic (Readable only)
-   * - minutes characteristics (Readable and Notifiable )
-   */
-  ret = Add_Time_Service(); 
-  
-  if(ret == BLE_STATUS_SUCCESS)
-    PRINTF("Time service added successfully.\n");
-  else
-    PRINTF("Error while adding Time service.\n");  
-  
-  /* Instantiate LED Button Service with one characteristic:
-   * - LED characteristic (Readable and Writable)
-   */  
-  ret = Add_LED_Service();
-
-  if(ret == BLE_STATUS_SUCCESS)
-    PRINTF("LED service added successfully.\n");
-  else
-    PRINTF("Error while adding LED service.\n");  
-#endif
 
   /* Set output power level */
   ret = aci_hal_set_tx_power_level(1,4);
@@ -278,9 +249,6 @@ int main(void)
   {
     HCI_Process();
     User_Process(&axes_data);
-#if NEW_SERVICES
-    Update_Time_Characteristics();
-#endif
   }
 }
 
@@ -311,7 +279,7 @@ void User_Process(AxesRaw_t* p_axes)
       p_axes->AXIS_X += 1;
       p_axes->AXIS_Y -= 1;
       p_axes->AXIS_Z += 2;
-      //PRINTF("ACC: X=%6d Y=%6d Z=%6d\r\n", p_axes->AXIS_X, p_axes->AXIS_Y, p_axes->AXIS_Z);
+      PRINTF("ACC: X=%6d Y=%6d Z=%6d\r\n", p_axes->AXIS_X, p_axes->AXIS_Y, p_axes->AXIS_Z);
       Acc_Update(p_axes);
     }
   }

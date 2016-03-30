@@ -32,6 +32,8 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
 
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.UUID;
 
@@ -65,6 +67,8 @@ public class BluetoothLeService extends Service {
 
     public final static UUID UUID_HEART_RATE_MEASUREMENT =
             UUID.fromString(SampleGattAttributes.HEART_RATE_MEASUREMENT);
+    public final static UUID UUID_ACC_VALUE =
+            UUID.fromString(SampleGattAttributes.ACC_VALUE);
 
     // Implements callback methods for GATT events that the app cares about.  For example,
     // connection change and services discovered.
@@ -139,6 +143,20 @@ public class BluetoothLeService extends Service {
             final int heartRate = characteristic.getIntValue(format, 1);
             Log.d(TAG, String.format("Received heart rate: %d", heartRate));
             intent.putExtra(EXTRA_DATA, String.valueOf(heartRate));
+        } else if(UUID_ACC_VALUE.equals(characteristic.getUuid())){
+
+            byte[] byteValue = characteristic.getValue();
+            int xval = byteValue[0] | (byteValue[1] << 8);
+            String xvalue = Integer.toString(xval);
+
+            int yval = byteValue[2] | (byteValue[3] << 8);
+            String yvalue = Integer.toString(yval);
+
+            int zval = byteValue[5] | (byteValue[5] << 8);
+            String zvalue = Integer.toString(zval);
+
+            System.out.println(xval);
+            intent.putExtra(EXTRA_DATA, xvalue+" "+yvalue+" "+zvalue);
         } else {
             // For all other profiles, writes the data formatted in HEX.
             final byte[] data = characteristic.getValue();
