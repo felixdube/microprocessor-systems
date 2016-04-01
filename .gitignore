@@ -1,9 +1,9 @@
 # Object files
-*/Objects
-*/Listings
+**/Objects
+**/Listings
 
 # Debug files
-*/DebugConfig
+**/DebugConfig
 
 #guix files
 *.uvguix.*
