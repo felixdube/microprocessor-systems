@@ -9,34 +9,34 @@
   *          MEMS accelerometer available on STM32F4-Discovery Kit.
   ******************************************************************************
 	* NOTES:
-	* The accelerometer packaged driver in STM32Cube drivers is highly abstracted and uses 
+	* The accelerometer packaged driver in STM32Cube drivers is highly abstracted and uses
 	* five files (accelero.h, stm32f4_discovery_accelerometer.c/.h and lis3dsh/lis302dl.c/.h)
 	* I have modified the drivers I written in previous years to be STM32F4Cube compatible
 	* with minimum modifications to the API/Definitions
 	******************************************************************************
 	* LIST OF CHANGES 1.1.0 (17-January-2016)
-	* Added an SPI handle declaration "SpiHandle"
+	* Added an SPI handle declaration "LIS3DSH_SpiHandle"
 	* Modified  the following functions to be compatible with the STM32CUBE driver HAL
-	* 1. LIS3DSH_Init 
+	* 1. LIS3DSH_Init
 	* 2. HAL_SPI_MspInit
 	* 3. LIS3DSH_SendByte
-	* 4. SPI_SendData 
-	* 5. SPI_ReceiveData
+	* 4. LIS3DSH_SPI_SendData
+	* 5. LIS3DSH_SPI_ReceiveData
 	* (Experimented with porting the new STM32Cube bundeled versions of HAL_SPI_TransmitReceive
      which are more thourough and have added functionality of setting SPI handle states, but
-     I ran into several issues. Reverted back to basic SPI read/write from old drivers set for 
+     I ran into several issues. Reverted back to basic SPI read/write from old drivers set for
      now)
 	******************************************************************************
 	* BUGS/FIXES:
 	* The new GPIO struct initialisation has new definitions for inputs used as external interrupt
-	* sources, that is inputs are explicitly defined as input source with triggering edge. This is 
-	* used to abstract the configuration of the pin as an EXTI source. The SPI initialisation for 
+	* sources, that is inputs are explicitly defined as input source with triggering edge. This is
+	* used to abstract the configuration of the pin as an EXTI source. The SPI initialisation for
 	* the driver sets PE0 and PE1 as INT1/INT2 for the LIS3DSH and configures them accordingly.
-	* By default, PE0 is set as EXTI_Line0 source. It conflicts with the Push Button. A work around 
-	* is either 
+	* By default, PE0 is set as EXTI_Line0 source. It conflicts with the Push Button. A work around
+	* is either
 	  1. Modify the driver to remove the initialisation of PE0/PE1 (not recommended)
     2. Simply call HAL_GPIO_DeInit(GPIOE, GPIO_PIN_0) AFTER initialsing the Accelerometer, this
-  * resets PE0		
+  * resets PE0
   */
 
 /* Includes ------------------------------------------------------------------*/
@@ -68,7 +68,7 @@
   */
 __IO uint32_t  LIS3DSHTimeout = LIS3DSH_FLAG_TIMEOUT;
 
- SPI_HandleTypeDef    SpiHandle;
+ SPI_HandleTypeDef    LIS3DSH_SpiHandle;
 
 /* Read/Write command */
 #define READWRITE_CMD              ((uint8_t)0x80)
@@ -103,8 +103,8 @@ __IO uint32_t  LIS3DSHTimeout = LIS3DSH_FLAG_TIMEOUT;
   * @{
   */
 static uint8_t LIS3DSH_SendByte(uint8_t byte);
-void SPI_SendData(SPI_HandleTypeDef *hspi, uint16_t Data);
-uint8_t SPI_ReceiveData(SPI_HandleTypeDef *hspi);
+void LIS3DSH_SPI_SendData(SPI_HandleTypeDef *hspi, uint16_t Data);
+uint8_t LIS3DSH_SPI_ReceiveData(SPI_HandleTypeDef *hspi);
 /**
   * @}
   */
@@ -127,24 +127,24 @@ void LIS3DSH_Init(LIS3DSH_InitTypeDef *LIS3DSH_InitStruct)
   /* Configure the low level interface ---------------------------------------*/
 	  /* SPI configuration -------------------------------------------------------*/
 	__HAL_RCC_SPI1_CLK_ENABLE();
-	
-  HAL_SPI_DeInit(&SpiHandle);
-  SpiHandle.Instance 							  = SPI1;
-  SpiHandle.Init.BaudRatePrescaler 	= SPI_BAUDRATEPRESCALER_4;
-  SpiHandle.Init.Direction 					= SPI_DIRECTION_2LINES;
-  SpiHandle.Init.CLKPhase 					= SPI_PHASE_1EDGE;
-  SpiHandle.Init.CLKPolarity 				= SPI_POLARITY_LOW;
-  SpiHandle.Init.CRCCalculation			= SPI_CRCCALCULATION_DISABLED;
-  SpiHandle.Init.CRCPolynomial 			= 7;
-  SpiHandle.Init.DataSize 					= SPI_DATASIZE_8BIT;
-  SpiHandle.Init.FirstBit 					= SPI_FIRSTBIT_MSB;
-  SpiHandle.Init.NSS 								= SPI_NSS_SOFT;
-  SpiHandle.Init.TIMode 						= SPI_TIMODE_DISABLED;
-  SpiHandle.Init.Mode 							= SPI_MODE_MASTER;
-	if (HAL_SPI_Init(&SpiHandle) != HAL_OK) {printf ("ERROR: Error in initialising SPI1 \n");};
-  
-	__HAL_SPI_ENABLE(&SpiHandle);
-  
+
+  HAL_SPI_DeInit(&LIS3DSH_SpiHandle);
+  LIS3DSH_SpiHandle.Instance 							  = SPI1;
+  LIS3DSH_SpiHandle.Init.BaudRatePrescaler 	= SPI_BAUDRATEPRESCALER_4;
+  LIS3DSH_SpiHandle.Init.Direction 					= SPI_DIRECTION_2LINES;
+  LIS3DSH_SpiHandle.Init.CLKPhase 					= SPI_PHASE_1EDGE;
+  LIS3DSH_SpiHandle.Init.CLKPolarity 				= SPI_POLARITY_LOW;
+  LIS3DSH_SpiHandle.Init.CRCCalculation			= SPI_CRCCALCULATION_DISABLED;
+  LIS3DSH_SpiHandle.Init.CRCPolynomial 			= 7;
+  LIS3DSH_SpiHandle.Init.DataSize 					= SPI_DATASIZE_8BIT;
+  LIS3DSH_SpiHandle.Init.FirstBit 					= SPI_FIRSTBIT_MSB;
+  LIS3DSH_SpiHandle.Init.NSS 								= SPI_NSS_SOFT;
+  LIS3DSH_SpiHandle.Init.TIMode 						= SPI_TIMODE_DISABLED;
+  LIS3DSH_SpiHandle.Init.Mode 							= SPI_MODE_MASTER;
+	if (HAL_SPI_Init(&LIS3DSH_SpiHandle) != HAL_OK) {printf ("ERROR: Error in initialising SPI1 \n");};
+
+	__HAL_SPI_ENABLE(&LIS3DSH_SpiHandle);
+
 	/* Configure MEMS: data rate, update mode and axes */
   ctrl = (uint8_t) (LIS3DSH_InitStruct->Power_Mode_Output_DataRate | \
 										LIS3DSH_InitStruct->Continous_Update           | \
@@ -426,25 +426,25 @@ static uint8_t LIS3DSH_SendByte(uint8_t byte)
 {
   /* Loop while DR register in not empty */
   LIS3DSHTimeout = LIS3DSH_FLAG_TIMEOUT;
-  while (__HAL_SPI_GET_FLAG(&SpiHandle, SPI_FLAG_TXE) == RESET)
+  while (__HAL_SPI_GET_FLAG(&LIS3DSH_SpiHandle, SPI_FLAG_TXE) == RESET)
   {
     if((LIS3DSHTimeout--) == 0) return LIS3DSH_TIMEOUT_UserCallback();
   }
 
   /* Send a Byte through the SPI peripheral */
-  SPI_SendData(&SpiHandle,  byte);
+  LIS3DSH_SPI_SendData(&LIS3DSH_SpiHandle,  byte);
 
   /* Wait to receive a Byte */
   LIS3DSHTimeout = LIS3DSH_FLAG_TIMEOUT;
-  while (__HAL_SPI_GET_FLAG(&SpiHandle, SPI_FLAG_RXNE) == RESET)
+  while (__HAL_SPI_GET_FLAG(&LIS3DSH_SpiHandle, SPI_FLAG_RXNE) == RESET)
   {
     if((LIS3DSHTimeout--) == 0) {
 			return LIS3DSH_TIMEOUT_UserCallback();
 		}
   }
 
-  /* Return the Byte read from the SPI bus */ 
-  return SPI_ReceiveData(&SpiHandle);
+  /* Return the Byte read from the SPI bus */
+  return LIS3DSH_SPI_ReceiveData(&LIS3DSH_SpiHandle);
 }
 
 
@@ -496,7 +496,7 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef *hspi){
   /* SPI MISO pin configuration */
   GPIO_InitStructure.Pin = LIS3DSH_SPI_MISO_PIN;
   HAL_GPIO_Init(LIS3DSH_SPI_MISO_GPIO_PORT, &GPIO_InitStructure);
-	
+
 	GPIO_InitStructure.Pin   = LIS3DSH_SPI_CS_PIN;
   GPIO_InitStructure.Mode  = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStructure.Speed = GPIO_SPEED_FREQ_MEDIUM;
@@ -517,22 +517,22 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef *hspi){
 
 /**
   * @brief  Transmits a Data through the SPIx/I2Sx peripheral.
-  * @param  *hspi: Pointer to the SPI handle. Its member Instance can point to either SPI1, SPI2 or SPI3 
+  * @param  *hspi: Pointer to the SPI handle. Its member Instance can point to either SPI1, SPI2 or SPI3
   * @param  Data: Data to be transmitted.
   * @retval None
   */
-void SPI_SendData(SPI_HandleTypeDef *hspi, uint16_t Data)
-{ 
+void LIS3DSH_SPI_SendData(SPI_HandleTypeDef *hspi, uint16_t Data)
+{
   /* Write in the DR register the data to be sent */
   hspi->Instance->DR = Data;
 }
 
 /**
-  * @brief  Returns the most recent received data by the SPIx/I2Sx peripheral. 
-  * @param  *hspi: Pointer to the SPI handle. Its member Instance can point to either SPI1, SPI2 or SPI3 
+  * @brief  Returns the most recent received data by the SPIx/I2Sx peripheral.
+  * @param  *hspi: Pointer to the SPI handle. Its member Instance can point to either SPI1, SPI2 or SPI3
   * @retval The value of the received data.
   */
-uint8_t SPI_ReceiveData(SPI_HandleTypeDef *hspi)
+uint8_t LIS3DSH_SPI_ReceiveData(SPI_HandleTypeDef *hspi)
 {
   /* Return the data in the DR register */
   return hspi->Instance->DR;
