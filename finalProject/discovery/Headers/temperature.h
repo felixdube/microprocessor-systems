@@ -1,10 +1,10 @@
 /**
   ******************************************************************************
-  * File Name          : temperature.h
-  * Description        : Header file for temperature.c
-	* Author						 : Auguste Lalande, Felix Dube, Juan Morency Trudel
-	* Version            : 1.0.0
-	* Date							 : February, 2016
+	* @file    temperature.h
+  * @author  Auguste Lalande, Felix Dube, Juan Morency Trudel
+	* @version 1.0.0
+  * @date    February-2016
+  * @brief   Implement methods for working with the internal temperature sensor
   ******************************************************************************
   */
 
@@ -12,6 +12,7 @@
 #define TEMPERATURE_H
 
 #define VREF 3.0
+#define MAX_12_BIT 4096
 
 float convertTemp(int adc_output);
 

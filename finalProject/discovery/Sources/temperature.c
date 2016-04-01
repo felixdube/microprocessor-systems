@@ -1,23 +1,22 @@
 /**
   ******************************************************************************
-  * File Name          : temperature.c
-  * Description        : Implement methods for working with the internal temperature sensor
-	* Author						 : Auguste Lalande, Felix Dube, Juan Morency Trudel
-	* Version            : 1.0.0
-	* Date							 : February, 2016
+	* @file    temperature.c
+  * @author  Auguste Lalande, Felix Dube, Juan Morency Trudel
+	* @version 1.0.0
+  * @date    February-2016
+  * @brief   Implement methods for working with the internal temperature sensor
   ******************************************************************************
   */
 
 #include "temperature.h"
 
 /**
-	* @brief Convert the output of the ADC to a temperature in *C
-	* @param adc_ouput: value sample by the ADC
-	* @retval temp: temperature un *C
+	* @brief Convert the output of the ADC to a temperature in °C
+	* @param adc_ouput: value sampled by the ADC
+	* @retval temperature: temperature in °C
 	*/
 float convertTemp(int adc_output) {
-	/* ADC is at 12 bit resolution so max value 4096 */
-	float voltage = adc_output / 4096.0 * VREF;
-	float temp = 400 * voltage - 279;
-	return temp;
+	float voltage = VREF * adc_output / MAX_12_BIT;
+	float temperature = 400 * voltage - 279;
+	return temperature;
 }

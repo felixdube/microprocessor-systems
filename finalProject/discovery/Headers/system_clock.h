@@ -1,11 +1,16 @@
 /**
   ******************************************************************************
-  * File Name          : system_clock.h
-  * Description        : Header file for system_clock.c
-	* Author						 : Ashraf Suyyagh
-	* Version            : 1.0.0
-	* Date							 : January 14th, 2016
+	* @file    system_clock.h
+  * @author  Ashraf Suyyagh
+	* @version 1.0.0
+  * @date    14-January-2016
+  * @brief   Configure system clock
   ******************************************************************************
   */
 	
+#ifndef SYSTEM_CLOCK_H
+#define SYSTEM_CLOCK_H
+	
 void SystemClock_Config(void);
+
+#endif

@@ -1,10 +1,10 @@
 /**
   ******************************************************************************
-  * File Name          : accelerometer.c
-  * Description        : Accelerometer initialazation and control
-	* Author						 : Auguste Lalande, Felix Dube, Juan Morency Trudel
-	* Version            : 1.0.0
-	* Date							 : February, 2016
+	* @file    accelerometer.c
+  * @author  Auguste Lalande, Felix Dube, Juan Morency Trudel
+	* @version 1.0.0
+  * @date    February-2016
+  * @brief   Accelerometer initialazation and control
   ******************************************************************************
   */
 
@@ -14,12 +14,16 @@
 #include "kalmanFilter.h"
 #include <stdlib.h>
 #include <math.h>
-#include "keypad.h"
+#include "Thread_Acc.h"
 
-float accValue[3] = {0, 0, 0};				//{AccX, AccY, AccZ}
-float pitch = 0;											//Pitch angle in degrees 0-180
-float tmp0, tmp1, tmp2;								//Temp variable used for calibration
-int counter_display_slower = 0;				//prevent the display value to change too fast
+float accValue[3] = {0, 0, 0};				// {AccX, AccY, AccZ}
+float pitchAngle = 0;									// Pitch angle in degrees 0-180
+float rollAngle = 0;									// Pitch angle in degrees 0-180
+float tmp0, tmp1, tmp2;								// Temp variable used for calibration
+
+kalmanState *xState;
+kalmanState *yState;
+kalmanState *zState;
 
 
 /**
@@ -116,6 +120,29 @@ float calcPitch (float x, float y, float z) {
 	return pitch;
 }
 
+/**
+  * @brief  Calculate the roll using 3D acceleration
+	* @param  x:	acceleration in x axis
+	* @param 	y:	acceleration in y axis
+	* @param	z:	acceleration in z axis
+  * @retval pitch in degrees
+  */
+float calcRoll (float x, float y, float z) {
+	float roll = atan2(y, (sqrt(x*x+z*z))) * 180.0 / PI;
+	
+	//Normalize the pitch to a value between 0-180
+	if ( z < 0 && roll < 0){
+		roll = 180 + roll;
+	}
+	else if( z < 0 && roll > 0) {
+			roll = 180 - roll;
+	}
+	else if ( roll < 0 ){
+		roll = -roll;
+	}
+	return roll;
+}
+
 
 /**
   * @brief  Calibrate the accelerometer data
@@ -123,9 +150,9 @@ float calcPitch (float x, float y, float z) {
   * @retval None
   */
 void Calibrate(float* out) {
-	tmp0 = out[0]; //x
-	tmp1 = out[1]; //y
-	tmp2 = out[2]; //z
+	tmp0 = out[0]; // x
+	tmp1 = out[1]; // y
+	tmp2 = out[2]; // z
 	out[0] = tmp0*(float)cal_X11 + tmp1*(float)cal_X21 + tmp2*(float)cal_X31 + (float)cal_X41*1000;
 	out[1] = tmp0*(float)cal_X12 + tmp1*(float)cal_X22 + tmp2*(float)cal_X32 + (float)cal_X42*1000;
 	out[2] = tmp0*(float)cal_X13 + tmp1*(float)cal_X23 + tmp2*(float)cal_X33 + (float)cal_X43*1000;
@@ -147,14 +174,6 @@ void ReadAcc(void){
 	kalmanUpdate(yState, accValue[1]);
 	kalmanUpdate(zState, accValue[2]);
 
-	/* DON'T DELETE printf for matlab script */
-	//printf("%f,%f,%f,%f,%f,%f\n",accValue[2], zState->q,zState->r, zState->x, zState->p, zState->k);
-	/* Calc pitch */
-	counter_display_slower++;
-	if(counter_display_slower >= 6) {
-		pitch = calcPitch(xState->x, yState->x, zState->x);
-		counter_display_slower = 0;
-	}
-	//printf("%f %f %f pitch: %f\n", xState->x,yState->x,zState->x, pitch);
-	//printf("%f %f %f;\n", xState->x,yState->x,zState->x);
+	pitchAngle = calcPitch(xState->x, yState->x, zState->x);	
+	rollAngle = calcRoll(xState->x, yState->x, zState->x);	
 }

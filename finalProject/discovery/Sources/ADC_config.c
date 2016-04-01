@@ -1,10 +1,10 @@
 /**
   ******************************************************************************
-  * File Name          : ADC_config.c
-  * Description        : Sets up ADC1
-	* Author						 : Auguste Lalande, Felix Dube, Juan Morency Trudel
-	* Version            : 1.0.0
-	* Date							 : February, 2016
+	* @file    ADC_config.c
+  * @author  Auguste Lalande, Felix Dube, Juan Morency Trudel
+	* @version 1.0.0
+  * @date    February-2016
+  * @brief   Configure adc for temperature monitoring
   ******************************************************************************
   */
 	
@@ -66,5 +66,4 @@ void ADC1_Config(void){
 	
 	HAL_ADC_ConfigChannel(&ADC1_Handle, &ADC1_Channel);					/* configure channel */
 	HAL_ADCEx_MultiModeConfigChannel(&ADC1_Handle, &ADC1_Mode);	/* configure mode */
-	HAL_ADC_Start(&ADC1_Handle);																/* start polling mode of ADC1 */
 }

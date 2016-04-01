@@ -38,9 +38,8 @@
   */
 
 /* Includes ------------------------------------------------------------------*/
-#include "main.h"
 #include "stm32f4xx_it.h"
-#include "accelerometer.h"
+#include "Thread_Acc.h"
 #include "keypad.h"
 #include "segment_controller.h"
 
@@ -126,43 +125,43 @@ void UsageFault_Handler(void)
   }
 }
 
-/**
-  * @brief  This function handles SVCall exception.
-  * @param  None
-  * @retval None
-  */
-void SVC_Handler(void)
-{
-}
+///**
+//  * @brief  This function handles SVCall exception.
+//  * @param  None
+//  * @retval None
+//  */
+//void SVC_Handler(void)
+//{
+//}
 
-/**
-  * @brief  This function handles Debug Monitor exception.
-  * @param  None
-  * @retval None
-  */
+///**
+//  * @brief  This function handles Debug Monitor exception.
+//  * @param  None
+//  * @retval None
+//  */
 void DebugMon_Handler(void)
 {
 }
 
-/**
-  * @brief  This function handles PendSVC exception.
-  * @param  None
-  * @retval None
-  */
-void PendSV_Handler(void)
-{
-}
+///**
+//  * @brief  This function handles PendSVC exception.
+//  * @param  None
+//  * @retval None
+//  */
+//void PendSV_Handler(void)
+//{
+//}
 
-/**
-  * @brief  This function handles SysTick Handler.
-  * @param  None
-  * @retval None
-  */
-void SysTick_Handler(void)
-{
-	lcdtimer++;
-	HAL_IncTick();
-}
+///**
+//  * @brief  This function handles SysTick Handler.
+//  * @param  None
+//  * @retval None
+//  */
+//void SysTick_Handler(void)
+//{
+//	lcdtimer++;
+//	HAL_IncTick();
+//}
 
 /******************************************************************************/
 /*                 STM32F4xx Peripherals Interrupt Handlers                   */
@@ -181,28 +180,15 @@ void EXTI0_IRQHandler (void) {
 }
 
 /**
-  * @brief  This function handles Timer 4 interrupts for the display
-  * @param  None
+  * @brief  Callback from the external GPIO interupt
+	* @param  GPIO_Pin: pin on with the interupt occurs
   * @retval None
   */
-void TIM4_IRQHandler (void) {
-	//digitTimer++;
-	//displayTimer = 1;
-	HAL_TIM_IRQHandler(&TIM_7_seg_HandleDef);
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
+	if (GPIO_Pin == accPin) {
+			osSignalSet(tid_Thread_Acc, ACC_INT_FLAG);
+		}
 }
-
-//void EXTI1_IRQHandler (void) {
-//	HAL_GPIO_EXTI_IRQHandler(col1);
-//}
-
-//void EXTI2_IRQHandler (void) {
-//	HAL_GPIO_EXTI_IRQHandler(col2);
-//}
-
-//void EXTI4_IRQHandler (void) {
-//	HAL_GPIO_EXTI_IRQHandler(col3);
-//}
-
 
 /**
   * @brief  This function handles PPP interrupt request.

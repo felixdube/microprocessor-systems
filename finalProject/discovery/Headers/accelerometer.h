@@ -16,6 +16,7 @@
 
 #define accPin GPIO_PIN_0
 
+#define DELAY_UPDATE_ACC_VALUE 6
 #define PI 3.1415926535
 
 #define cal_X11 1.01149016032271
@@ -31,12 +32,18 @@
 #define cal_X42 -0.00989724403866105
 #define cal_X43 -0.0246509358276086
 
-extern float accValue[3];
-extern float pitch;
-extern int flag_accPin;
-extern kalmanState *xState;
-extern kalmanState *yState;
-extern kalmanState *zState;
+/* kalman parameters */
+#define INIT_q 0.5 				/* this parameter controls the speed of convergence the higher, the faster it converges */
+#define INIT_r 2 					/* this parameter controls the speed of convergence */
+#define INIT_x 0 			  	/* starting on a flat surface in mg */
+#define INIT_y 0 			  	/* starting on a flat surface in mg */
+#define INIT_z 1000 			/* starting on a flat surface in mg */
+#define INIT_p 0.780776 	/* this was set to the value it converges to when the filter runs for a while */
+#define INIT_k 0.390388 	/* this was set to the value it converges to when the filter runs for a while */
+
+extern float pitchAngle;
+extern float rollAngle;
+
 
 void Accelerometer_Config(void);
 void Accelerometer_Interrupt_Config(void);
@@ -45,7 +52,7 @@ void EXTI0_IRQHandler (void);
 float calcPitch (float x, float y, float z);
 void Calibrate(float* out);
 void ReadAcc(void);
-
+float calcRoll (float x, float y, float z);
 
 
 #endif
