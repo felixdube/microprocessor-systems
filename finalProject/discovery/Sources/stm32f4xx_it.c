@@ -40,8 +40,6 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_it.h"
 #include "Thread_Acc.h"
-#include "keypad.h"
-#include "segment_controller.h"
 
 int lcdtimer = 0;
 

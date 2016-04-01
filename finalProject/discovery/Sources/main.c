@@ -12,9 +12,7 @@
 #include "RTE_Components.h"             // Component selection
 #include "system_clock.h"
 #include "Thread_Temp.h"
-#include "Thread_Segment.h"
 #include "Thread_Acc.h"
-#include "Thread_Keypad.h"
 
 /**
   These lines are mandatory to make CMSIS-RTOS RTX work with te new Cube HAL
@@ -34,7 +32,5 @@ int main (void) {
   SystemClock_Config();                     /* Configure the System Clock */
   start_Thread_Temperature();               /* Create a thread for sampling CPU temperature */
   start_Thread_Acc();                       /* Create a thread for sampling accelerometer data */
-  start_Thread_Segment();                   /* Create a thread for using the 7-seg display */
-  start_Thread_Keypad();                    /* Create a thread for reading the keypad */
   osKernelStart();                          /* start thread execution */
 }
