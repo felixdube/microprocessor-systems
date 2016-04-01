@@ -28,3 +28,10 @@
 #windows files
 *.db
 
+#Java build files
+**/build
+**/.gradle
+**/.idea
+*.bin
+*.iml
+*.properties
