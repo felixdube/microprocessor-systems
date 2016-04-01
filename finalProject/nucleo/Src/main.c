@@ -141,10 +141,6 @@ int main(void)
    */
   HAL_Init();
   
-#if NEW_SERVICES
-  /* Configure LED2 */
-  BSP_LED_Init(LED2); 
-#endif
   
   /* Configure the User Button in GPIO Mode */
   BSP_PB_Init(BUTTON_KEY, BUTTON_MODE_GPIO);

@@ -306,8 +306,12 @@
       <GroupNumber>1</GroupNumber>
       <FileNumber>5</FileNumber>
       <FileType>1</FileType>
+<<<<<<< Updated upstream
       <tvExp>1</tvExp>
       <Focus>1</Focus>
+=======
+      <tvExp>0</tvExp>
+>>>>>>> Stashed changes
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>.\Src\main.c</PathWithFileName>

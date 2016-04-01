@@ -145,18 +145,16 @@ public class BluetoothLeService extends Service {
             intent.putExtra(EXTRA_DATA, String.valueOf(heartRate));
         } else if(UUID_ACC_VALUE.equals(characteristic.getUuid())){
 
-            byte[] byteValue = characteristic.getValue();
-            int xval = byteValue[0] | (byteValue[1] << 8);
-            String xvalue = Integer.toString(xval);
+            final int xIntValue = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT8, 0);
+            String xValue = Integer.toString(xIntValue);
 
-            int yval = byteValue[2] | (byteValue[3] << 8);
-            String yvalue = Integer.toString(yval);
+            final int yIntValue = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT8, 2);
+            String yValue = Integer.toString(yIntValue);
 
-            int zval = byteValue[5] | (byteValue[5] << 8);
-            String zvalue = Integer.toString(zval);
+            final int zIntValue = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT8, 4);
+            String zValue = Integer.toString(zIntValue);
 
-            System.out.println(xval);
-            intent.putExtra(EXTRA_DATA, xvalue+" "+yvalue+" "+zvalue);
+            intent.putExtra(EXTRA_DATA, xValue+" "+yValue+" "+zValue );
         } else {
             // For all other profiles, writes the data formatted in HEX.
             final byte[] data = characteristic.getValue();
