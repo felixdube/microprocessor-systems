@@ -26,7 +26,7 @@ void SPI_Init_Slave(void) {
   SpiSlaveHandle.Init.FirstBit 					= SPI_FIRSTBIT_MSB;
   SpiSlaveHandle.Init.NSS 								= SPI_NSS_SOFT;
   SpiSlaveHandle.Init.TIMode 						= SPI_TIMODE_DISABLED;
-  SpiSlaveHandle.Init.Mode 							= SPI_MODE_MASTER;
+  SpiSlaveHandle.Init.Mode 							= SPI_MODE_SLAVE;
 	if (HAL_SPI_Init(&SpiSlaveHandle) != HAL_OK) {printf ("ERROR: Error in initialising SPI1 \n");};
 
 	__HAL_SPI_ENABLE(&SpiSlaveHandle);
@@ -41,31 +41,35 @@ void SPI_MspInit() {
   __SPI2_CLK_ENABLE();
 
   /* Enable NSS, SCK, MOSI and MISO GPIO clocks */
+  __GPIOA_CLK_ENABLE();
   __GPIOB_CLK_ENABLE();
 
   GPIO_InitStructure.Mode  = GPIO_MODE_AF_PP;
   GPIO_InitStructure.Pull  = GPIO_PULLDOWN;
   GPIO_InitStructure.Speed = GPIO_SPEED_MEDIUM;
-  GPIO_InitStructure.Alternate = GPIO_AF5_SPI2;
+  GPIO_InitStructure.Alternate = GPIO_AF5_SPI1;
 
   /* SPI SCK pin configuration */
-  GPIO_InitStructure.Pin = SPI2_SCK;
-  HAL_GPIO_Init(SPI2_PORT, &GPIO_InitStructure);
+  GPIO_InitStructure.Pin = SPI1_SCK;
+  HAL_GPIO_Init(SPI1_PORT, &GPIO_InitStructure);
 
   /* SPI  MOSI pin configuration */
-  GPIO_InitStructure.Pin =  SPI2_MOSI;
-  HAL_GPIO_Init(SPI2_PORT, &GPIO_InitStructure);
+  GPIO_InitStructure.Pin =  SPI1_MOSI;
+  HAL_GPIO_Init(SPI1_PORT, &GPIO_InitStructure);
 
   /* SPI MISO pin configuration */
-  GPIO_InitStructure.Pin = SPI2_MISO;
-  HAL_GPIO_Init(SPI2_PORT, &GPIO_InitStructure);
+  GPIO_InitStructure.Pin = SPI1_MISO;
+  HAL_GPIO_Init(SPI1_PORT, &GPIO_InitStructure);
+    
+  /* SPI NSS pin configuration */
+  GPIO_InitStructure.Pin = SPI1_NSS;
+  GPIO_InitStructure.Mode  = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStructure.Speed = GPIO_SPEED_FREQ_MEDIUM;
 
-	/* SPI NSS pin configuration */
-  GPIO_InitStructure.Pin = SPI2_NSS;
-  HAL_GPIO_Init(SPI2_PORT, &GPIO_InitStructure);
+  HAL_GPIO_Init(SPI1_NSS_PORT, &GPIO_InitStructure);
 
   /* Deselect : Chip Select high */
-  HAL_GPIO_WritePin(SPI2_PORT, SPI2_NSS, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(SPI1_NSS_PORT, SPI1_NSS, GPIO_PIN_SET);
 }
 
 /**
