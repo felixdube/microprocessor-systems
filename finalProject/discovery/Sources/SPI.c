@@ -30,6 +30,42 @@ void SPI_Init_Master(void) {
 	if (HAL_SPI_Init(&SpiHandle) != HAL_OK) {printf ("ERROR: Error in initialising SPI1 \n");};
   
 	__HAL_SPI_ENABLE(&SpiHandle);
+  
+  SPI_MspInit();
+}
+
+void SPI_MspInit() {
+	GPIO_InitTypeDef GPIO_InitStructure;
+
+  /* Enable the SPI periph */
+  __SPI2_CLK_ENABLE();
+
+  /* Enable NSS, SCK, MOSI and MISO GPIO clocks */
+  __GPIOB_CLK_ENABLE();
+
+  GPIO_InitStructure.Mode  = GPIO_MODE_AF_PP;
+  GPIO_InitStructure.Pull  = GPIO_PULLDOWN;
+  GPIO_InitStructure.Speed = GPIO_SPEED_MEDIUM;
+  GPIO_InitStructure.Alternate = GPIO_AF5_SPI2;
+
+  /* SPI SCK pin configuration */
+  GPIO_InitStructure.Pin = SPI2_SCK;
+  HAL_GPIO_Init(SPI2_PORT, &GPIO_InitStructure);
+
+  /* SPI  MOSI pin configuration */
+  GPIO_InitStructure.Pin =  SPI2_MOSI;
+  HAL_GPIO_Init(SPI2_PORT, &GPIO_InitStructure);
+
+  /* SPI MISO pin configuration */
+  GPIO_InitStructure.Pin = SPI2_MISO;
+  HAL_GPIO_Init(SPI2_PORT, &GPIO_InitStructure);
+
+	/* SPI NSS pin configuration */
+  GPIO_InitStructure.Pin = SPI2_NSS;
+  HAL_GPIO_Init(SPI2_PORT, &GPIO_InitStructure);
+
+  /* Deselect : Chip Select high */
+  HAL_GPIO_WritePin(SPI2_PORT, SPI2_NSS, GPIO_PIN_SET);
 }
 
 /**
@@ -38,7 +74,7 @@ void SPI_Init_Master(void) {
   * @param  Byte : Byte send.
   * @retval The received byte value
   */
-static uint8_t Exchange_Byte(uint8_t byte) {
+uint8_t Exchange_Byte(uint8_t byte) {
   /* Loop while DR register in not empty */
   uint32_t timeout = BYTE_EXCHANGE_FLAG_TIMEOUT;
   while (__HAL_SPI_GET_FLAG(&SpiHandle, SPI_FLAG_TXE) == RESET) {
