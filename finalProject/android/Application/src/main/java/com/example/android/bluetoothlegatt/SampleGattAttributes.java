@@ -23,21 +23,25 @@ import java.util.HashMap;
  */
 public class SampleGattAttributes {
     private static HashMap<String, String> attributes = new HashMap();
-    public static String HEART_RATE_MEASUREMENT = "00002a37-0000-1000-8000-00805f9b34fb";
-    public static String CLIENT_CHARACTERISTIC_CONFIG = "00002902-0000-1000-8000-00805f9b34fb";
     public static String ACC_VALUE = "00000000-0000-0000-0000-000000000002";
+    public static String ROLL_VALUE = "00000000-0000-0000-0000-000000000004";
+    public static String PITCH_VALUE = "00000000-0000-0000-0000-000000000005";
+    public static String TEMP_VALUE = "00000000-0000-0000-0000-000000000007";
 
     static {
-        // Sample Services.
-        attributes.put("0000180d-0000-1000-8000-00805f9b34fb", "Heart Rate Service");
-        attributes.put("0000180a-0000-1000-8000-00805f9b34fb", "Device Information Service");
-        // Sample Characteristics.
-        attributes.put(HEART_RATE_MEASUREMENT, "Heart Rate Measurement");
-        attributes.put("00002a29-0000-1000-8000-00805f9b34fb", "Manufacturer Name String");
 
         // acc
-        attributes.put("00000000-0000-0000-0000-000000000001", "Acc Services");
+        attributes.put("00000000-0000-0000-0000-000000000001", "Acc Services Test");
         attributes.put("00000000-0000-0000-0000-000000000002", "Acc Values");
+
+        // ACCELERPMETER
+        attributes.put("00000000-0000-0000-0000-000000000003", "Accelerometer Services");
+        attributes.put("00000000-0000-0000-0000-000000000004", "Roll Values");
+        attributes.put("00000000-0000-0000-0000-000000000005", "Pitch Values");
+
+        // TEMPERATURE
+        attributes.put("00000000-0000-0000-0000-000000000006", "Temperature Service");
+        attributes.put("00000000-0000-0000-0000-000000000007", "Temperature Value");
     }
 
     public static String lookup(String uuid, String defaultName) {

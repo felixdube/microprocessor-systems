@@ -113,33 +113,33 @@ typedef struct {
 /** @addtogroup SENSOR_SERVICE_Exported_Functions
  *  @{
  */
-tBleStatus Add_Acc_Service(void);
+tBleStatus Add_Acc2_Service(void);
 tBleStatus Acc_Update(AxesRaw_t *data);
+
+// ACCELEROMETER
+tBleStatus Add_Acc_Service(void);
+tBleStatus Roll_Update(i32_t roll);
+tBleStatus Pitch_Update(i32_t pitch);
+
+// TEMPERATURE
+tBleStatus Add_Temp_Service(void);
+tBleStatus Temp_Update(i32_t temp);
+
+// DOUBLE TAP
+tBleStatus Add_Tap_Service(void);
+
+
+// LED
+tBleStatus Add_Led_Service(void);
+
+
 tBleStatus Add_Environmental_Sensor_Service(void);
 void       setConnectable(void);
 void       enableNotification(void);
 void       GAP_ConnectionComplete_CB(uint8_t addr[6], uint16_t handle);
 void       GAP_DisconnectionComplete_CB(void);
 void       HCI_Event_CB(void *pckt);
-/**
- * @}
- */
 
-/**
- * @}
- */
- 
-/**
- * @}
- */
-
-/**
- * @}
- */
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif /* _SENSOR_SERVICE_H_ */
 

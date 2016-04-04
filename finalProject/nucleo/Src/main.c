@@ -230,12 +230,45 @@ int main(void)
   
   PRINTF("SERVER: BLE Stack Initialized\n");
   
-  ret = Add_Acc_Service();
+  ret = Add_Acc2_Service();
+  
+  if(ret == BLE_STATUS_SUCCESS)
+    PRINTF("AccTest service added successfully.\n");
+  else
+    PRINTF("Error while adding Acc service.\n");
+	
+	
+	// ACCELEROMETER
+	ret = Add_Acc_Service();
   
   if(ret == BLE_STATUS_SUCCESS)
     PRINTF("Acc service added successfully.\n");
   else
     PRINTF("Error while adding Acc service.\n");
+	
+	// TEMPERATURE
+	ret = Add_Temp_Service();
+  
+  if(ret == BLE_STATUS_SUCCESS)
+    PRINTF("Temp service added successfully.\n");
+  else
+    PRINTF("Error while adding Temp service.\n");
+	
+	// DOUBLE TAP
+	ret = Add_Tap_Service();
+  
+  if(ret == BLE_STATUS_SUCCESS)
+    PRINTF("Tap service added successfully.\n");
+  else
+    PRINTF("Error while adding Tap service.\n");
+	
+	// LED
+	ret = Add_Acc2_Service();
+  
+  if(ret == BLE_STATUS_SUCCESS)
+    PRINTF("Led service added successfully.\n");
+  else
+    PRINTF("Error while adding Led service.\n");
   
 
   /* Set output power level */
@@ -277,6 +310,17 @@ void User_Process(AxesRaw_t* p_axes)
       p_axes->AXIS_Z += 2;
       PRINTF("ACC: X=%6d Y=%6d Z=%6d\r\n", p_axes->AXIS_X, p_axes->AXIS_Y, p_axes->AXIS_Z);
       Acc_Update(p_axes);
+			
+			i32_t roll = 1;
+			Roll_Update(roll);
+			
+			i32_t pitch = 2;
+			Pitch_Update(pitch);
+			
+			i32_t temp = 3;
+			Temp_Update(temp);
+			
+			
     }
   }
 }
