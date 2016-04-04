@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Objects\BLE_SampleProject.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Objects\BLE_SampleProject.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Mon Apr 04 17:33:16 2016
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Mon Apr 04 18:54:53 2016
 <BR><P>
 <H3>Maximum Stack Usage =       1032 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -968,7 +968,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[67]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[a7]"></a>Add_Acc_Service</STRONG> (Thumb, 364 bytes, Stack size 48 bytes, sensor_service.o(i.Add_Acc_Service))
+<P><STRONG><a name="[a7]"></a>Add_Acc_Service</STRONG> (Thumb, 360 bytes, Stack size 48 bytes, sensor_service.o(i.Add_Acc_Service))
 <BR><BR>[Stack]<UL><LI>Max Depth = 704 + Unknown Stack Size
 <LI>Call Chain = Add_Acc_Service &rArr; aci_gatt_add_char &rArr; hci_send_req &rArr; hci_send_cmd &rArr; hci_write &rArr; Hal_Write_Serial &rArr; BlueNRG_SPI_Write &rArr; HAL_SPI_TransmitReceive &rArr; SPI_WaitOnFlagUntilTimeout
 </UL>
@@ -1058,13 +1058,13 @@ Global Symbols
 <P><STRONG><a name="[b8]"></a>BlueNRG_SPI_Write</STRONG> (Thumb, 176 bytes, Stack size 312 bytes, stm32_bluenrg_ble.o(i.BlueNRG_SPI_Write))
 <BR><BR>[Stack]<UL><LI>Max Depth = 376<LI>Call Chain = BlueNRG_SPI_Write &rArr; HAL_SPI_TransmitReceive &rArr; SPI_WaitOnFlagUntilTimeout
 </UL>
-<BR>[Calls]<UL><LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Enable_SPI_IRQ
-<LI><a href="#[b9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Disable_SPI_IRQ
-<LI><a href="#[ba]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;set_irq_as_output
+<BR>[Calls]<UL><LI><a href="#[ba]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;set_irq_as_output
 <LI><a href="#[bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;set_irq_as_input
 <LI><a href="#[bb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;us150Delay
 <LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_TransmitReceive
 <LI><a href="#[b4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
+<LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Enable_SPI_IRQ
+<LI><a href="#[b9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Disable_SPI_IRQ
 </UL>
 <BR>[Called By]<UL><LI><a href="#[df]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Hal_Write_Serial
 </UL>
@@ -1091,8 +1091,8 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_DisableIRQ
 </UL>
 <BR>[Called By]<UL><LI><a href="#[dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HCI_Process
-<LI><a href="#[ef]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;hci_send_req
 <LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BlueNRG_SPI_Write
+<LI><a href="#[ef]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;hci_send_req
 </UL>
 
 <P><STRONG><a name="[19]"></a>EXTI0_IRQHandler</STRONG> (Thumb, 10 bytes, Stack size 8 bytes, stm32xx_it.o(i.EXTI0_IRQHandler))
@@ -1115,8 +1115,8 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[b1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_EnableIRQ
 </UL>
 <BR>[Called By]<UL><LI><a href="#[dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HCI_Process
-<LI><a href="#[ef]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;hci_send_req
 <LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BlueNRG_SPI_Write
+<LI><a href="#[ef]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;hci_send_req
 </UL>
 
 <P><STRONG><a name="[c2]"></a>GAP_ConnectionComplete_CB</STRONG> (Thumb, 50 bytes, Stack size 16 bytes, sensor_service.o(i.GAP_ConnectionComplete_CB))
@@ -1178,10 +1178,10 @@ Global Symbols
 
 <P><STRONG><a name="[b4]"></a>HAL_GPIO_WritePin</STRONG> (Thumb, 12 bytes, Stack size 0 bytes, stm32f4xx_hal_gpio.o(i.HAL_GPIO_WritePin))
 <BR><BR>[Called By]<UL><LI><a href="#[b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BlueNRG_RST
-<LI><a href="#[b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BlueNRG_SPI_Read_All
 <LI><a href="#[ba]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;set_irq_as_output
 <LI><a href="#[d1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_MspInit
 <LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BlueNRG_SPI_Write
+<LI><a href="#[b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BlueNRG_SPI_Read_All
 </UL>
 
 <P><STRONG><a name="[bf]"></a>HAL_GetTick</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, stm32f4xx_hal.o(i.HAL_GetTick))
@@ -1227,8 +1227,8 @@ Global Symbols
 
 <P><STRONG><a name="[b1]"></a>HAL_NVIC_EnableIRQ</STRONG> (Thumb, 26 bytes, Stack size 0 bytes, stm32f4xx_hal_cortex.o(i.HAL_NVIC_EnableIRQ))
 <BR><BR>[Called By]<UL><LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BSP_PB_Init
-<LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Enable_SPI_IRQ
 <LI><a href="#[d1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_MspInit
+<LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Enable_SPI_IRQ
 </UL>
 
 <P><STRONG><a name="[b0]"></a>HAL_NVIC_SetPriority</STRONG> (Thumb, 124 bytes, Stack size 40 bytes, stm32f4xx_hal_cortex.o(i.HAL_NVIC_SetPriority))
@@ -1301,8 +1301,8 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[d2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_WaitOnFlagUntilTimeout
 </UL>
-<BR>[Called By]<UL><LI><a href="#[b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BlueNRG_SPI_Read_All
-<LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BlueNRG_SPI_Write
+<BR>[Called By]<UL><LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BlueNRG_SPI_Write
+<LI><a href="#[b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BlueNRG_SPI_Read_All
 </UL>
 
 <P><STRONG><a name="[cb]"></a>HAL_SYSTICK_Config</STRONG> (Thumb, 52 bytes, Stack size 16 bytes, stm32f4xx_hal_cortex.o(i.HAL_SYSTICK_Config))
@@ -1380,9 +1380,9 @@ Global Symbols
 <P><STRONG><a name="[df]"></a>Hal_Write_Serial</STRONG> (Thumb, 70 bytes, Stack size 40 bytes, stm32_bluenrg_ble.o(i.Hal_Write_Serial))
 <BR><BR>[Stack]<UL><LI>Max Depth = 416<LI>Call Chain = Hal_Write_Serial &rArr; BlueNRG_SPI_Write &rArr; HAL_SPI_TransmitReceive &rArr; SPI_WaitOnFlagUntilTimeout
 </UL>
-<BR>[Calls]<UL><LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Timer_Set
+<BR>[Calls]<UL><LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BlueNRG_SPI_Write
+<LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Timer_Set
 <LI><a href="#[e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Timer_Expired
-<LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BlueNRG_SPI_Write
 </UL>
 <BR>[Called By]<UL><LI><a href="#[fb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;hci_write
 </UL>
@@ -1828,9 +1828,9 @@ Global Symbols
 <P><STRONG><a name="[da]"></a>list_remove_head</STRONG> (Thumb, 42 bytes, Stack size 16 bytes, list.o(i.list_remove_head))
 <BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = list_remove_head &rArr; list_remove_node
 </UL>
-<BR>[Calls]<UL><LI><a href="#[fe]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__set_PRIMASK
+<BR>[Calls]<UL><LI><a href="#[ff]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;list_remove_node
+<LI><a href="#[fe]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__set_PRIMASK
 <LI><a href="#[fd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__get_PRIMASK
-<LI><a href="#[ff]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;list_remove_node
 </UL>
 <BR>[Called By]<UL><LI><a href="#[fc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;move_list
 <LI><a href="#[dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HCI_Process
@@ -1928,19 +1928,19 @@ Local Symbols
 </UL>
 
 <P><STRONG><a name="[fd]"></a>__get_PRIMASK</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, list.o(i.__get_PRIMASK))
-<BR><BR>[Called By]<UL><LI><a href="#[da]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;list_remove_head
+<BR><BR>[Called By]<UL><LI><a href="#[ff]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;list_remove_node
+<LI><a href="#[da]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;list_remove_head
 <LI><a href="#[d9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;list_is_empty
 <LI><a href="#[d7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;list_insert_tail
 <LI><a href="#[dc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;list_insert_head
-<LI><a href="#[ff]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;list_remove_node
 </UL>
 
 <P><STRONG><a name="[fe]"></a>__set_PRIMASK</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, list.o(i.__set_PRIMASK))
-<BR><BR>[Called By]<UL><LI><a href="#[da]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;list_remove_head
+<BR><BR>[Called By]<UL><LI><a href="#[ff]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;list_remove_node
+<LI><a href="#[da]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;list_remove_head
 <LI><a href="#[d9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;list_is_empty
 <LI><a href="#[d7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;list_insert_tail
 <LI><a href="#[dc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;list_insert_head
-<LI><a href="#[ff]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;list_remove_node
 </UL>
 
 <P><STRONG><a name="[bb]"></a>us150Delay</STRONG> (Thumb, 28 bytes, Stack size 8 bytes, stm32_bluenrg_ble.o(i.us150Delay))

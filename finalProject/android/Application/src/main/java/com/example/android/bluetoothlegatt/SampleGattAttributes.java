@@ -23,25 +23,25 @@ import java.util.HashMap;
  */
 public class SampleGattAttributes {
     private static HashMap<String, String> attributes = new HashMap();
-    public static String ACC_VALUE = "00000000-0000-0000-0000-000000000002";
-    public static String ROLL_VALUE = "00000000-0000-0000-0000-000000000004";
-    public static String PITCH_VALUE = "00000000-0000-0000-0000-000000000005";
-    public static String TEMP_VALUE = "00000000-0000-0000-0000-000000000007";
+    public static String ACC_VALUE =    "00000000-0000-0000-0000-000000000002";
+    public static String ROLL_VALUE =   "00000000-0000-0000-0000-000000000004";
+    public static String PITCH_VALUE =  "00000000-0000-0000-0000-000000000005";
+    public static String TEMP_VALUE =   "00000000-0000-0000-0000-000000000007";
 
     static {
 
         // acc
         attributes.put("00000000-0000-0000-0000-000000000001", "Acc Services Test");
-        attributes.put("00000000-0000-0000-0000-000000000002", "Acc Values");
+        attributes.put(ACC_VALUE, "Acc Values");
 
         // ACCELERPMETER
         attributes.put("00000000-0000-0000-0000-000000000003", "Accelerometer Services");
-        attributes.put("00000000-0000-0000-0000-000000000004", "Roll Values");
-        attributes.put("00000000-0000-0000-0000-000000000005", "Pitch Values");
+        attributes.put(ROLL_VALUE, "Roll Values");
+        attributes.put(PITCH_VALUE, "Pitch Values");
 
         // TEMPERATURE
         attributes.put("00000000-0000-0000-0000-000000000006", "Temperature Service");
-        attributes.put("00000000-0000-0000-0000-000000000007", "Temperature Value");
+        attributes.put(TEMP_VALUE, "Temperature Value");
     }
 
     public static String lookup(String uuid, String defaultName) {

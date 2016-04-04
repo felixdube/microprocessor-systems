@@ -71,7 +71,7 @@ do {\
                 uuid_struct[12] = uuid_12; uuid_struct[13] = uuid_13; uuid_struct[14] = uuid_14; uuid_struct[15] = uuid_15; \
 }while(0)
 
-  #define COPY_ACC2_SERVICE_UUID(uuid_struct)  COPY_UUID_128(uuid_struct,0x00,0x00,0x00,0x00, 0x00,0x00, 0x00,0x00, 0x00,0x00, 0x00,0x00,0x00,0x00,0x00,0x01)
+  #define COPY_ACC2_SERVICE_UUID(uuid_struct) COPY_UUID_128(uuid_struct,0x00,0x00,0x00,0x00, 0x00,0x00, 0x00,0x00, 0x00,0x00, 0x00,0x00,0x00,0x00,0x00,0x01)
   #define COPY_ACC_UUID(uuid_struct)          COPY_UUID_128(uuid_struct,0x00,0x00,0x00,0x00, 0x00,0x00, 0x00,0x00, 0x00,0x00, 0x00,0x00,0x00,0x00,0x00,0x02)
 
 	/* ACCELEROMETER */
@@ -90,7 +90,7 @@ do {\
 	/* LED */
 	#define COPY_LED_SERVICE_UUID(uuid_struct)  	COPY_UUID_128(uuid_struct,0x00,0x00,0x00,0x00, 0x00,0x00, 0x00,0x00, 0x00,0x00, 0x00,0x00,0x00,0x00,0x00,0x09)
 	#define COPY_LED_DIR_UUID(uuid_struct)  			COPY_UUID_128(uuid_struct,0x00,0x00,0x00,0x00, 0x00,0x00, 0x00,0x00, 0x00,0x00, 0x00,0x00,0x00,0x00,0x00,0x10)
-  #define COPY_LED_ON_UUID(uuid_struct) 			COPY_UUID_128(uuid_struct,0x00,0x00,0x00,0x00, 0x00,0x00, 0x00,0x00, 0x00,0x00, 0x00,0x00,0x00,0x00,0x00,0x11)
+  #define COPY_LED_ON_UUID(uuid_struct) 				COPY_UUID_128(uuid_struct,0x00,0x00,0x00,0x00, 0x00,0x00, 0x00,0x00, 0x00,0x00, 0x00,0x00,0x00,0x00,0x00,0x11)
 
 
 /* Store Value into a buffer in Little Endian Format */
@@ -184,16 +184,14 @@ tBleStatus Add_Acc_Service(void)
   COPY_ACC_ROLL_UUID(uuid);  
   ret =  aci_gatt_add_char(accServHandle, UUID_TYPE_128, uuid, 2,
                            CHAR_PROP_NOTIFY|CHAR_PROP_READ,
-                           ATTR_PERMISSION_NONE,
-                           GATT_NOTIFY_READ_REQ_AND_WAIT_FOR_APPL_RESP,
+                           ATTR_PERMISSION_NONE, 0,
                            16, 0, &accRollCharHandle);
   if (ret != BLE_STATUS_SUCCESS) goto fail;
 	
 	COPY_ACC_PITCH_UUID(uuid);  
   ret =  aci_gatt_add_char(accServHandle, UUID_TYPE_128, uuid, 2,
                            CHAR_PROP_NOTIFY|CHAR_PROP_READ,
-                           ATTR_PERMISSION_NONE,
-                           GATT_NOTIFY_READ_REQ_AND_WAIT_FOR_APPL_RESP,
+                           ATTR_PERMISSION_NONE, 0,
                            16, 0, &accPitchCharHandle);
   if (ret != BLE_STATUS_SUCCESS) goto fail;
   
@@ -434,20 +432,20 @@ fail:
  * 
  * @retval Status
  */
-tBleStatus Dir_Read()
-{  
-  tBleStatus ret;    
-  uint8_t buff[2];
-	
-  ret = aci_gatt_read_handle_value(ledDirCharHandle, 2, 2, buff);
-	printf("%i %i", buff[0], buff[1]);
-	
-  if (ret != BLE_STATUS_SUCCESS){
-    PRINTF("Error while reading direction characteristic.\n") ;
-    return BLE_STATUS_ERROR ;
-  }
-  return BLE_STATUS_SUCCESS;	
-}
+//tBleStatus Dir_Read()
+//{  
+//  tBleStatus ret;    
+//  uint8_t buff[2];
+//	
+//  ret = aci_gatt_read_handle_value(ledDirCharHandle, 2, 2, buff);
+//	printf("%i %i", buff[0], buff[1]);
+//	
+//  if (ret != BLE_STATUS_SUCCESS){
+//    PRINTF("Error while reading direction characteristic.\n") ;
+//    return BLE_STATUS_ERROR ;
+//  }
+//  return BLE_STATUS_SUCCESS;	
+//}
 
 /** 
  * @brief  Read direction characteristic value.
@@ -455,20 +453,20 @@ tBleStatus Dir_Read()
  * 
  * @retval Status
  */
-tBleStatus On_Read()
-{  
-  tBleStatus ret;    
-  uint8_t buff[2];
-	
-  ret = aci_gatt_read_handle_value(ledOnCharHandle, 2, 2, buff);
-	printf("%i %i", buff[0], buff[1]);
-	
-  if (ret != BLE_STATUS_SUCCESS){
-    PRINTF("Error while reading on led characteristic.\n") ;
-    return BLE_STATUS_ERROR ;
-  }
-  return BLE_STATUS_SUCCESS;	
-}
+//tBleStatus On_Read()
+//{  
+//  tBleStatus ret;    
+//  uint8_t buff[2];
+//	
+//  ret = aci_gatt_read_handle_value(ledOnCharHandle, 2, 2, buff);
+//	printf("%i %i", buff[0], buff[1]);
+//	
+//  if (ret != BLE_STATUS_SUCCESS){
+//    PRINTF("Error while reading on led characteristic.\n") ;
+//    return BLE_STATUS_ERROR ;
+//  }
+//  return BLE_STATUS_SUCCESS;	
+//}
 
 /**
  * @brief  Puts the device in connectable mode.
