@@ -6,31 +6,31 @@
   * @brief   implement SPI communication protocols
   ******************************************************************************
   */
- 
+
 #include "SPI.h"
 
-SPI_HandleTypeDef SpiHandle;
-  
+SPI_HandleTypeDef SpiSlaveHandle;
+
 void SPI_Init_Slave(void) {
   __HAL_RCC_SPI1_CLK_ENABLE();
-  
-	HAL_SPI_DeInit(&SpiHandle);
-  SpiHandle.Instance 							  = SPI1;
-  SpiHandle.Init.BaudRatePrescaler 	= SPI_BAUDRATEPRESCALER_4;
-  SpiHandle.Init.Direction 					= SPI_DIRECTION_2LINES;
-  SpiHandle.Init.CLKPhase 					= SPI_PHASE_1EDGE;
-  SpiHandle.Init.CLKPolarity 				= SPI_POLARITY_LOW;
-  SpiHandle.Init.CRCCalculation			= SPI_CRCCALCULATION_DISABLED;
-  SpiHandle.Init.CRCPolynomial 			= 7;
-  SpiHandle.Init.DataSize 					= SPI_DATASIZE_8BIT;
-  SpiHandle.Init.FirstBit 					= SPI_FIRSTBIT_MSB;
-  SpiHandle.Init.NSS 								= SPI_NSS_SOFT;
-  SpiHandle.Init.TIMode 						= SPI_TIMODE_DISABLED;
-  SpiHandle.Init.Mode 							= SPI_MODE_MASTER;
-	if (HAL_SPI_Init(&SpiHandle) != HAL_OK) {printf ("ERROR: Error in initialising SPI1 \n");};
-  
-	__HAL_SPI_ENABLE(&SpiHandle);
-  
+
+	HAL_SPI_DeInit(&SpiSlaveHandle);
+  SpiSlaveHandle.Instance 							  = SPI1;
+  SpiSlaveHandle.Init.BaudRatePrescaler 	= SPI_BAUDRATEPRESCALER_4;
+  SpiSlaveHandle.Init.Direction 					= SPI_DIRECTION_2LINES;
+  SpiSlaveHandle.Init.CLKPhase 					= SPI_PHASE_1EDGE;
+  SpiSlaveHandle.Init.CLKPolarity 				= SPI_POLARITY_LOW;
+  SpiSlaveHandle.Init.CRCCalculation			= SPI_CRCCALCULATION_DISABLED;
+  SpiSlaveHandle.Init.CRCPolynomial 			= 7;
+  SpiSlaveHandle.Init.DataSize 					= SPI_DATASIZE_8BIT;
+  SpiSlaveHandle.Init.FirstBit 					= SPI_FIRSTBIT_MSB;
+  SpiSlaveHandle.Init.NSS 								= SPI_NSS_SOFT;
+  SpiSlaveHandle.Init.TIMode 						= SPI_TIMODE_DISABLED;
+  SpiSlaveHandle.Init.Mode 							= SPI_MODE_MASTER;
+	if (HAL_SPI_Init(&SpiSlaveHandle) != HAL_OK) {printf ("ERROR: Error in initialising SPI1 \n");};
+
+	__HAL_SPI_ENABLE(&SpiSlaveHandle);
+
   SPI_MspInit();
 }
 
@@ -77,37 +77,37 @@ void SPI_MspInit() {
 uint8_t Exchange_Byte(uint8_t byte) {
   /* Loop while DR register in not empty */
   uint32_t timeout = BYTE_EXCHANGE_FLAG_TIMEOUT;
-  while (__HAL_SPI_GET_FLAG(&SpiHandle, SPI_FLAG_TXE) == RESET) {
+  while (__HAL_SPI_GET_FLAG(&SpiSlaveHandle, SPI_FLAG_TXE) == RESET) {
     if((timeout--) == 0) return (uint8_t) 0;
   }
 
   /* Send a Byte through the SPI peripheral */
-  SPI_SendData(&SpiHandle,  byte);
+  SPI_SendData(&SpiSlaveHandle,  byte);
 
   /* Wait to receive a Byte */
   timeout = BYTE_EXCHANGE_FLAG_TIMEOUT;
-  while (__HAL_SPI_GET_FLAG(&SpiHandle, SPI_FLAG_RXNE) == RESET) {
+  while (__HAL_SPI_GET_FLAG(&SpiSlaveHandle, SPI_FLAG_RXNE) == RESET) {
     if((timeout--) == 0) {return (uint8_t) 1;}
   }
 
-  /* Return the Byte read from the SPI bus */ 
-  return SPI_ReceiveData(&SpiHandle);
+  /* Return the Byte read from the SPI bus */
+  return SPI_ReceiveData(&SpiSlaveHandle);
 }
 
 /**
   * @brief  Transmits a Data through the SPIx/I2Sx peripheral.
-  * @param  *hspi: Pointer to the SPI handle. Its member Instance can point to either SPI1, SPI2 or SPI3 
+  * @param  *hspi: Pointer to the SPI handle. Its member Instance can point to either SPI1, SPI2 or SPI3
   * @param  Data: Data to be transmitted.
   * @retval None
   */
-void SPI_SendData(SPI_HandleTypeDef *hspi, uint16_t Data) { 
+void SPI_SendData(SPI_HandleTypeDef *hspi, uint16_t Data) {
   /* Write in the DR register the data to be sent */
   hspi->Instance->DR = Data;
 }
 
 /**
-  * @brief  Returns the most recent received data by the SPIx/I2Sx peripheral. 
-  * @param  *hspi: Pointer to the SPI handle. Its member Instance can point to either SPI1, SPI2 or SPI3 
+  * @brief  Returns the most recent received data by the SPIx/I2Sx peripheral.
+  * @param  *hspi: Pointer to the SPI handle. Its member Instance can point to either SPI1, SPI2 or SPI3
   * @retval The value of the received data.
   */
 uint8_t SPI_ReceiveData(SPI_HandleTypeDef *hspi) {
