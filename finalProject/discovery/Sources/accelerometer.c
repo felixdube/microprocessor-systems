@@ -15,10 +15,9 @@
 #include <stdlib.h>
 #include <math.h>
 #include "Thread_Acc.h"
+#include "Thread_SPI.h"
 
 float accValue[3] = {0, 0, 0};				// {AccX, AccY, AccZ}
-float pitchAngle = 0;									// Pitch angle in degrees 0-180
-float rollAngle = 0;									// Pitch angle in degrees 0-180
 float tmp0, tmp1, tmp2;								// Temp variable used for calibration
 
 kalmanState *xState;
@@ -106,7 +105,7 @@ void Accelerometer_GPIO_Config(void) {
   */
 float calcPitch (float x, float y, float z) {
 	float pitch = atan2(x, (sqrt(y*y+z*z))) * 180.0 / PI;
-	
+
 	//Normalize the pitch to a value between 0-180
 	if ( z < 0 && pitch < 0){
 		pitch = 180 + pitch;
@@ -129,7 +128,7 @@ float calcPitch (float x, float y, float z) {
   */
 float calcRoll (float x, float y, float z) {
 	float roll = atan2(y, (sqrt(x*x+z*z))) * 180.0 / PI;
-	
+
 	//Normalize the pitch to a value between 0-180
 	if ( z < 0 && roll < 0){
 		roll = 180 + roll;
@@ -174,6 +173,6 @@ void ReadAcc(void){
 	kalmanUpdate(yState, accValue[1]);
 	kalmanUpdate(zState, accValue[2]);
 
-	pitchAngle = calcPitch(xState->x, yState->x, zState->x);	
-	rollAngle = calcRoll(xState->x, yState->x, zState->x);	
+	pitchAngle = calcPitch(xState->x, yState->x, zState->x);
+	rollAngle = calcRoll(xState->x, yState->x, zState->x);
 }
