@@ -29,9 +29,6 @@ void InitCommunication(void) {
 }
 
 void communicate(void) {
-	uint8_t start_byte = 0;
-	float temperature = 0;
-	
 	while (Exchange_Byte(EMPTY_BYTE) != START_BYTE);
   
 	/* receive */
@@ -46,7 +43,7 @@ void communicate(void) {
 	Exchange_Byte((uint8_t) LED_speed);
 	Exchange_Byte((uint8_t) LED_PWM_duty_cycle);
 	
-	printf("%X, %f, %f, %f, %d\n", start_byte, temperature, pitchAngle, rollAngle, doubleTap);
+	printf("t: %f, p: %f, r: %f, d: %d\n", temperature, pitchAngle, rollAngle, doubleTap);
 }
 
 float receiveFloat(void) {
