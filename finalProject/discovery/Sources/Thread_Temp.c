@@ -16,6 +16,7 @@
 #include "ADC_config.h"
 #include "temperature.h"
 #include "kalmanFilter.h"
+#include "Thread_SPI.h"
 
 osThreadId tid_Thread_Temperature;
 osThreadDef(Thread_Temperature, osPriorityHigh, 1, 0);
@@ -23,7 +24,6 @@ osThreadDef(Thread_Temperature, osPriorityHigh, 1, 0);
 kalmanState adcState = {INIT_TEMP_q, INIT_TEMP_r, INIT_TEMP_x, INIT_TEMP_p, INIT_TEMP_k};
 
 int adc_val = 0;
-volatile float temperature = 0;
 
 /**
   * @brief Start temperature monitoring thread
@@ -54,7 +54,6 @@ void Thread_Temperature (void const *argument) {
       temperature = convertTemp(adcState.x);
       __HAL_ADC_CLEAR_FLAG(&ADC1_Handle, ADC_FLAG_EOC);
     }
-
     osDelay(TEMP_DELAY);
   }
 }

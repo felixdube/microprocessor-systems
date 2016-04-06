@@ -46,6 +46,7 @@
 #include "debug.h"
 #include "stm32_bluenrg_ble.h"
 #include "bluenrg_utils.h"
+#include "SPI.h"
 
 #include <string.h>
 #include <stdio.h>
@@ -118,6 +119,9 @@ void User_Process(AxesRaw_t* p_axes);
  * @param  None
  * @retval None
  */
+ 
+ uint8_t data = 0;
+ 
 int main(void)
 {
   const char *name = "BlueNRG";
@@ -273,7 +277,9 @@ int main(void)
 
   /* Set output power level */
   ret = aci_hal_set_tx_power_level(1,4);
-
+  
+  SPI_Init_Slave();
+  
   while(1)
   {
     HCI_Process();

@@ -7,7 +7,7 @@
 	* Date							 : February, 2016
   ******************************************************************************
   */
-	
+
 
 #ifndef ACCELEROMETER_H
 #define ACCELEROMETER_H
@@ -40,9 +40,6 @@
 #define INIT_z 1000 			/* starting on a flat surface in mg */
 #define INIT_p 0.780776 	/* this was set to the value it converges to when the filter runs for a while */
 #define INIT_k 0.390388 	/* this was set to the value it converges to when the filter runs for a while */
-
-extern float pitchAngle;
-extern float rollAngle;
 
 
 void Accelerometer_Config(void);

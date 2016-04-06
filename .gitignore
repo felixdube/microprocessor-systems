@@ -2,9 +2,6 @@
 **/Objects
 **/Listings
 
-# Debug files
-**/DebugConfig
-
 #guix files
 *.uvguix.*
 *.uvguix
