@@ -6,15 +6,17 @@
   * @brief    Accelerometer initialazation and control Thread
   ******************************************************************************
   */
-	
+
+#include <stdlib.h>
+#include <math.h>
+
 #include "cmsis_os.h"                  									 	// ARM::CMSIS:RTOS:Keil RTX
 #include "stm32f4xx_hal.h"
 #include "Thread_Acc.h"
+#include "Thread_SPI.h"
 #include "lis3dsh.h"
 #include "kalmanFilter.h"
 #include "accelerometer.h"
-#include <stdlib.h>
-#include <math.h>
 
 void Thread_Acc (void const *argument);                 	// thread function
 osThreadId tid_Thread_Acc;                             	 	// thread id
@@ -30,13 +32,13 @@ int start_Thread_Acc (void) {
 	Accelerometer_GPIO_Config();
 	Accelerometer_Interrupt_Config();
   tid_Thread_Acc = osThreadCreate(osThread(Thread_Acc ), NULL); // Start LED_Thread
-  if (!tid_Thread_Acc) return(-1); 
+  if (!tid_Thread_Acc) return(-1);
   return(0);
 }
 
 /**
 * @brief Thread that read the accelerometer
-* @param argument: 
+* @param argument:
 * @retval None
 */
 void Thread_Acc (void const *argument) {
@@ -45,7 +47,6 @@ void Thread_Acc (void const *argument) {
 		//0 for the timeout value so that it never starts before the flag
 		osSignalWait(ACC_INT_FLAG, osWaitForever);
 		ReadAcc();
-		//printf("%f\n",accValue[0]);
 		osSignalClear(tid_Thread_Acc,ACC_INT_FLAG);
 	}
 }

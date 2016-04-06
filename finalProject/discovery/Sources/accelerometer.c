@@ -20,9 +20,9 @@
 float accValue[3] = {0, 0, 0};				// {AccX, AccY, AccZ}
 float tmp0, tmp1, tmp2;								// Temp variable used for calibration
 
-kalmanState *xState;
-kalmanState *yState;
-kalmanState *zState;
+kalmanState xState = {INIT_q, INIT_r, INIT_x, INIT_p, INIT_k};
+kalmanState yState = {INIT_q, INIT_r, INIT_y, INIT_p, INIT_k};
+kalmanState zState = {INIT_q, INIT_r, INIT_z, INIT_p, INIT_k};
 
 
 /**
@@ -43,14 +43,6 @@ void Accelerometer_Config(void) {
 	Acc_InitDef.Full_Scale = LIS3DSH_FULLSCALE_2;																				/* 2g */
 
 	LIS3DSH_Init(&Acc_InitDef);
-
-	/* Init Kalman Filter for the accelerometer */
-	xState = malloc(sizeof(kalmanState));
-	yState = malloc(sizeof(kalmanState));
-	zState = malloc(sizeof(kalmanState));
-	kalmanInit(xState, INIT_q, INIT_r, INIT_x, INIT_p, INIT_k);
-	kalmanInit(yState, INIT_q, INIT_r, INIT_y, INIT_p, INIT_k);
-	kalmanInit(zState, INIT_q, INIT_r, INIT_z, INIT_p, INIT_k);
 }
 
 /**
@@ -169,10 +161,10 @@ void ReadAcc(void){
 	Calibrate(accValue);
 
 	/* Filter values */
-	kalmanUpdate(xState, accValue[0]);
-	kalmanUpdate(yState, accValue[1]);
-	kalmanUpdate(zState, accValue[2]);
+	kalmanUpdate(&xState, accValue[0]);
+	kalmanUpdate(&yState, accValue[1]);
+	kalmanUpdate(&zState, accValue[2]);
 
-	pitchAngle = calcPitch(xState->x, yState->x, zState->x);
-	rollAngle = calcRoll(xState->x, yState->x, zState->x);
+	pitchAngle = calcPitch(xState.x, yState.x, zState.x);
+	rollAngle = calcRoll(xState.x, yState.x, zState.x);
 }
