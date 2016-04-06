@@ -10,8 +10,6 @@
 #ifndef COMMUNICATE_H
 #define COMMUNICATE_H
 
-#define PREFIX_BYTE 0xFF
-
 /* variables to receive */
 extern volatile float temperature;
 extern volatile float pitchAngle;
