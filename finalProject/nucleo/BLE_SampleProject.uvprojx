@@ -175,7 +175,7 @@
             <Capability>1</Capability>
             <DriverSelection>4103</DriverSelection>
           </Flash1>
-          <bUseTDR>1</bUseTDR>
+          <bUseTDR>0</bUseTDR>
           <Flash2>STLink\ST-LINKIII-KEIL_SWO.dll</Flash2>
           <Flash3>"" ()</Flash3>
           <Flash4></Flash4>
@@ -441,11 +441,6 @@
               <FileName>sensor_service.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Src\sensor_service.c</FilePath>
-            </File>
-            <File>
-              <FileName>SPI.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Src\SPI.c</FilePath>
             </File>
           </Files>
         </Group>

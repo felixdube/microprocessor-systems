@@ -119,6 +119,9 @@ void User_Process(AxesRaw_t* p_axes);
  * @param  None
  * @retval None
  */
+ 
+ uint8_t data = 0;
+ 
 int main(void)
 {
   const char *name = "BlueNRG";
@@ -248,7 +251,6 @@ int main(void)
   {
     HCI_Process();
     User_Process(&axes_data);
-    Exchange_Byte(((uint8_t)0xBC));
   }
 }
 

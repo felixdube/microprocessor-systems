@@ -12,10 +12,10 @@
 SPI_HandleTypeDef SpiSlaveHandle;
 
 void SPI_Init_Slave(void) {
-  __HAL_RCC_SPI1_CLK_ENABLE();
+  __HAL_RCC_SPI2_CLK_ENABLE();
 
 	HAL_SPI_DeInit(&SpiSlaveHandle);
-  SpiSlaveHandle.Instance 							  = SPI1;
+  SpiSlaveHandle.Instance 							  = SPI2;
   SpiSlaveHandle.Init.BaudRatePrescaler 	= SPI_BAUDRATEPRESCALER_4;
   SpiSlaveHandle.Init.Direction 					= SPI_DIRECTION_2LINES;
   SpiSlaveHandle.Init.CLKPhase 					= SPI_PHASE_1EDGE;
@@ -47,29 +47,26 @@ void SPI_MspInit() {
   GPIO_InitStructure.Mode  = GPIO_MODE_AF_PP;
   GPIO_InitStructure.Pull  = GPIO_PULLDOWN;
   GPIO_InitStructure.Speed = GPIO_SPEED_MEDIUM;
-  GPIO_InitStructure.Alternate = GPIO_AF5_SPI1;
+  GPIO_InitStructure.Alternate = GPIO_AF5_SPI2;
 
   /* SPI SCK pin configuration */
-  GPIO_InitStructure.Pin = SPI1_SCK;
-  HAL_GPIO_Init(SPI1_PORT, &GPIO_InitStructure);
+  GPIO_InitStructure.Pin = SPI2_SCK;
+  HAL_GPIO_Init(SPI2_PORT, &GPIO_InitStructure);
 
   /* SPI  MOSI pin configuration */
-  GPIO_InitStructure.Pin =  SPI1_MOSI;
-  HAL_GPIO_Init(SPI1_PORT, &GPIO_InitStructure);
+  GPIO_InitStructure.Pin =  SPI2_MOSI;
+  HAL_GPIO_Init(SPI2_PORT, &GPIO_InitStructure);
 
   /* SPI MISO pin configuration */
-  GPIO_InitStructure.Pin = SPI1_MISO;
-  HAL_GPIO_Init(SPI1_PORT, &GPIO_InitStructure);
+  GPIO_InitStructure.Pin = SPI2_MISO;
+  HAL_GPIO_Init(SPI2_PORT, &GPIO_InitStructure);
     
   /* SPI NSS pin configuration */
-  GPIO_InitStructure.Pin = SPI1_NSS;
-  GPIO_InitStructure.Mode  = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStructure.Speed = GPIO_SPEED_FREQ_MEDIUM;
-
-  HAL_GPIO_Init(SPI1_NSS_PORT, &GPIO_InitStructure);
+  GPIO_InitStructure.Pin = SPI2_NSS;
+  HAL_GPIO_Init(SPI2_PORT, &GPIO_InitStructure);
 
   /* Deselect : Chip Select high */
-  HAL_GPIO_WritePin(SPI1_NSS_PORT, SPI1_NSS, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(SPI2_PORT, SPI2_NSS, GPIO_PIN_SET);
 }
 
 /**

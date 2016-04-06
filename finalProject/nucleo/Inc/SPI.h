@@ -15,13 +15,13 @@
 #define BYTE_EXCHANGE_FLAG_TIMEOUT         ((uint32_t)0x1000)
 #define EMPTY_BYTE                 ((uint8_t)0x00)
 
-#define SPI1_SCK GPIO_PIN_5
-#define SPI1_MISO GPIO_PIN_6
-#define SPI1_MOSI GPIO_PIN_7
-#define SPI1_PORT GPIOA
+#define SPI2_SCK GPIO_PIN_13
+#define SPI2_MISO GPIO_PIN_14
+#define SPI2_MOSI GPIO_PIN_15
+#define SPI2_NSS GPIO_PIN_12
 
-#define SPI1_NSS GPIO_PIN_6
-#define SPI1_NSS_PORT GPIOB
+#define SPI2_PORT GPIOB
+
 
 void SPI_Init_Slave(void);
 void SPI_MspInit(void);
