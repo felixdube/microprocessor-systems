@@ -14,6 +14,7 @@
 #include "cmsis_os.h"
 
 #define COM_DELAY 100           /* communication delay in ms */
+#define BYTE_DELAY 1           /* byte delay in ms */
 
 extern osThreadId tid_Thread_SPI;
 
@@ -21,12 +22,16 @@ extern osThreadId tid_Thread_SPI;
 extern volatile float temperature;
 extern volatile float pitchAngle;
 extern volatile float rollAngle;
-extern volatile int double_tap;
+extern volatile int doubleTap;
 
 /* variables needing to be received */
 extern volatile int LED_pattern;
+extern volatile int LED_brightness;
+extern volatile int LED_speed;
+extern volatile int LED_PWM_duty_cycle;
 
 int start_Thread_SPI(void);
 void Thread_SPI(void const *argument);
+void transmitFloat(float f);
 
 #endif
