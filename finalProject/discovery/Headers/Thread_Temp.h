@@ -27,8 +27,6 @@
 
 extern osThreadId tid_Thread_Temperature;
 
-extern volatile float temperature;
-
 int start_Thread_Temperature(void);
 void Thread_Temperature(void const *argument);
 
