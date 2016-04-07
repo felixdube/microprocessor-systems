@@ -43,7 +43,7 @@ void communicate(void) {
 	Exchange_Byte((uint8_t) LED_speed);
 	Exchange_Byte((uint8_t) LED_PWM_duty_cycle);
 	
-	printf("t: %f, p: %f, r: %f, d: %d\n", temperature, pitchAngle, rollAngle, doubleTap);
+	//printf("t: %f, p: %f, r: %f, d: %d\n", temperature, pitchAngle, rollAngle, doubleTap);
 }
 
 float receiveFloat(void) {

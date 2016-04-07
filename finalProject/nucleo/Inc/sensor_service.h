@@ -131,6 +131,7 @@ tBleStatus Add_Tap_Service(void);
 
 // LED
 tBleStatus Add_Led_Service(void);
+tBleStatus On_Read(void);
 
 
 tBleStatus Add_Environmental_Sensor_Service(void);

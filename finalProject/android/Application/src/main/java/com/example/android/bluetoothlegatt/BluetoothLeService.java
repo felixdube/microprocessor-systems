@@ -73,6 +73,10 @@ public class BluetoothLeService extends Service {
             UUID.fromString(SampleGattAttributes.PITCH_VALUE);
     public final static UUID UUID_TEMP_VALUE =
             UUID.fromString(SampleGattAttributes.TEMP_VALUE);
+    public final static UUID UUID_ON_VALUE =
+            UUID.fromString(SampleGattAttributes.ON_VALUE);
+
+    byte[] led_on_value = new byte[1];
 
     // Implements callback methods for GATT events that the app cares about.  For example,
     // connection change and services discovered.
@@ -143,6 +147,32 @@ public class BluetoothLeService extends Service {
             String zValue = Integer.toString(zIntValue);
 
             intent.putExtra(EXTRA_DATA, xValue+" "+yValue+" "+zValue );
+        } else if(UUID_ON_VALUE.equals(characteristic.getUuid())){
+            //check mBluetoothGatt is available
+            if (mBluetoothGatt == null) {
+                Log.e(TAG, "lost connection");
+
+            }
+            BluetoothGattService Service = mBluetoothGatt.getService(UUID_ON_VALUE);
+            if (Service == null) {
+                Log.e(TAG, "service not found!");
+
+            }
+            BluetoothGattCharacteristic charac = Service.getCharacteristic(UUID_ON_VALUE);
+            if (charac == null) {
+                Log.e(TAG, "char not found!");
+
+            }
+
+            if(led_on_value[0] == 1){
+                led_on_value[0] = 0;
+                charac.setValue(led_on_value);
+            } else {
+                led_on_value[0] = 1;
+                charac.setValue(led_on_value);
+            }
+
+
         } else {
             // For all other profiles, writes the data formatted in HEX.
             final byte[] data = characteristic.getValue();

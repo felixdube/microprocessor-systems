@@ -123,7 +123,7 @@ void User_Process(AxesRaw_t* p_axes);
 int main(void)
 {
   const char *name = "BlueNRG";
-  uint8_t SERVER_BDADDR[] = {0x01, 0x34, 0x00, 0xE1, 0x80, 0x03};
+  uint8_t SERVER_BDADDR[] = {0xBA, 0xDD, 0x0A, 0x55, 0x80, 0x03};
   uint8_t bdaddr[BDADDR_SIZE];
   uint16_t service_handle, dev_name_char_handle, appearance_char_handle;
   
@@ -265,7 +265,7 @@ int main(void)
     PRINTF("Error while adding Tap service.\n");
 	
 	// LED
-	ret = Add_Acc2_Service();
+	ret = Add_Led_Service();
   
   if(ret == BLE_STATUS_SUCCESS)
     PRINTF("Led service added successfully.\n");
@@ -282,7 +282,8 @@ int main(void)
   {
     HCI_Process();
     User_Process(&axes_data);
-		communicate();
+		//communicate();
+		On_Read();
   }
 }
 
