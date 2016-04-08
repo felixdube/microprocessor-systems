@@ -19,11 +19,11 @@
 osThreadId tid_Thread_SPI;
 osThreadDef(Thread_SPI, osPriorityHigh, 1, 0);
 
-/* varaibles needing to be sent */
+/* variables needing to be sent */
 volatile float temperature = 12.3;
 volatile float pitchAngle = 34.3;
 volatile float rollAngle = 89.88;
-volatile int doubleTap = 1;
+volatile int doubleTap = 0;
 
 /* variables needing to be received */
 volatile int LED_pattern = 0;
@@ -68,7 +68,7 @@ void Thread_SPI (void const *argument) {
     osDelay(BYTE_DELAY);
     LED_PWM_duty_cycle = Exchange_Byte(EMPTY_BYTE);
     
-    printf("%d, %d, %d, %d\n", LED_pattern, LED_brightness, LED_speed, LED_PWM_duty_cycle);
+    //printf("%d, %d, %d, %d\n", LED_pattern, LED_brightness, LED_speed, LED_PWM_duty_cycle);
     osDelay(COM_DELAY);
   }
 }

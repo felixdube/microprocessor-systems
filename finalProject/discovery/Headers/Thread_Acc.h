@@ -18,9 +18,22 @@
 #define accPin GPIO_PIN_0
 #define ACC_INT_FLAG 0x01
 
+#define TAP_STRENGTH_THRESH 10
+//all these times are divided by 400 hertz (the speed of the accelerometer polling)
+#define TAP_MAX_TIME_BEFORE_2ND_TAP 250
+#define TIME_DELAY_AFTER_SPIKE 20
+#define MIN_DELAY_AFTER_TAP1 50
+#define MIN_DELAY_AFTER_TAP2 120	
+
+#define UP_SPIKE 1
+#define DOWN_SPIKE 2
+
 extern osThreadId tid_Thread_Acc;   
 
 int start_Thread_Acc (void);
 void Thread_Acc (void const *argument);
+int verifyDoubleTap(void);
+int detectBigVariation(void);
+int DetectSpike(void);
 
 #endif

@@ -36,7 +36,7 @@ void Accelerometer_Config(void) {
 	LIS3DSH_InitTypeDef Acc_InitDef;
 
 	/* define field of the accelerometer initialisation structure */
-	Acc_InitDef.Power_Mode_Output_DataRate = LIS3DSH_DATARATE_25;      									/* 25Hz */
+	Acc_InitDef.Power_Mode_Output_DataRate = LIS3DSH_DATARATE_400;      									/* 25Hz */
 	Acc_InitDef.Axes_Enable = LIS3DSH_XYZ_ENABLE;                     									/* XYZ */
 	Acc_InitDef.Continous_Update = LIS3DSH_ContinousUpdate_Disabled;										/* continuous update */
 	Acc_InitDef.AA_Filter_BW = LIS3DSH_AA_BW_50;																				/* 50Hz to filter gravity*/

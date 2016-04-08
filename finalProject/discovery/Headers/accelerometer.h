@@ -42,6 +42,9 @@
 #define INIT_k 0.390388 	/* this was set to the value it converges to when the filter runs for a while */
 
 
+extern float accValue[3];
+extern kalmanState *zState;
+
 void Accelerometer_Config(void);
 void Accelerometer_Interrupt_Config(void);
 void Accelerometer_GPIO_Config(void);
