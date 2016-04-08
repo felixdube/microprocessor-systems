@@ -43,7 +43,7 @@
 
 
 extern float accValue[3];
-extern kalmanState *zState;
+extern kalmanState zState;
 
 void Accelerometer_Config(void);
 void Accelerometer_Interrupt_Config(void);

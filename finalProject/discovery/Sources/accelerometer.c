@@ -24,7 +24,6 @@ kalmanState xState = {INIT_q, INIT_r, INIT_x, INIT_p, INIT_k};
 kalmanState yState = {INIT_q, INIT_r, INIT_y, INIT_p, INIT_k};
 kalmanState zState = {INIT_q, INIT_r, INIT_z, INIT_p, INIT_k};
 
-
 /**
 * @brief Initialise the Accelerometer
 * @param None

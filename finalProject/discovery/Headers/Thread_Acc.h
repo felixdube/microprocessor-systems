@@ -18,11 +18,11 @@
 #define accPin GPIO_PIN_0
 #define ACC_INT_FLAG 0x01
 
-#define TAP_STRENGTH_THRESH 10
+#define TAP_STRENGTH_THRESH 12
 //all these times are divided by 400 hertz (the speed of the accelerometer polling)
 #define TAP_MAX_TIME_BEFORE_2ND_TAP 250
-#define TIME_DELAY_AFTER_SPIKE 20
-#define MIN_DELAY_AFTER_TAP1 50
+#define TIME_DELAY_AFTER_SPIKE 40
+#define MIN_DELAY_AFTER_TAP1 60
 #define MIN_DELAY_AFTER_TAP2 120	
 
 #define UP_SPIKE 1
