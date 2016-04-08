@@ -6,7 +6,10 @@
   * @brief    Accelerometer initialazation and control Thread
   ******************************************************************************
   */
-	
+
+#include <stdlib.h>
+#include <math.h>
+
 #include "cmsis_os.h"                  									 	// ARM::CMSIS:RTOS:Keil RTX
 #include "stm32f4xx_hal.h"
 #include "Thread_Acc.h"
@@ -14,8 +17,6 @@
 #include "lis3dsh.h"
 #include "kalmanFilter.h"
 #include "accelerometer.h"
-#include <stdlib.h>
-#include <math.h>
 
 
 void Thread_Acc (void const *argument);                 	// thread function
@@ -48,7 +49,7 @@ int start_Thread_Acc (void) {
 
 /**
 * @brief Thread that read the accelerometer
-* @param argument: 
+* @param argument:
 * @retval None
 */
 void Thread_Acc (void const *argument) {

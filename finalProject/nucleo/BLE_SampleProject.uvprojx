@@ -10,6 +10,7 @@
       <TargetName>Application</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
+      <pCCUsed>5060061::V5.06 update 1 (build 61)::ARMCC</pCCUsed>
       <TargetOption>
         <TargetCommonOption>
           <Device>STM32F401RETx</Device>
@@ -229,6 +230,7 @@
             <useUlib>0</useUlib>
             <EndSel>0</EndSel>
             <uLtcg>0</uLtcg>
+            <nSecure>0</nSecure>
             <RoSelD>3</RoSelD>
             <RwSelD>3</RwSelD>
             <CodeSel>0</CodeSel>
@@ -365,6 +367,8 @@
             <useXO>0</useXO>
             <v6Lang>0</v6Lang>
             <v6LangP>0</v6LangP>
+            <vShortEn>0</vShortEn>
+            <vShortWch>0</vShortWch>
             <VariousControls>
               <MiscControls>--C99 --gnu</MiscControls>
               <Define>USE_HAL_DRIVER,STM32F401xE,USE_STM32F4XX_NUCLEO,DEBUG</Define>
@@ -446,6 +450,11 @@
               <FileName>SPI.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Src\SPI.c</FilePath>
+            </File>
+            <File>
+              <FileName>communicate.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Src\communicate.c</FilePath>
             </File>
           </Files>
         </Group>

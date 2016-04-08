@@ -27,6 +27,9 @@ public class SampleGattAttributes {
     public static String ROLL_VALUE =   "00000000-0000-0000-0000-000000000004";
     public static String PITCH_VALUE =  "00000000-0000-0000-0000-000000000005";
     public static String TEMP_VALUE =   "00000000-0000-0000-0000-000000000007";
+    public static String TAP_VALUE =    "00000000-0000-0000-0000-000000000009";
+    public static String DIR_VALUE =    "00000000-0000-0000-0000-000000000011";
+    public static String ON_VALUE =     "00000000-0000-0000-0000-000000000012";
 
     static {
 
@@ -42,6 +45,15 @@ public class SampleGattAttributes {
         // TEMPERATURE
         attributes.put("00000000-0000-0000-0000-000000000006", "Temperature Service");
         attributes.put(TEMP_VALUE, "Temperature Value");
+
+        // TAP
+        attributes.put("00000000-0000-0000-0000-000000000008", "TapTap Service");
+        attributes.put(TAP_VALUE, "TapTap Value");
+
+        // LED
+        attributes.put("00000000-0000-0000-0000-000000000010", "LED Services");
+        attributes.put(DIR_VALUE, "Direction Values");
+        attributes.put(ON_VALUE, "On or Off Values");
     }
 
     public static String lookup(String uuid, String defaultName) {

@@ -51,7 +51,7 @@ int start_Thread_SPI(void) {
   */
 void Thread_SPI (void const *argument) {
   while(1) {
-    Exchange_Byte(PREFIX_BYTE);
+    Exchange_Byte(START_BYTE);
     transmitFloat(temperature);
     transmitFloat(pitchAngle);
     transmitFloat(rollAngle);
@@ -59,7 +59,7 @@ void Thread_SPI (void const *argument) {
     
     osDelay(2 * BYTE_DELAY);
     
-    LED_pattern = Exchange_Byte(EMPTY_BYTE);
+    LED_pattern = Exchange_Byte(EMPTY_BYTE); // this is just for extra delay. lol.
     LED_pattern = Exchange_Byte(EMPTY_BYTE);
     osDelay(BYTE_DELAY);
     LED_brightness = Exchange_Byte(EMPTY_BYTE);

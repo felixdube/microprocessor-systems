@@ -13,7 +13,9 @@
 #include "stm32f4xx_hal.h"
 
 #define BYTE_EXCHANGE_FLAG_TIMEOUT         ((uint32_t)0x1000)
-#define EMPTY_BYTE                 ((uint8_t)0x00)
+
+#define EMPTY_BYTE                 ((uint8_t) 0x00)
+#define START_BYTE                 ((uint8_t) 0xFF)
 
 #define SPI2_SCK GPIO_PIN_13
 #define SPI2_MISO GPIO_PIN_14

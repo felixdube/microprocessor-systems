@@ -20,7 +20,6 @@ typedef struct kalmanState {
   float k;                /* adapive Kalman filter gain */
 } kalmanState;
 
-void kalmanInit(kalmanState* kstate, float q, float r, float x, float p, float k);
 void kalmanUpdate(kalmanState* kstate, float input);
 
 #endif
