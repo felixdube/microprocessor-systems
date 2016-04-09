@@ -120,6 +120,16 @@ public class BluetoothLeService extends Service {
         }
 
         @Override
+        public void onCharacteristicWrite(BluetoothGatt gatt,
+                                         BluetoothGattCharacteristic characteristic,
+                                         int status) {
+            byte[] value = characteristic.getValue();
+            for (byte val : value) {
+                System.out.println(val);
+            }
+        }
+
+        @Override
         public void onCharacteristicChanged(BluetoothGatt gatt,
                                             BluetoothGattCharacteristic characteristic) {
             broadcastUpdate(ACTION_DATA_AVAILABLE, characteristic);
@@ -314,6 +324,16 @@ public class BluetoothLeService extends Service {
             return;
         }
         mBluetoothGatt.readCharacteristic(characteristic);
+    }
+
+    public void writeCharacteristic(BluetoothGattCharacteristic characteristic, byte[] value){
+        if (mBluetoothAdapter == null || mBluetoothGatt == null) {
+            Log.w(TAG, "BluetoothAdapter not initialized");
+            return;
+        }
+
+        characteristic.setValue(value);
+        mBluetoothGatt.writeCharacteristic(characteristic);
     }
 
     /**
