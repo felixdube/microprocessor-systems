@@ -29,7 +29,6 @@ volatile int doubleTap = 0;
 volatile int LED_pattern = 0;
 volatile int LED_brightness = 0;
 volatile int LED_speed = 0;
-volatile int LED_PWM_duty_cycle = 0;
 
 /**
   * @brief Start SPI communication thread
@@ -65,8 +64,6 @@ void Thread_SPI (void const *argument) {
     LED_brightness = Exchange_Byte(EMPTY_BYTE);
     osDelay(BYTE_DELAY);
     LED_speed = Exchange_Byte(EMPTY_BYTE);
-    osDelay(BYTE_DELAY);
-    LED_PWM_duty_cycle = Exchange_Byte(EMPTY_BYTE);
     
     //printf("%d, %d, %d, %d\n", LED_pattern, LED_brightness, LED_speed, LED_PWM_duty_cycle);
     osDelay(COM_DELAY);

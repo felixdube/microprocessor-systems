@@ -9,7 +9,6 @@
 
 #include <stdlib.h>
 #include <math.h>
-
 #include "cmsis_os.h"                  									 	// ARM::CMSIS:RTOS:Keil RTX
 #include "stm32f4xx_hal.h"
 #include "Thread_Acc.h"
@@ -17,7 +16,6 @@
 #include "lis3dsh.h"
 #include "kalmanFilter.h"
 #include "accelerometer.h"
-
 
 void Thread_Acc (void const *argument);                 	// thread function
 osThreadId tid_Thread_Acc;                             	 	// thread id

@@ -475,6 +475,16 @@
               <FileType>1</FileType>
               <FilePath>.\Sources\SPI.c</FilePath>
             </File>
+            <File>
+              <FileName>Thread_LED.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\Thread_LED.c</FilePath>
+            </File>
+            <File>
+              <FileName>LED.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\LED.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -965,6 +975,16 @@
               <FileType>1</FileType>
               <FilePath>.\Sources\SPI.c</FilePath>
             </File>
+            <File>
+              <FileName>Thread_LED.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\Thread_LED.c</FilePath>
+            </File>
+            <File>
+              <FileName>LED.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\LED.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1453,6 +1473,16 @@
               <FileName>SPI.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Sources\SPI.c</FilePath>
+            </File>
+            <File>
+              <FileName>Thread_LED.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\Thread_LED.c</FilePath>
+            </File>
+            <File>
+              <FileName>LED.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sources\LED.c</FilePath>
             </File>
           </Files>
         </Group>

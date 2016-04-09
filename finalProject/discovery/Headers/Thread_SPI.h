@@ -28,7 +28,6 @@ extern volatile int doubleTap;
 extern volatile int LED_pattern;
 extern volatile int LED_brightness;
 extern volatile int LED_speed;
-extern volatile int LED_PWM_duty_cycle;
 
 int start_Thread_SPI(void);
 void Thread_SPI(void const *argument);
