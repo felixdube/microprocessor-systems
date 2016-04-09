@@ -141,6 +141,11 @@ public class DeviceControlActivity extends Activity {
                             mBluetoothLeService.setCharacteristicNotification(
                                     characteristic, true);
                         }
+                        if ((charaProp | BluetoothGattCharacteristic.PROPERTY_WRITE) > 0) {
+                            byte[] data = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+                            mBluetoothLeService.writeCharacteristic(characteristic, data);
+                            mBluetoothLeService.readCharacteristic(characteristic);
+                        }
                         return true;
                     }
                     return false;

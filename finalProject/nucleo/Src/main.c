@@ -123,7 +123,7 @@ void User_Process(AxesRaw_t* p_axes);
 int main(void)
 {
   const char *name = "BlueNRG";
-  uint8_t SERVER_BDADDR[] = {0xBA, 0xDD, 0x0A, 0x55, 0x80, 0x03};
+  uint8_t SERVER_BDADDR[] = {0x0B, 0xB0, 0x55, 0x0A, 0xDD, 0xBA};
   uint8_t bdaddr[BDADDR_SIZE];
   uint16_t service_handle, dev_name_char_handle, appearance_char_handle;
   
