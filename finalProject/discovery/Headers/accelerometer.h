@@ -44,6 +44,7 @@
 
 extern float accValue[3];
 extern kalmanState zState;
+extern float zAccInitial;
 
 void Accelerometer_Config(void);
 void Accelerometer_Interrupt_Config(void);
@@ -53,6 +54,10 @@ float calcPitch (float x, float y, float z);
 void Calibrate(float* out);
 void ReadAcc(void);
 float calcRoll (float x, float y, float z);
+
+int verifyDoubleTap(void);
+int detectBigVariation(void);
+int DetectSpike(void);
 
 
 #endif

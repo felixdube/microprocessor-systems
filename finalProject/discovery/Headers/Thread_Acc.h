@@ -12,7 +12,6 @@
 #define THREAD_ACC_H
 
 #include "kalmanFilter.h"
-#include "stm32f4xx_hal.h"
 #include "cmsis_os.h"  
 
 #define accPin GPIO_PIN_0
@@ -32,8 +31,5 @@ extern osThreadId tid_Thread_Acc;
 
 int start_Thread_Acc (void);
 void Thread_Acc (void const *argument);
-int verifyDoubleTap(void);
-int detectBigVariation(void);
-int DetectSpike(void);
 
 #endif

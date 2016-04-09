@@ -55,7 +55,10 @@ void Thread_SPI (void const *argument) {
     transmitFloat(pitchAngle);
     transmitFloat(rollAngle);
     Exchange_Byte((uint8_t) doubleTap);
-    
+    //set doubleTap back to 0 after transmission
+		//might need a mutex here
+		doubleTap = 0;
+		
     osDelay(2 * BYTE_DELAY);
     
     LED_pattern = Exchange_Byte(EMPTY_BYTE); // this is just for extra delay. lol.

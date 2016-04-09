@@ -40,6 +40,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_it.h"
 #include "Thread_Acc.h"
+#include "stm32f4xx_hal.h"
 
 int lcdtimer = 0;
 
