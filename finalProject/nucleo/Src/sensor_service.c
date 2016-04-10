@@ -35,6 +35,8 @@
   ******************************************************************************
   */
 #include "sensor_service.h"
+#include <stdio.h>
+#include <inttypes.h>
 
 /* Private variables ---------------------------------------------------------*/
 volatile int connected = FALSE;
@@ -403,7 +405,7 @@ tBleStatus Add_Led_Service(void)
   ret =  aci_gatt_add_char(ledServHandle, UUID_TYPE_128, uuid, 2,
                            CHAR_PROP_WRITE,
                            ATTR_PERMISSION_NONE,
-                           GATT_NOTIFY_READ_REQ_AND_WAIT_FOR_APPL_RESP,
+                           GATT_NOTIFY_WRITE_REQ_AND_WAIT_FOR_APPL_RESP,
                            16, 0, &ledDirCharHandle);
   if (ret != BLE_STATUS_SUCCESS) goto fail;
 	
@@ -411,7 +413,7 @@ tBleStatus Add_Led_Service(void)
   ret =  aci_gatt_add_char(ledServHandle, UUID_TYPE_128, uuid, 2,
                            CHAR_PROP_WRITE,
                            ATTR_PERMISSION_NONE,
-                           GATT_NOTIFY_READ_REQ_AND_WAIT_FOR_APPL_RESP,
+                           GATT_NOTIFY_WRITE_REQ_AND_WAIT_FOR_APPL_RESP,
                            16, 0, &ledOnCharHandle);
   if (ret != BLE_STATUS_SUCCESS) goto fail;
   
@@ -458,13 +460,13 @@ tBleStatus On_Read()
   uint8_t buff[10];
 	uint16_t *buff_length;
 	
-  ret = aci_gatt_read_handle_value(ledOnCharHandle, 10, buff_length, buff);
+  int i;
+	for(i = 0; i< 5; i++) {
+		buff[i] = *(&ledOnCharHandle+i);
+	}
 	printf("-- %i %i %i %i %i %i %i %i %i %i %i\n", buff[0], buff[1], buff[2], buff[3] , buff[4],buff[5], buff[6], buff[7], buff[8] , buff[9],  buff_length);
 	
-  if (ret != BLE_STATUS_SUCCESS){
-    PRINTF("Error while reading on led characteristic.\n") ;
-    return BLE_STATUS_ERROR ;
-  }
+
   return BLE_STATUS_SUCCESS;	
 }
 
@@ -537,6 +539,18 @@ void GAP_DisconnectionComplete_CB(void)
   notification_enabled = FALSE;
 }
 
+
+void Write_Request_CB(uint16_t attr_handle, uint8_t att_val_len, uint8_t *att_val){
+	
+	if(attr_handle == ledOnCharHandle+1) {
+		printf("callback led with value: %i\n", att_val[0]);
+	}
+
+//EXIT:
+  if(connection_handle != 0){}
+    aci_gatt_write_response(connection_handle, attr_handle, 0x00, 0, att_val_len, att_val);
+}
+
 /**
  * @brief  Read request callback.
  * @param  uint16_t Handle of the attribute
@@ -546,6 +560,7 @@ void Read_Request_CB(uint16_t handle)
 {  
   if(handle == accCharHandle + 1){
     Acc_Update((AxesRaw_t*)&axes_data);
+		printf("callback");
   }  
   
   //EXIT:
@@ -562,12 +577,16 @@ void Read_Request_CB(uint16_t handle)
  */
 void HCI_Event_CB(void *pckt)
 {
+	
+	printf("main cb\n");
+	
   hci_uart_pckt *hci_pckt = pckt;
   /* obtain event packet */
   hci_event_pckt *event_pckt = (hci_event_pckt*)hci_pckt->data;
   
   if(hci_pckt->type != HCI_EVENT_PKT)
     return;
+	
   
   switch(event_pckt->evt){
     
@@ -594,6 +613,9 @@ void HCI_Event_CB(void *pckt)
     
   case EVT_VENDOR:
     {
+			
+			printf("vendor cb\n");
+			
       evt_blue_aci *blue_evt = (void*)event_pckt->data;
       switch(blue_evt->ecode){
 
@@ -601,6 +623,14 @@ void HCI_Event_CB(void *pckt)
         {
           evt_gatt_read_permit_req *pr = (void*)blue_evt->data;                    
           Read_Request_CB(pr->attr_handle);                    
+        }
+        break;
+      
+			case EVT_BLUE_GATT_WRITE_PERMIT_REQ:
+        {
+					printf("write request\n");
+          evt_gatt_write_permit_req *pr = (void*)blue_evt->data;                    
+          Write_Request_CB(pr->attr_handle, pr->data_length, pr->data);                    
         }
         break;
       }

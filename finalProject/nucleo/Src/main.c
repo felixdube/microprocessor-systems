@@ -278,12 +278,13 @@ int main(void)
   
 	InitCommunication();
 	
+	
   while(1)
   {
     HCI_Process();
     User_Process(&axes_data);
 		//communicate();
-		On_Read();
+		//On_Read();
   }
 }
 
