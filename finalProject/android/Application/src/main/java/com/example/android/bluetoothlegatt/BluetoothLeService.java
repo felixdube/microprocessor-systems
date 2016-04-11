@@ -127,6 +127,7 @@ public class BluetoothLeService extends Service {
             for (byte val : value) {
                 System.out.println(val);
             }
+
         }
 
         @Override
@@ -173,15 +174,7 @@ public class BluetoothLeService extends Service {
                 Log.e(TAG, "char not found!");
 
             }
-
-            if(led_on_value[0] == 1){
-                led_on_value[0] = 0;
-                charac.setValue(led_on_value);
-            } else {
-                led_on_value[0] = 1;
-                charac.setValue(led_on_value);
-            }
-
+            
 
         } else {
             // For all other profiles, writes the data formatted in HEX.

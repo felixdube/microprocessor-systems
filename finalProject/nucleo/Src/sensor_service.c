@@ -578,7 +578,6 @@ void Read_Request_CB(uint16_t handle)
 void HCI_Event_CB(void *pckt)
 {
 	
-	printf("main cb\n");
 	
   hci_uart_pckt *hci_pckt = pckt;
   /* obtain event packet */
@@ -614,7 +613,6 @@ void HCI_Event_CB(void *pckt)
   case EVT_VENDOR:
     {
 			
-			printf("vendor cb\n");
 			
       evt_blue_aci *blue_evt = (void*)event_pckt->data;
       switch(blue_evt->ecode){
@@ -628,7 +626,6 @@ void HCI_Event_CB(void *pckt)
       
 			case EVT_BLUE_GATT_WRITE_PERMIT_REQ:
         {
-					printf("write request\n");
           evt_gatt_write_permit_req *pr = (void*)blue_evt->data;                    
           Write_Request_CB(pr->attr_handle, pr->data_length, pr->data);                    
         }
