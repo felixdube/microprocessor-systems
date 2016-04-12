@@ -45,6 +45,27 @@
         </activity>
         <activity android:name=".DeviceControlActivity"/>
         <service android:name=".BluetoothLeService" android:enabled="true"/>
+
+        <activity
+            android:name=".accelerometer"
+            android:label="Accelerometer"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        </activity>
+
+        <activity
+            android:name=".temperature"
+            android:label="Temperature"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        </activity>
+
+        <activity
+            android:name=".led"
+            android:label="LED Control"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        </activity>
+
+
+
     </application>
 
 </manifest>
