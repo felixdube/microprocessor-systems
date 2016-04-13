@@ -13,13 +13,15 @@ public class temperature extends AppCompatActivity {
 
     int[] timeTemp = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19};
     int[] pointsTemp = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-    GraphView graph_temp = (GraphView) findViewById(R.id.graph_temp);
+    GraphView graph_temp;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.temperature);
+
+        graph_temp = (GraphView) findViewById(R.id.graph_temp);
 
         graph_temp.removeAllSeries();
         graph_temp.setTitle("Temperature Over Time");

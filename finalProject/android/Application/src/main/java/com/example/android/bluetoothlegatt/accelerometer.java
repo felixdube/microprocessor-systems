@@ -20,16 +20,19 @@ public class accelerometer extends AppCompatActivity {
 
     int[] timePitch = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19};
     int[] pointsPitch = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-    GraphView graph_pitch = (GraphView) findViewById(R.id.graph_pitch);
+    GraphView graph_pitch;
 
     int[] timeRoll = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19};
     int[] pointsRoll = {0,0,0,0,0,0,0,0,0,0};
-    GraphView graph_roll = (GraphView) findViewById(R.id.graph_roll);
+    GraphView graph_roll;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.accelerometer);
+
+        graph_pitch = (GraphView) findViewById(R.id.graph_pitch);
+        graph_roll = (GraphView) findViewById(R.id.graph_roll);
 
         graph_roll.removeAllSeries();
         graph_roll.setTitle("Roll Angle Over Time");
