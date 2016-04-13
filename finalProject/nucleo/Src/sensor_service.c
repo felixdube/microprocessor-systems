@@ -354,29 +354,8 @@ fail:
 }
 
 
-/** TODO TODO TODO TODO 
- * @brief  Update acceleration characteristic value.
- *
- * @param  Structure containing acceleration value in mg
- * @retval Status
- */
-//tBleStatus Acc_Update(AxesRaw_t *data)
-//{  
-//  tBleStatus ret;    
-//  uint8_t buff[6];
-//    
-//  STORE_LE_16(buff,data->AXIS_X);
-//  STORE_LE_16(buff+2,data->AXIS_Y);
-//  STORE_LE_16(buff+4,data->AXIS_Z);
-//	
-//  ret = aci_gatt_update_char_value(acc2ServHandle, accCharHandle, 0, 6, buff);
-//	
-//  if (ret != BLE_STATUS_SUCCESS){
-//    PRINTF("Error while updating ACC characteristic.\n") ;
-//    return BLE_STATUS_ERROR ;
-//  }
-//  return BLE_STATUS_SUCCESS;	
-//}
+// TODO implement taptap() that send a 1 went a taptap occurs
+ 
 
 
 /******************************************************************************************************/
@@ -427,48 +406,6 @@ fail:
 }
 
 
-/** 
- * @brief  Read direction characteristic value.
- *
- * 
- * @retval Status
- */
-//tBleStatus Dir_Read()
-//{  
-//  tBleStatus ret;    
-//  uint8_t buff[2];
-//	
-//  ret = aci_gatt_read_handle_value(ledDirCharHandle, 2, 2, buff);
-//	printf("%i %i", buff[0], buff[1]);
-//	
-//  if (ret != BLE_STATUS_SUCCESS){
-//    PRINTF("Error while reading direction characteristic.\n") ;
-//    return BLE_STATUS_ERROR ;
-//  }
-//  return BLE_STATUS_SUCCESS;	
-//}
-
-/** 
- * @brief  Read direction characteristic value.
- *
- * 
- * @retval Status
- */
-tBleStatus On_Read()
-{  
-  tBleStatus ret;    
-  uint8_t buff[10];
-	uint16_t *buff_length;
-	
-  int i;
-	for(i = 0; i< 5; i++) {
-		buff[i] = *(&ledOnCharHandle+i);
-	}
-	printf("-- %i %i %i %i %i %i %i %i %i %i %i\n", buff[0], buff[1], buff[2], buff[3] , buff[4],buff[5], buff[6], buff[7], buff[8] , buff[9],  buff_length);
-	
-
-  return BLE_STATUS_SUCCESS;	
-}
 
 /**
  * @brief  Puts the device in connectable mode.
@@ -539,12 +476,22 @@ void GAP_DisconnectionComplete_CB(void)
   notification_enabled = FALSE;
 }
 
-
+/**
+ * @brief  Write request callback.
+ * @param  uint16_t Handle of the attribute
+ * @param  uint8_t Length of the value
+ * @param  uint8_t Value
+ * @retval None
+ */
 void Write_Request_CB(uint16_t attr_handle, uint8_t att_val_len, uint8_t *att_val){
 	
 	if(attr_handle == ledOnCharHandle+1) {
+    //TODO do something with the incoming data
 		printf("callback led with value: %i\n", att_val[0]);
 	}
+  if(attr_handle == ledDirCharHandle+1) {
+    //TODO
+  }
 
 //EXIT:
   if(connection_handle != 0){}
@@ -560,8 +507,24 @@ void Read_Request_CB(uint16_t handle)
 {  
   if(handle == accCharHandle + 1){
     Acc_Update((AxesRaw_t*)&axes_data);
-		printf("callback");
+		printf("callback acc");
   }  
+    if(handle == accRollCharHandle + 1){
+    //Roll_Update(/*TODO*/);
+    printf("callback roll");
+  }  
+    if(handle == accPitchCharHandle + 1){
+    //Pitch_Update(/*TODO*/);
+    printf("callback pitch");
+  }  
+    if(handle == tempCharHandle + 1){
+    //Temp_Update(/*TODO*/;
+    printf("callback temp");
+  }  
+  if(handle == tapCharHandle + 1){
+    //taptap(/*TODO*/);
+    printf("callback taptap");
+  } 
   
   //EXIT:
   if(connection_handle != 0)
