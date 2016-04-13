@@ -22,7 +22,9 @@ extern osThreadId tid_Thread_SPI;
 extern volatile float temperature;
 extern volatile float pitchAngle;
 extern volatile float rollAngle;
-extern volatile int doubleTap;
+extern volatile int doubleTapZ;
+extern volatile int doubleTapY;
+extern volatile int doubleTapX;
 
 /* variables needing to be received */
 extern volatile int LED_pattern;
