@@ -46,6 +46,17 @@ import java.util.List;
  * communicates with {@code BluetoothLeService}, which in turn interacts with the
  * Bluetooth LE API.
  */
+
+
+//TODO create an object ScheduledExecutorService
+    //TODO create a function that call mBluetoothLeService.readCharacteristic(characteristic) on all the characteristic that are read
+    // using    for (BluetoothGattService gattService : gattServices) {
+        //TODO update value depending on the characteristic in  broadcastUpdate()
+            //TODO create function that updates each specific graph
+
+//TODO create a listener on the slider to calls mBluetoothLeService.writeCharacteristic(characteristic, data);
+
+
 public class DeviceControlActivity extends Activity implements View.OnClickListener {
     private final static String TAG = DeviceControlActivity.class.getSimpleName();
 
