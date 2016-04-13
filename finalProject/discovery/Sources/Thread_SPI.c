@@ -23,7 +23,9 @@ osThreadDef(Thread_SPI, osPriorityHigh, 1, 0);
 volatile float temperature = 12.3;
 volatile float pitchAngle = 34.3;
 volatile float rollAngle = 89.88;
-volatile int doubleTap = 0;
+volatile int doubleTapZ = 0;
+volatile int doubleTapY = 0;
+volatile int doubleTapX = 0;
 
 /* variables needing to be received */
 volatile int LED_pattern = 0;
@@ -54,10 +56,12 @@ void Thread_SPI (void const *argument) {
     transmitFloat(temperature);
     transmitFloat(pitchAngle);
     transmitFloat(rollAngle);
-    Exchange_Byte((uint8_t) doubleTap);
+    Exchange_Byte((uint8_t) doubleTapZ);
     //set doubleTap back to 0 after transmission
 		//might need a mutex here
-		doubleTap = 0;
+		doubleTapZ = 0;
+    doubleTapY = 0;
+    doubleTapX = 0;
 		
     osDelay(2 * BYTE_DELAY);
     

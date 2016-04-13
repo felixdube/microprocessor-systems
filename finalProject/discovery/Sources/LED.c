@@ -218,7 +218,7 @@ void Change_PWM(int brightness, int LED_number){
 		case 4:
 			//LED 4
 			HAL_TIM_PWM_ConfigChannel(&TIM_HandleDef,&TIM_OC_InitDef,TIM_CHANNEL_4);
-			HAL_TIM_PWM_Start(&TIM_HandleDef,TIM_CHANNEL_4);
+      HAL_TIM_PWM_Start(&TIM_HandleDef,TIM_CHANNEL_4);
 		break;
 	}
 }

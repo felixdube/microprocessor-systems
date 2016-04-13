@@ -33,8 +33,8 @@ int main (void) {
   HAL_Init();                               /* Initialize the HAL Library */
   SystemClock_Config();                     /* Configure the System Clock */
   //start_Thread_SPI();
-  //start_Thread_Temperature();               /* Create a thread for sampling CPU temperature */
-  //start_Thread_Acc();                       /* Create a thread for sampling accelerometer data */
+  start_Thread_Temperature();               /* Create a thread for sampling CPU temperature */
+  start_Thread_Acc();                       /* Create a thread for sampling accelerometer data */
 	start_Thread_LED();
   osKernelStart();                          /* start thread execution */
 	
