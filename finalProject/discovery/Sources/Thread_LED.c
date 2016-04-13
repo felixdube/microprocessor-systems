@@ -29,7 +29,8 @@ int start_Thread_LED (void) {
 	LED_PWM_Config();
 	//set the default LED pattern
 	LED_pattern = 2;
-	LED_speed = 8;
+	LED_speed = -8;
+  LED_brightness = 100;
 	
   tid_Thread_LED = osThreadCreate(osThread(Thread_LED ), NULL); // Start LED_Thread
   if (!tid_Thread_LED) return(-1);
