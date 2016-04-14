@@ -313,6 +313,7 @@ tBleStatus Temp_Update(i32_t temp)
   return BLE_STATUS_SUCCESS;	
 }
 
+//TODO implement function that notify led characteristic for over temperature
 
 /******************************************************************************************************/
 /****************************************** DOUBLE TAP ************************************************/
@@ -354,7 +355,7 @@ fail:
 }
 
 
-// TODO implement taptap() that send a 1 went a taptap occurs
+// TODO implement taptap() that notify the characteristic
  
 
 
@@ -498,6 +499,8 @@ void Write_Request_CB(uint16_t attr_handle, uint8_t att_val_len, uint8_t *att_va
     aci_gatt_write_response(connection_handle, attr_handle, 0x00, 0, att_val_len, att_val);
 }
 
+//TODO Implement Notify_Request_CB()
+
 /**
  * @brief  Read request callback.
  * @param  uint16_t Handle of the attribute
@@ -521,10 +524,7 @@ void Read_Request_CB(uint16_t handle)
     //Temp_Update(/*TODO*/;
     printf("callback temp");
   }  
-  if(handle == tapCharHandle + 1){
-    //taptap(/*TODO*/);
-    printf("callback taptap");
-  } 
+
   
   //EXIT:
   if(connection_handle != 0)
