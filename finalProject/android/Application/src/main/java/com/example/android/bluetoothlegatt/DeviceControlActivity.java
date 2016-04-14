@@ -17,6 +17,7 @@
 package com.example.android.bluetoothlegatt;
 
 import android.app.Activity;
+import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
 import android.content.BroadcastReceiver;
@@ -36,9 +37,17 @@ import android.widget.ExpandableListView;
 import android.widget.SimpleExpandableListAdapter;
 import android.widget.TextView;
 
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 /**
  * For a given BLE device, this Activity provides the user interface to connect, display data,
@@ -76,6 +85,31 @@ public class DeviceControlActivity extends Activity implements View.OnClickListe
 
     private final String LIST_NAME = "NAME";
     private final String LIST_UUID = "UUID";
+
+    static int[] timeTemp = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
+    static int[] pointsTemp = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+    GraphView graph_temp;
+    public static LineGraphSeries<DataPoint> series_temp;
+
+    static int[] timePitch = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
+    static int[] pointsPitch = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+    GraphView graph_pitch;
+    public static LineGraphSeries<DataPoint> series_pitch;
+
+    static int[] timeRoll = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
+    static int[] pointsRoll = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+    GraphView graph_roll;
+    public static LineGraphSeries<DataPoint> series_roll;
+
+
+    boolean up1 = true;
+    boolean up2 = true;
+    boolean up3 = true;
+    public int dummy1;
+    public int dummy2;
+    public int dummy3;
+    int selector = 1;
+    int update = 0;
 
     // Code to manage Service lifecycle.
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
@@ -170,17 +204,10 @@ public class DeviceControlActivity extends Activity implements View.OnClickListe
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.gatt_connected);
 
-        Button button_acc = (Button) findViewById(R.id.button_acc);
-        button_acc.setOnClickListener(this);
-
-        Button button_temp = (Button) findViewById(R.id.button_temp);
-        button_temp.setOnClickListener(this);
-
-        Button button_led = (Button) findViewById(R.id.button_led);
-        button_led.setOnClickListener(this);
 
         final Intent intent = getIntent();
         mDeviceName = intent.getStringExtra(EXTRAS_DEVICE_NAME);
@@ -197,6 +224,58 @@ public class DeviceControlActivity extends Activity implements View.OnClickListe
         getActionBar().setDisplayHomeAsUpEnabled(true);
         Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
         bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
+
+
+
+        graph_temp = (GraphView) findViewById(R.id.graph_temp);
+
+        graph_temp.removeAllSeries();
+        graph_temp.setTitle("Temperature Over Time");
+        graph_temp.getViewport().setYAxisBoundsManual(true);
+        graph_temp.getViewport().setMinY(0);
+        graph_temp.getViewport().setMaxY(180);
+
+
+        graph_roll = (GraphView) findViewById(R.id.graph_roll);
+        graph_roll.removeAllSeries();
+        graph_roll.setTitle("Roll Angle Over Time");
+        graph_roll.getViewport().setYAxisBoundsManual(true);
+        graph_roll.getViewport().setMinY(0);
+        graph_roll.getViewport().setMaxY(180);
+
+
+        graph_pitch = (GraphView) findViewById(R.id.graph_pitch);
+        graph_pitch.removeAllSeries();
+        graph_pitch.setTitle("Pitch Angle Over Time");
+        graph_pitch.getViewport().setYAxisBoundsManual(true);
+        graph_pitch.getViewport().setMinY(0);
+        graph_pitch.getViewport().setMaxY(180);
+
+        ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(15);
+
+        Runnable ReadTask = new ReadRollCharacteristicTask();
+
+
+        scheduledExecutorService.scheduleAtFixedRate(ReadTask,
+                5000,
+                20,
+                TimeUnit.MILLISECONDS);
+
+        Runnable ReadPitchTask = new ReadPitchCharacteristicTask();
+
+
+        scheduledExecutorService.scheduleAtFixedRate(ReadPitchTask,
+                5005,
+                20,
+                TimeUnit.MILLISECONDS);
+
+        Runnable ReadTempTask = new ReadTempCharacteristicTask();
+
+
+        scheduledExecutorService.scheduleAtFixedRate(ReadTempTask,
+                5010,
+                20,
+                TimeUnit.MILLISECONDS);
     }
 
     @Override
@@ -239,26 +318,7 @@ public class DeviceControlActivity extends Activity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.button_acc: {
-                Intent intentMain = new Intent(DeviceControlActivity.this,
-                        accelerometer.class);
-                DeviceControlActivity.this.startActivity(intentMain);
-                break;
-            }
 
-            case R.id.button_temp: {
-                Intent intentMain = new Intent(DeviceControlActivity.this,
-                        temperature.class);
-                DeviceControlActivity.this.startActivity(intentMain);
-                break;
-            }
-
-            case R.id.button_led: {
-                Intent intentMain = new Intent(DeviceControlActivity.this,
-                        led.class);
-                DeviceControlActivity.this.startActivity(intentMain);
-                break;
-            }
         }
     }
 
@@ -358,4 +418,208 @@ public class DeviceControlActivity extends Activity implements View.OnClickListe
         intentFilter.addAction(BluetoothLeService.ACTION_DATA_AVAILABLE);
         return intentFilter;
     }
+
+
+    private final class ReadRollCharacteristicTask implements Runnable {
+        @Override public void run() {
+
+            List<BluetoothGattService> gattServices = mBluetoothLeService.getSupportedGattServices();
+
+            for (BluetoothGattService gattService : gattServices) {
+                if(BluetoothLeService.UUID_ACC_SERV.equals(gattService.getUuid())) {
+                    for (final BluetoothGattCharacteristic gattCharacteristic : gattService.getCharacteristics()) {
+                        if (BluetoothLeService.UUID_ROLL_VALUE.equals(gattCharacteristic.getUuid())) {
+                            mBluetoothLeService.readCharacteristic(gattCharacteristic);
+                        }
+                    }
+                }
+            }
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (series_roll != null) {
+                        graph_roll.removeAllSeries();
+                        graph_roll.addSeries(series_roll);
+                    }
+                }
+            });
+        }
+    }
+
+    private final class ReadPitchCharacteristicTask implements Runnable {
+        @Override public void run() {
+
+            List<BluetoothGattService> gattServices = mBluetoothLeService.getSupportedGattServices();
+
+            for (BluetoothGattService gattService : gattServices) {
+                if(BluetoothLeService.UUID_ACC_SERV.equals(gattService.getUuid())) {
+                    for (final BluetoothGattCharacteristic gattCharacteristic : gattService.getCharacteristics()) {
+                        if (BluetoothLeService.UUID_PITCH_VALUE.equals(gattCharacteristic.getUuid())) {
+                            mBluetoothLeService.readCharacteristic(gattCharacteristic);
+                        }
+                    }
+                }
+            }
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (series_pitch != null) {
+                        graph_pitch.removeAllSeries();
+                        graph_pitch.addSeries(series_pitch);
+                    }
+                }
+            });
+        }
+    }
+
+    private final class ReadTempCharacteristicTask implements Runnable {
+        @Override public void run() {
+
+            List<BluetoothGattService> gattServices = mBluetoothLeService.getSupportedGattServices();
+
+            for (BluetoothGattService gattService : gattServices) {
+                if(BluetoothLeService.UUID_TEMP_SERV.equals(gattService.getUuid())) {
+                    for (final BluetoothGattCharacteristic gattCharacteristic : gattService.getCharacteristics()) {
+                        if (BluetoothLeService.UUID_TEMP_VALUE.equals(gattCharacteristic.getUuid())) {
+                            mBluetoothLeService.readCharacteristic(gattCharacteristic);
+                        }
+                    }
+                }
+            }
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (series_temp != null) {
+                        graph_temp.removeAllSeries();
+                        graph_temp.addSeries(series_temp);
+                    }
+                }
+            });
+        }
+    }
+
+
+
+    public static void updatePointsRoll(int newPoint) {
+
+
+        //shift the data
+        int i;
+        for(i = 0; i< 19; i++) {
+            pointsRoll[i] = pointsRoll[i+1];
+        }
+        pointsRoll[19] = newPoint;
+
+        //increment the time
+        for(i = 0; i< 20; i++){
+            timeRoll[i] += 1;
+        }
+
+        series_roll = new LineGraphSeries<DataPoint>(new DataPoint[] {
+                new DataPoint(timeRoll[0], pointsRoll[0]),
+                new DataPoint(timeRoll[1], pointsRoll[1]),
+                new DataPoint(timeRoll[2], pointsRoll[2]),
+                new DataPoint(timeRoll[3], pointsRoll[3]),
+                new DataPoint(timeRoll[4], pointsRoll[4]),
+                new DataPoint(timeRoll[5], pointsRoll[5]),
+                new DataPoint(timeRoll[6], pointsRoll[6]),
+                new DataPoint(timeRoll[7], pointsRoll[7]),
+                new DataPoint(timeRoll[8], pointsRoll[8]),
+                new DataPoint(timeRoll[9], pointsRoll[9]),
+                new DataPoint(timeRoll[10], pointsRoll[10]),
+                new DataPoint(timeRoll[11], pointsRoll[11]),
+                new DataPoint(timeRoll[12], pointsRoll[12]),
+                new DataPoint(timeRoll[13], pointsRoll[13]),
+                new DataPoint(timeRoll[14], pointsRoll[14]),
+                new DataPoint(timeRoll[15], pointsRoll[15]),
+                new DataPoint(timeRoll[16], pointsRoll[16]),
+                new DataPoint(timeRoll[17], pointsRoll[17]),
+                new DataPoint(timeRoll[18], pointsRoll[18]),
+                new DataPoint(timeRoll[19], pointsRoll[19])
+        });
+    }
+
+    public static void updatePointsPitch(int newPoint) {
+
+
+        //shift the data
+        int i;
+        for(i = 0; i< 19; i++) {
+            pointsPitch[i] = pointsPitch[i+1];
+        }
+        pointsPitch[19] = newPoint;
+
+        //increment the time
+        for(i = 0; i< 20; i++){
+            timePitch[i] += 1;
+        }
+
+        series_pitch = new LineGraphSeries<DataPoint>(new DataPoint[] {
+                new DataPoint(timePitch[0], pointsPitch[0]),
+                new DataPoint(timePitch[1], pointsPitch[1]),
+                new DataPoint(timePitch[2], pointsPitch[2]),
+                new DataPoint(timePitch[3], pointsPitch[3]),
+                new DataPoint(timePitch[4], pointsPitch[4]),
+                new DataPoint(timePitch[5], pointsPitch[5]),
+                new DataPoint(timePitch[6], pointsPitch[6]),
+                new DataPoint(timePitch[7], pointsPitch[7]),
+                new DataPoint(timePitch[8], pointsPitch[8]),
+                new DataPoint(timePitch[9], pointsPitch[9]),
+                new DataPoint(timePitch[10], pointsPitch[10]),
+                new DataPoint(timePitch[11], pointsPitch[11]),
+                new DataPoint(timePitch[12], pointsPitch[12]),
+                new DataPoint(timePitch[13], pointsPitch[13]),
+                new DataPoint(timePitch[14], pointsPitch[14]),
+                new DataPoint(timePitch[15], pointsPitch[15]),
+                new DataPoint(timePitch[16], pointsPitch[16]),
+                new DataPoint(timePitch[17], pointsPitch[17]),
+                new DataPoint(timePitch[18], pointsPitch[18]),
+                new DataPoint(timePitch[19], pointsPitch[19])
+        });
+
+    }
+
+    public static void updatePointsTemp(int newPoint) {
+        //System.out.println("Updating temp");
+        //shift the data
+        int i;
+        for(i = 0; i< 19; i++) {
+            pointsTemp[i] = pointsTemp[i+1];
+        }
+        pointsTemp[19] = newPoint;
+
+        //increment the time
+        for(i = 0; i< 20; i++){
+            timeTemp[i] += 1;
+        }
+
+        series_temp = new LineGraphSeries<DataPoint>(new DataPoint[] {
+                new DataPoint(timeTemp[0], pointsTemp[0]),
+                new DataPoint(timeTemp[1], pointsTemp[1]),
+                new DataPoint(timeTemp[2], pointsTemp[2]),
+                new DataPoint(timeTemp[3], pointsTemp[3]),
+                new DataPoint(timeTemp[4], pointsTemp[4]),
+                new DataPoint(timeTemp[5], pointsTemp[5]),
+                new DataPoint(timeTemp[6], pointsTemp[6]),
+                new DataPoint(timeTemp[7], pointsTemp[7]),
+                new DataPoint(timeTemp[8], pointsTemp[8]),
+                new DataPoint(timeTemp[9], pointsTemp[9]),
+                new DataPoint(timeTemp[10], pointsTemp[10]),
+                new DataPoint(timeTemp[11], pointsTemp[11]),
+                new DataPoint(timeTemp[12], pointsTemp[12]),
+                new DataPoint(timeTemp[13], pointsTemp[13]),
+                new DataPoint(timeTemp[14], pointsTemp[14]),
+                new DataPoint(timeTemp[15], pointsTemp[15]),
+                new DataPoint(timeTemp[16], pointsTemp[16]),
+                new DataPoint(timeTemp[17], pointsTemp[17]),
+                new DataPoint(timeTemp[18], pointsTemp[18]),
+                new DataPoint(timeTemp[19], pointsTemp[19])
+        });
+    }
+
+
+
 }

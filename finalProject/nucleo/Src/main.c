@@ -79,6 +79,10 @@
  * @{
  */
 /* Private variables ---------------------------------------------------------*/
+int up = 1;
+int dummy = 0;
+
+
 extern volatile uint8_t set_connectable;
 extern volatile int connected;
 extern AxesRaw_t axes_data;
@@ -303,9 +307,9 @@ void User_Process(AxesRaw_t* p_axes)
   }  
 
   /* Check if the user has pushed the button */
-  if(BSP_PB_GetState(BUTTON_KEY) == RESET)
-  {
-    while (BSP_PB_GetState(BUTTON_KEY) == RESET);
+//  if(BSP_PB_GetState(BUTTON_KEY) == RESET)
+//  {
+//    while (BSP_PB_GetState(BUTTON_KEY) == RESET);
     
     //BSP_LED_Toggle(LED2); //used for debugging (BSP_LED_Init() above must be also enabled)
     
@@ -318,18 +322,30 @@ void User_Process(AxesRaw_t* p_axes)
       PRINTF("ACC: X=%6d Y=%6d Z=%6d\r\n", p_axes->AXIS_X, p_axes->AXIS_Y, p_axes->AXIS_Z);
       Acc_Update(p_axes);
 			
-			i32_t roll = 1;
+			if(up){
+			if(dummy>20){
+				up = 0;
+			}
+			dummy++;
+		}else{
+			if(dummy<0){
+				up = 1;
+			}
+			dummy--;
+		}
+			
+			uint8_t roll = dummy;
 			Roll_Update(roll);
 			
-			i32_t pitch = 2;
+			uint8_t pitch = dummy +2;
 			Pitch_Update(pitch);
 			
-			i32_t temp = 3;
+			uint8_t temp = dummy +4;
 			Temp_Update(temp);
 			
 			
     }
-  }
+ // }
 }
 
 /**

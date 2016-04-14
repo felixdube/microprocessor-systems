@@ -32,6 +32,10 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
 
+
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
+
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -75,6 +79,10 @@ public class BluetoothLeService extends Service {
             UUID.fromString(SampleGattAttributes.TEMP_VALUE);
     public final static UUID UUID_ON_VALUE =
             UUID.fromString(SampleGattAttributes.ON_VALUE);
+    public final static UUID UUID_ACC_SERV =
+            UUID.fromString(SampleGattAttributes.ACC_SERV);
+    public final static UUID UUID_TEMP_SERV =
+            UUID.fromString(SampleGattAttributes.TEMP_SERV);
 
     byte[] led_on_value = new byte[1];
 
@@ -146,6 +154,8 @@ public class BluetoothLeService extends Service {
                                  final BluetoothGattCharacteristic characteristic) {
         final Intent intent = new Intent(action);
 
+        //System.out.println(characteristic.getUuid().toString());
+
         if(UUID_ACC_VALUE.equals(characteristic.getUuid())){
 
             final int xIntValue = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT8, 0);
@@ -176,7 +186,60 @@ public class BluetoothLeService extends Service {
             }
             
 
-        } else {
+        } else if(UUID_ROLL_VALUE.equals(characteristic.getUuid())) {
+            //check mBluetoothGatt is available
+            if (mBluetoothGatt == null) {
+                Log.e(TAG, "lost connection");
+            }
+
+            byte[] value = characteristic.getValue();
+//            for (byte val : value) {
+//                System.out.println(val);
+//            }
+
+            int val = value[0];
+
+            DeviceControlActivity.updatePointsRoll(val);
+
+
+
+
+        }
+        else if(UUID_PITCH_VALUE.equals(characteristic.getUuid())) {
+            //check mBluetoothGatt is available
+            if (mBluetoothGatt == null) {
+                Log.e(TAG, "lost connection");
+            }
+
+            byte[] value = characteristic.getValue();
+//            for (byte val : value) {
+//                System.out.println(val);
+//            }
+
+            int val = value[0];
+
+            DeviceControlActivity.updatePointsPitch(val);
+
+
+        }
+        else if(UUID_TEMP_VALUE.equals(characteristic.getUuid())) {
+            //check mBluetoothGatt is available
+            if (mBluetoothGatt == null) {
+                Log.e(TAG, "lost connection");
+            }
+            byte[] value = characteristic.getValue();
+//            for (byte val : value) {
+//                System.out.println(val);
+//            }
+
+            int val = value[0];
+
+            DeviceControlActivity.updatePointsTemp(val);
+
+
+        }
+
+        else {
             // For all other profiles, writes the data formatted in HEX.
             final byte[] data = characteristic.getValue();
             if (data != null && data.length > 0) {
@@ -363,4 +426,7 @@ public class BluetoothLeService extends Service {
 
         return mBluetoothGatt.getServices();
     }
+
+
+
 }

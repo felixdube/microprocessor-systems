@@ -30,6 +30,8 @@ public class SampleGattAttributes {
     public static String TAP_VALUE =    "00000000-0000-0000-0000-000000000009";
     public static String DIR_VALUE =    "00000000-0000-0000-0000-000000000011";
     public static String ON_VALUE =     "00000000-0000-0000-0000-000000000012";
+    public static String ACC_SERV =     "00000000-0000-0000-0000-000000000003";
+    public static String TEMP_SERV =    "00000000-0000-0000-0000-000000000006";
 
     static {
 

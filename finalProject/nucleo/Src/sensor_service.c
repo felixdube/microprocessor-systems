@@ -212,14 +212,14 @@ fail:
  * @param  roll angle in degrees
  * @retval Status
  */
-tBleStatus Roll_Update(i32_t roll)
+tBleStatus Roll_Update(uint8_t roll)
 {  
   tBleStatus ret;    
-  uint8_t buff[2];
+  //uint8_t buff[2];
     
-  STORE_LE_16(buff,roll);
+  //STORE_LE_16(buff,roll);
 	
-  ret = aci_gatt_update_char_value(accServHandle, accRollCharHandle, 0, 2, buff);
+  ret = aci_gatt_update_char_value(accServHandle, accRollCharHandle, 0, 1, roll);
 	
   if (ret != BLE_STATUS_SUCCESS){
     PRINTF("Error while updating ACC characteristic.\n") ;
@@ -234,14 +234,14 @@ tBleStatus Roll_Update(i32_t roll)
  * @param  roll angle in degrees
  * @retval Status
  */
-tBleStatus Pitch_Update(i32_t pitch)
+tBleStatus Pitch_Update(uint8_t pitch)
 {  
   tBleStatus ret;    
-  uint8_t buff[2];
+  //uint8_t buff[2];
     
-  STORE_LE_16(buff, pitch);
+  //STORE_LE_16(buff, pitch);
 	
-  ret = aci_gatt_update_char_value(accServHandle, accPitchCharHandle, 0, 2, buff);
+  ret = aci_gatt_update_char_value(accServHandle, accPitchCharHandle, 0, 1, pitch);
 	
   if (ret != BLE_STATUS_SUCCESS){
     PRINTF("Error while updating ACC characteristic.\n") ;
@@ -297,14 +297,14 @@ fail:
  * @param  temperature
  * @retval Status
  */
-tBleStatus Temp_Update(i32_t temp)
+tBleStatus Temp_Update(uint8_t temp)
 {  
   tBleStatus ret;    
-  uint8_t buff[2];
+  //uint8_t buff[2];
     
-  STORE_LE_16(buff, temp);
+  //STORE_LE_16(buff, temp);
 	
-  ret = aci_gatt_update_char_value(tempServHandle, tempCharHandle, 0, 2, buff);
+  ret = aci_gatt_update_char_value(tempServHandle, tempCharHandle, 0, 1, temp);
 	
   if (ret != BLE_STATUS_SUCCESS){
     PRINTF("Error while updating TEMP characteristic.\n") ;
@@ -512,8 +512,8 @@ void Read_Request_CB(uint16_t handle)
     Acc_Update((AxesRaw_t*)&axes_data);
 		printf("callback acc");
   }  
-    if(handle == accRollCharHandle + 1){
-    //Roll_Update(/*TODO*/);
+    if(handle == accRollCharHandle + 1){	
+		//Roll_Update(dummy);
     printf("callback roll");
   }  
     if(handle == accPitchCharHandle + 1){
