@@ -118,12 +118,12 @@ tBleStatus Acc_Update(AxesRaw_t *data);
 
 // ACCELEROMETER
 tBleStatus Add_Acc_Service(void);
-tBleStatus Roll_Update(i32_t roll);
-tBleStatus Pitch_Update(i32_t pitch);
+tBleStatus Roll_Update(uint8_t roll);
+tBleStatus Pitch_Update(uint8_t pitch);
 
 // TEMPERATURE
 tBleStatus Add_Temp_Service(void);
-tBleStatus Temp_Update(i32_t temp);
+tBleStatus Temp_Update(uint8_t temp);
 
 // DOUBLE TAP
 tBleStatus Add_Tap_Service(void);
