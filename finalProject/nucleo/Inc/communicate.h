@@ -20,7 +20,6 @@ extern volatile int doubleTap;
 extern volatile int LED_pattern;
 extern volatile int LED_brightness;
 extern volatile int LED_speed;
-extern volatile int LED_PWM_duty_cycle;
 
 void InitCommunication(void);
 void communicate(void);

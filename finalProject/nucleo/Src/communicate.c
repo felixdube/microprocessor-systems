@@ -6,7 +6,8 @@
   * @brief   implement interboard communication
   ******************************************************************************
   */
-
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "SPI.h"
@@ -19,10 +20,9 @@ volatile float rollAngle = 0;
 volatile int doubleTap = 0;
 
 /* variables to transmit */
-volatile int LED_pattern = 4;
-volatile int LED_brightness = 5;
+volatile int LED_pattern = 0;
+volatile int LED_brightness = 100;
 volatile int LED_speed = 6;
-volatile int LED_PWM_duty_cycle = 7;
 
 void InitCommunication(void) {
 	SPI_Init_Slave();
@@ -41,9 +41,8 @@ void communicate(void) {
 	Exchange_Byte((uint8_t) LED_pattern);
 	Exchange_Byte((uint8_t) LED_brightness);
 	Exchange_Byte((uint8_t) LED_speed);
-	Exchange_Byte((uint8_t) LED_PWM_duty_cycle);
 	
-	//printf("t: %f, p: %f, r: %f, d: %d\n", temperature, pitchAngle, rollAngle, doubleTap);
+	printf("t: %f, p: %f, r: %f, d: %d\n", temperature, pitchAngle, rollAngle, doubleTap);
 }
 
 float receiveFloat(void) {

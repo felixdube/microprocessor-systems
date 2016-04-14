@@ -283,7 +283,7 @@ int main(void)
   {
     HCI_Process();
     User_Process(&axes_data);
-		//communicate();
+		communicate();
 		//On_Read();
   }
 }
