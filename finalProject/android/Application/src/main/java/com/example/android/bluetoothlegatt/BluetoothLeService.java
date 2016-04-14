@@ -37,6 +37,8 @@ import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.UUID;
@@ -83,6 +85,14 @@ public class BluetoothLeService extends Service {
             UUID.fromString(SampleGattAttributes.ACC_SERV);
     public final static UUID UUID_TEMP_SERV =
             UUID.fromString(SampleGattAttributes.TEMP_SERV);
+    public final static UUID UUID_LED_SERV =
+            UUID.fromString(SampleGattAttributes.LED_SERV);
+    public final static UUID UUID_BRI_VALUE =
+            UUID.fromString(SampleGattAttributes.BRI_VALUE);
+    public final static UUID UUID_DIR_VALUE =
+            UUID.fromString(SampleGattAttributes.DIR_VALUE);
+    public final static UUID UUID_TAP_VALUE =
+            UUID.fromString(SampleGattAttributes.TAP_VALUE);
 
     byte[] led_on_value = new byte[1];
 
@@ -197,7 +207,7 @@ public class BluetoothLeService extends Service {
 //                System.out.println(val);
 //            }
 
-            int val = value[0];
+            float val = ByteBuffer.wrap(value).order(ByteOrder.LITTLE_ENDIAN).getFloat();
 
             DeviceControlActivity.updatePointsRoll(val);
 
@@ -216,7 +226,7 @@ public class BluetoothLeService extends Service {
 //                System.out.println(val);
 //            }
 
-            int val = value[0];
+            float val = ByteBuffer.wrap(value).order(ByteOrder.LITTLE_ENDIAN).getFloat();
 
             DeviceControlActivity.updatePointsPitch(val);
 
@@ -232,7 +242,7 @@ public class BluetoothLeService extends Service {
 //                System.out.println(val);
 //            }
 
-            int val = value[0];
+            float val = ByteBuffer.wrap(value).order(ByteOrder.LITTLE_ENDIAN).getFloat();
 
             DeviceControlActivity.updatePointsTemp(val);
 
@@ -405,6 +415,7 @@ public class BluetoothLeService extends Service {
             return;
         }
         mBluetoothGatt.setCharacteristicNotification(characteristic, enabled);
+
 
         // This is specific to Heart Rate Measurement.
 //        if (UUID_HEART_RATE_MEASUREMENT.equals(characteristic.getUuid())) {

@@ -32,6 +32,8 @@ public class SampleGattAttributes {
     public static String ON_VALUE =     "00000000-0000-0000-0000-000000000012";
     public static String ACC_SERV =     "00000000-0000-0000-0000-000000000003";
     public static String TEMP_SERV =    "00000000-0000-0000-0000-000000000006";
+    public static String LED_SERV =     "00000000-0000-0000-0000-000000000010";
+    public static String BRI_VALUE =    "00000000-0000-0000-0000-000000000013";
 
     static {
 
@@ -56,6 +58,7 @@ public class SampleGattAttributes {
         attributes.put("00000000-0000-0000-0000-000000000010", "LED Services");
         attributes.put(DIR_VALUE, "Direction Values");
         attributes.put(ON_VALUE, "On or Off Values");
+        attributes.put(BRI_VALUE, "Brightness Values");
     }
 
     public static String lookup(String uuid, String defaultName) {
