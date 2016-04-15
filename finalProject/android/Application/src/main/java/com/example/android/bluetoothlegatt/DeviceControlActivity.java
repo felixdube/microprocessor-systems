@@ -34,6 +34,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ExpandableListView;
+import android.widget.SeekBar;
 import android.widget.SimpleExpandableListAdapter;
 import android.widget.TextView;
 
@@ -41,6 +42,7 @@ import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -86,18 +88,18 @@ public class DeviceControlActivity extends Activity implements View.OnClickListe
     private final String LIST_NAME = "NAME";
     private final String LIST_UUID = "UUID";
 
-    static int[] timeTemp = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
-    static int[] pointsTemp = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+    static float[] timeTemp = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
+    static float[] pointsTemp = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
     GraphView graph_temp;
     public static LineGraphSeries<DataPoint> series_temp;
 
-    static int[] timePitch = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
-    static int[] pointsPitch = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+    static float[] timePitch = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
+    static float[] pointsPitch = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
     GraphView graph_pitch;
     public static LineGraphSeries<DataPoint> series_pitch;
 
-    static int[] timeRoll = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
-    static int[] pointsRoll = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+    static float[] timeRoll = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
+    static float[] pointsRoll = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
     GraphView graph_roll;
     public static LineGraphSeries<DataPoint> series_roll;
 
@@ -110,6 +112,11 @@ public class DeviceControlActivity extends Activity implements View.OnClickListe
     public int dummy3;
     int selector = 1;
     int update = 0;
+    boolean on = false;
+
+    private SeekBar brightness;
+    private SeekBar speed;
+    private Button onOff;
 
     // Code to manage Service lifecycle.
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
@@ -225,6 +232,20 @@ public class DeviceControlActivity extends Activity implements View.OnClickListe
         Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
         bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
 
+        List<BluetoothGattService> gattServices = mBluetoothLeService.getSupportedGattServices();
+
+        for (BluetoothGattService gattService : gattServices) {
+            for (final BluetoothGattCharacteristic gattCharacteristic : gattService.getCharacteristics()) {
+                if (BluetoothLeService.UUID_TAP_VALUE.equals(gattCharacteristic.getUuid())) {
+
+                }
+                if (BluetoothLeService.UUID_DIR_VALUE.equals(gattCharacteristic.getUuid())) {
+
+                }
+            }
+
+        }
+
 
 
         graph_temp = (GraphView) findViewById(R.id.graph_temp);
@@ -232,8 +253,8 @@ public class DeviceControlActivity extends Activity implements View.OnClickListe
         graph_temp.removeAllSeries();
         graph_temp.setTitle("Temperature Over Time");
         graph_temp.getViewport().setYAxisBoundsManual(true);
-        graph_temp.getViewport().setMinY(0);
-        graph_temp.getViewport().setMaxY(180);
+        graph_temp.getViewport().setMinY(25);
+        graph_temp.getViewport().setMaxY(65);
 
 
         graph_roll = (GraphView) findViewById(R.id.graph_roll);
@@ -251,7 +272,51 @@ public class DeviceControlActivity extends Activity implements View.OnClickListe
         graph_pitch.getViewport().setMinY(0);
         graph_pitch.getViewport().setMaxY(180);
 
-        ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(15);
+        this.brightness = (SeekBar) findViewById(R.id.brightness_seekBar);
+        brightness.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+            int progress = 0;
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser) {
+                updateBrightness(progresValue);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+
+        });
+
+        this.speed = (SeekBar) findViewById(R.id.speed_seekBar);
+        speed.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+            int progress = 0;
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser) {
+                updateSpeed(progresValue);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                //updateBrightness(seekBar.getProgress());
+            }
+
+        });
+
+        ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(10);
 
         Runnable ReadTask = new ReadRollCharacteristicTask();
 
@@ -352,6 +417,8 @@ public class DeviceControlActivity extends Activity implements View.OnClickListe
             mDataField.setText(data);
         }
     }
+
+
 
     // Demonstrates how to iterate through the supported GATT Services/Characteristics.
     // In this sample, we populate the data structure that is bound to the ExpandableListView
@@ -503,8 +570,8 @@ public class DeviceControlActivity extends Activity implements View.OnClickListe
 
 
 
-    public static void updatePointsRoll(int newPoint) {
-
+    public static void updatePointsRoll(float newPoint) {
+        //System.out.println("ROLL:  "+newPoint);
 
         //shift the data
         int i;
@@ -542,8 +609,8 @@ public class DeviceControlActivity extends Activity implements View.OnClickListe
         });
     }
 
-    public static void updatePointsPitch(int newPoint) {
-
+    public static void updatePointsPitch(float newPoint) {
+        //System.out.println("PITCH:  "+newPoint);
 
         //shift the data
         int i;
@@ -582,9 +649,8 @@ public class DeviceControlActivity extends Activity implements View.OnClickListe
 
     }
 
-    public static void updatePointsTemp(int newPoint) {
-        //System.out.println("Updating temp");
-        //shift the data
+    public static void updatePointsTemp(float newPoint) {
+        //System.out.println("TEMP:  "+newPoint);
         int i;
         for(i = 0; i< 19; i++) {
             pointsTemp[i] = pointsTemp[i+1];
@@ -620,6 +686,71 @@ public class DeviceControlActivity extends Activity implements View.OnClickListe
         });
     }
 
+    public void onOff(View v){
 
+        this.onOff = (Button) findViewById(R.id.onOff_button);
+        byte[] data = {2};
+
+        if(on){
+            data[0] = 0;
+            on = false;
+            onOff.setText("OFF");
+        }
+        else{
+            data[0] = 1;
+            on = true;
+            onOff.setText("ON");
+        }
+
+        List<BluetoothGattService> gattServices = mBluetoothLeService.getSupportedGattServices();
+
+        for (BluetoothGattService gattService : gattServices) {
+            if(BluetoothLeService.UUID_LED_SERV.equals(gattService.getUuid())) {
+                for (final BluetoothGattCharacteristic gattCharacteristic : gattService.getCharacteristics()) {
+                    if (BluetoothLeService.UUID_ON_VALUE.equals(gattCharacteristic.getUuid())) {
+                        mBluetoothLeService.writeCharacteristic(gattCharacteristic, data);
+                    }
+                }
+            }
+        }
+    }
+
+    public void updateBrightness(int value) {
+
+        System.out.println("new brightness");
+
+        byte[] bytes = ByteBuffer.allocate(4).putInt(value).array();
+
+        List<BluetoothGattService> gattServices = mBluetoothLeService.getSupportedGattServices();
+
+        for (BluetoothGattService gattService : gattServices) {
+            if(BluetoothLeService.UUID_LED_SERV.equals(gattService.getUuid())) {
+                for (final BluetoothGattCharacteristic gattCharacteristic : gattService.getCharacteristics()) {
+                    if (BluetoothLeService.UUID_BRI_VALUE.equals(gattCharacteristic.getUuid())) {
+                        mBluetoothLeService.writeCharacteristic(gattCharacteristic, bytes);
+                    }
+                }
+            }
+        }
+    }
+
+    public void updateSpeed(int value) {
+
+        System.out.println("new speed");
+
+        byte[] bytes = ByteBuffer.allocate(4).putInt(value).array();
+
+        List<BluetoothGattService> gattServices = mBluetoothLeService.getSupportedGattServices();
+
+        for (BluetoothGattService gattService : gattServices) {
+            if(BluetoothLeService.UUID_LED_SERV.equals(gattService.getUuid())) {
+                for (final BluetoothGattCharacteristic gattCharacteristic : gattService.getCharacteristics()) {
+                    if (BluetoothLeService.UUID_DIR_VALUE.equals(gattCharacteristic.getUuid())) {
+                        mBluetoothLeService.writeCharacteristic(gattCharacteristic, bytes);
+                    }
+                }
+            }
+        }
+    }
 
 }
