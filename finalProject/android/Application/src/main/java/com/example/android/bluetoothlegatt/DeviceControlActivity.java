@@ -17,6 +17,7 @@
 package com.example.android.bluetoothlegatt;
 
 import android.app.Activity;
+import android.app.NotificationManager;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
@@ -28,6 +29,7 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -205,8 +207,8 @@ public class DeviceControlActivity extends Activity implements View.OnClickListe
     };
 
     private void clearUI() {
-        mGattServicesList.setAdapter((SimpleExpandableListAdapter) null);
-        mDataField.setText(R.string.no_data);
+        //mGattServicesList.setAdapter((SimpleExpandableListAdapter) null);
+        //mDataField.setText(R.string.no_data);
     }
 
     @Override
@@ -232,19 +234,19 @@ public class DeviceControlActivity extends Activity implements View.OnClickListe
         Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
         bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
 
-        List<BluetoothGattService> gattServices = mBluetoothLeService.getSupportedGattServices();
-
-        for (BluetoothGattService gattService : gattServices) {
-            for (final BluetoothGattCharacteristic gattCharacteristic : gattService.getCharacteristics()) {
-                if (BluetoothLeService.UUID_TAP_VALUE.equals(gattCharacteristic.getUuid())) {
-
-                }
-                if (BluetoothLeService.UUID_DIR_VALUE.equals(gattCharacteristic.getUuid())) {
-
-                }
-            }
-
-        }
+//        List<BluetoothGattService> gattServices = mBluetoothLeService.getSupportedGattServices();
+//
+//        for (BluetoothGattService gattService : gattServices) {
+//            for (final BluetoothGattCharacteristic gattCharacteristic : gattService.getCharacteristics()) {
+//                if (BluetoothLeService.UUID_TAP_VALUE.equals(gattCharacteristic.getUuid())) {
+//                        //TODO set notify
+//                }
+//                if (BluetoothLeService.UUID_DIR_VALUE.equals(gattCharacteristic.getUuid())) {
+//
+//                }
+//            }
+//
+//        }
 
 
 
@@ -751,6 +753,22 @@ public class DeviceControlActivity extends Activity implements View.OnClickListe
                 }
             }
         }
+    }
+
+    public void notifyTap(View V) {
+        android.support.v4.app.NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.tile)
+                        .setContentTitle("My notification")
+                        .setContentText("Hello World!");
+
+        // Sets an ID for the notification
+        int mNotificationId = 001;
+        // Gets an instance of the NotificationManager service
+        NotificationManager mNotifyMgr =
+                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        // Builds the notification and issues it.
+        mNotifyMgr.notify(mNotificationId, mBuilder.build());
     }
 
 }

@@ -249,6 +249,16 @@ public class BluetoothLeService extends Service {
 
         }
 
+        else if(UUID_TAP_VALUE.equals(characteristic.getUuid())) {
+            //check mBluetoothGatt is available
+            if (mBluetoothGatt == null) {
+                Log.e(TAG, "lost connection");
+            }
+
+
+
+        }
+
         else {
             // For all other profiles, writes the data formatted in HEX.
             final byte[] data = characteristic.getValue();
@@ -261,6 +271,7 @@ public class BluetoothLeService extends Service {
         }
         sendBroadcast(intent);
     }
+
 
     public class LocalBinder extends Binder {
         BluetoothLeService getService() {
