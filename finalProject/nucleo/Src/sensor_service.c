@@ -37,6 +37,7 @@
 #include "sensor_service.h"
 #include <stdio.h>
 #include <inttypes.h>
+#include "communicate.h"
 
 /* Private variables ---------------------------------------------------------*/
 volatile int connected = FALSE;
@@ -44,6 +45,12 @@ volatile uint8_t set_connectable = 1;
 volatile uint16_t connection_handle = 0;
 volatile uint8_t notification_enabled = FALSE;
 volatile AxesRaw_t axes_data = {0, 0, 0};
+
+uint8_t rollByte[4];
+uint8_t pitchByte[4];
+uint8_t tempByte[4];
+uint8_t *doubleTapByte;
+int doubleTapLock = 0; 
 
 uint16_t acc2ServHandle, accCharHandle;
 
@@ -57,7 +64,7 @@ uint16_t tempServHandle, tempCharHandle;
 uint16_t tapServHandle, tapCharHandle;
 
 /* LED */
-uint16_t ledServHandle, ledDirCharHandle, ledOnCharHandle;
+uint16_t ledServHandle, ledSpeedCharHandle, ledOnCharHandle, ledBrightnessCharHandle;
 
 
 
@@ -91,9 +98,9 @@ do {\
 
 	/* LED */
 	#define COPY_LED_SERVICE_UUID(uuid_struct)  	COPY_UUID_128(uuid_struct,0x00,0x00,0x00,0x00, 0x00,0x00, 0x00,0x00, 0x00,0x00, 0x00,0x00,0x00,0x00,0x00,0x10)
-	#define COPY_LED_DIR_UUID(uuid_struct)  			COPY_UUID_128(uuid_struct,0x00,0x00,0x00,0x00, 0x00,0x00, 0x00,0x00, 0x00,0x00, 0x00,0x00,0x00,0x00,0x00,0x11)
+	#define COPY_LED_SPEED_UUID(uuid_struct)  		COPY_UUID_128(uuid_struct,0x00,0x00,0x00,0x00, 0x00,0x00, 0x00,0x00, 0x00,0x00, 0x00,0x00,0x00,0x00,0x00,0x11)
   #define COPY_LED_ON_UUID(uuid_struct) 				COPY_UUID_128(uuid_struct,0x00,0x00,0x00,0x00, 0x00,0x00, 0x00,0x00, 0x00,0x00, 0x00,0x00,0x00,0x00,0x00,0x12)
-
+  #define COPY_LED_BRIGHTNESS_UUID(uuid_struct) COPY_UUID_128(uuid_struct,0x00,0x00,0x00,0x00, 0x00,0x00, 0x00,0x00, 0x00,0x00, 0x00,0x00,0x00,0x00,0x00,0x13)
 
 /* Store Value into a buffer in Little Endian Format */
 #define STORE_LE_16(buf, val)    ( ((buf)[0] =  (uint8_t) (val)    ) , \
@@ -178,19 +185,19 @@ tBleStatus Add_Acc_Service(void)
   uint8_t uuid[16];
   
   COPY_ACC_SERVICE_UUID(uuid);
-  ret = aci_gatt_add_serv(UUID_TYPE_128,  uuid, PRIMARY_SERVICE, 7,
+  ret = aci_gatt_add_serv(UUID_TYPE_128,  uuid, PRIMARY_SERVICE, 14,
                           &accServHandle);
   if (ret != BLE_STATUS_SUCCESS) goto fail;    
   
   COPY_ACC_ROLL_UUID(uuid);  
-  ret =  aci_gatt_add_char(accServHandle, UUID_TYPE_128, uuid, 2,
+  ret =  aci_gatt_add_char(accServHandle, UUID_TYPE_128, uuid, 4,
                            CHAR_PROP_NOTIFY|CHAR_PROP_READ,
                            ATTR_PERMISSION_NONE, 0,
                            16, 0, &accRollCharHandle);
   if (ret != BLE_STATUS_SUCCESS) goto fail;
 	
 	COPY_ACC_PITCH_UUID(uuid);  
-  ret =  aci_gatt_add_char(accServHandle, UUID_TYPE_128, uuid, 2,
+  ret =  aci_gatt_add_char(accServHandle, UUID_TYPE_128, uuid, 4,
                            CHAR_PROP_NOTIFY|CHAR_PROP_READ,
                            ATTR_PERMISSION_NONE, 0,
                            16, 0, &accPitchCharHandle);
@@ -212,14 +219,16 @@ fail:
  * @param  roll angle in degrees
  * @retval Status
  */
-tBleStatus Roll_Update(uint8_t roll)
+tBleStatus Roll_Update(float roll)
 {  
   tBleStatus ret;    
   //uint8_t buff[2];
     
   //STORE_LE_16(buff,roll);
-	
-  ret = aci_gatt_update_char_value(accServHandle, accRollCharHandle, 0, 1, roll);
+
+	char rollByte[sizeof(float)];
+	memcpy(rollByte,&roll,sizeof roll);
+  ret = aci_gatt_update_char_value(accServHandle, accRollCharHandle, 0, 4, rollByte);
 	
   if (ret != BLE_STATUS_SUCCESS){
     PRINTF("Error while updating ACC characteristic.\n") ;
@@ -234,14 +243,15 @@ tBleStatus Roll_Update(uint8_t roll)
  * @param  roll angle in degrees
  * @retval Status
  */
-tBleStatus Pitch_Update(uint8_t pitch)
+tBleStatus Pitch_Update(float pitch)
 {  
   tBleStatus ret;    
   //uint8_t buff[2];
     
   //STORE_LE_16(buff, pitch);
-	
-  ret = aci_gatt_update_char_value(accServHandle, accPitchCharHandle, 0, 1, pitch);
+	char pitchByte[sizeof(float)];
+	memcpy(pitchByte,&pitch,sizeof pitch);
+  ret = aci_gatt_update_char_value(accServHandle, accPitchCharHandle, 0, 4, pitchByte);
 	
   if (ret != BLE_STATUS_SUCCESS){
     PRINTF("Error while updating ACC characteristic.\n") ;
@@ -268,13 +278,13 @@ tBleStatus Add_Temp_Service(void)
   uint8_t uuid[16];
   
   COPY_TEMP_SERVICE_UUID(uuid);
-  ret = aci_gatt_add_serv(UUID_TYPE_128,  uuid, PRIMARY_SERVICE, 4,
+  ret = aci_gatt_add_serv(UUID_TYPE_128,  uuid, PRIMARY_SERVICE, 6,
                           &tempServHandle);
   if (ret != BLE_STATUS_SUCCESS) goto fail;    
   
   
   COPY_TEMP_UUID(uuid);  
-  ret =  aci_gatt_add_char(tempServHandle, UUID_TYPE_128, uuid, 2,
+  ret =  aci_gatt_add_char(tempServHandle, UUID_TYPE_128, uuid, 4,
                            CHAR_PROP_NOTIFY|CHAR_PROP_READ,
                            ATTR_PERMISSION_NONE,
                            0,
@@ -297,14 +307,15 @@ fail:
  * @param  temperature
  * @retval Status
  */
-tBleStatus Temp_Update(uint8_t temp)
+tBleStatus Temp_Update(float temp)
 {  
   tBleStatus ret;    
   //uint8_t buff[2];
     
   //STORE_LE_16(buff, temp);
-	
-  ret = aci_gatt_update_char_value(tempServHandle, tempCharHandle, 0, 1, temp);
+	char tempByte[sizeof(float)];
+	memcpy(tempByte,&temp,sizeof temp);
+  ret = aci_gatt_update_char_value(tempServHandle, tempCharHandle, 0, 4, tempByte);
 	
   if (ret != BLE_STATUS_SUCCESS){
     PRINTF("Error while updating TEMP characteristic.\n") ;
@@ -336,7 +347,6 @@ tBleStatus Add_Tap_Service(void)
                           &tapServHandle);
   if (ret != BLE_STATUS_SUCCESS) goto fail;    
   
-  
   COPY_TAP_UUID(uuid);  
   ret =  aci_gatt_add_char(tapServHandle, UUID_TYPE_128, uuid, 2,
                            CHAR_PROP_NOTIFY,
@@ -354,9 +364,25 @@ fail:
     
 }
 
+tBleStatus DT_Update(uint8_t doubleTap)
+{  
+  tBleStatus ret;    
+	if (doubleTap == 1 && doubleTapLock == 0){
+	doubleTapLock = 1;
+  ret = aci_gatt_update_char_value(tempServHandle, tempCharHandle, 0, 1, doubleTapByte);
+	}
+	else if (doubleTap == 0){
+		doubleTapLock = 0;
+	}
+  if (ret != BLE_STATUS_SUCCESS){
+    PRINTF("Error while updating DT characteristic.\n") ;
+    return BLE_STATUS_ERROR ;
+  }
+  return BLE_STATUS_SUCCESS;	
+}
 
-// TODO implement taptap() that notify the characteristic
- 
+//// TODO implement taptap() that notify the characteristic
+// 
 
 
 /******************************************************************************************************/
@@ -376,17 +402,17 @@ tBleStatus Add_Led_Service(void)
   uint8_t uuid[16];
   
   COPY_LED_SERVICE_UUID(uuid);
-  ret = aci_gatt_add_serv(UUID_TYPE_128,  uuid, PRIMARY_SERVICE, 5,
+  ret = aci_gatt_add_serv(UUID_TYPE_128,  uuid, PRIMARY_SERVICE, 11,
                           &ledServHandle);
   if (ret != BLE_STATUS_SUCCESS) goto fail;    
   
   
-  COPY_LED_DIR_UUID(uuid);  
-  ret =  aci_gatt_add_char(ledServHandle, UUID_TYPE_128, uuid, 2,
+  COPY_LED_SPEED_UUID(uuid);  
+  ret =  aci_gatt_add_char(ledServHandle, UUID_TYPE_128, uuid, 4,
                            CHAR_PROP_WRITE,
                            ATTR_PERMISSION_NONE,
                            GATT_NOTIFY_WRITE_REQ_AND_WAIT_FOR_APPL_RESP,
-                           16, 0, &ledDirCharHandle);
+                           16, 0, &ledSpeedCharHandle);
   if (ret != BLE_STATUS_SUCCESS) goto fail;
 	
 	COPY_LED_ON_UUID(uuid);  
@@ -396,8 +422,16 @@ tBleStatus Add_Led_Service(void)
                            GATT_NOTIFY_WRITE_REQ_AND_WAIT_FOR_APPL_RESP,
                            16, 0, &ledOnCharHandle);
   if (ret != BLE_STATUS_SUCCESS) goto fail;
-  
-  PRINTF("Service LED added. Handle 0x%04X, Dir Charac handle: 0x%04X, On Charac handle:0x%04X\n",ledServHandle, ledDirCharHandle, ledOnCharHandle);	
+ 
+  COPY_LED_BRIGHTNESS_UUID(uuid);  
+  ret =  aci_gatt_add_char(ledServHandle, UUID_TYPE_128, uuid, 4,
+                           CHAR_PROP_WRITE,
+                           ATTR_PERMISSION_NONE,
+                           GATT_NOTIFY_WRITE_REQ_AND_WAIT_FOR_APPL_RESP,
+                           16, 0, &ledBrightnessCharHandle);
+  if (ret != BLE_STATUS_SUCCESS) goto fail;
+	
+  PRINTF("Service LED added. Handle 0x%04X, Dir Charac handle: 0x%04X, On Charac handle:0x%04X\n",ledServHandle, ledSpeedCharHandle, ledOnCharHandle);	
   return BLE_STATUS_SUCCESS; 
   
 fail:
@@ -488,10 +522,19 @@ void Write_Request_CB(uint16_t attr_handle, uint8_t att_val_len, uint8_t *att_va
 	
 	if(attr_handle == ledOnCharHandle+1) {
     //TODO do something with the incoming data
-		printf("callback led with value: %i\n", att_val[0]);
+		
+		LED_pattern = (int)att_val[0];
+		printf("ON callback led with value: %i\n", att_val[0]);
 	}
-  if(attr_handle == ledDirCharHandle+1) {
+  if(attr_handle == ledSpeedCharHandle+1) {
     //TODO
+		LED_speed = (int)att_val[3];
+		printf("SPEED callback led with value: %i\n", att_val[3]);
+  }
+  if(attr_handle == ledBrightnessCharHandle+1) {
+    //TODO
+		LED_brightness = (int)att_val[3];
+		printf("BRIGHTNESS callback led with value: %i\n", att_val[3]);
   }
 
 //EXIT:

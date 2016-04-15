@@ -87,6 +87,8 @@ extern volatile uint8_t set_connectable;
 extern volatile int connected;
 extern AxesRaw_t axes_data;
 uint8_t bnrg_expansion_board = IDB04A1; /* at startup, suppose the X-NUCLEO-IDB04A1 is used */
+
+
 /**
  * @}
  */
@@ -315,35 +317,33 @@ void User_Process(AxesRaw_t* p_axes)
     
     if(connected)
     {
-      /* Update acceleration data */
-      p_axes->AXIS_X += 1;
-      p_axes->AXIS_Y -= 1;
-      p_axes->AXIS_Z += 2;
-      PRINTF("ACC: X=%6d Y=%6d Z=%6d\r\n", p_axes->AXIS_X, p_axes->AXIS_Y, p_axes->AXIS_Z);
-      Acc_Update(p_axes);
+//      /* Update acceleration data */
+//      p_axes->AXIS_X += 1;
+//      p_axes->AXIS_Y -= 1;
+//      p_axes->AXIS_Z += 2;
+//      PRINTF("ACC: X=%6d Y=%6d Z=%6d\r\n", p_axes->AXIS_X, p_axes->AXIS_Y, p_axes->AXIS_Z);
+//      Acc_Update(p_axes);
 			
-			if(up){
-			if(dummy>20){
-				up = 0;
-			}
-			dummy++;
-		}else{
-			if(dummy<0){
-				up = 1;
-			}
-			dummy--;
-		}
+//			if(up){
+//			if(dummy>20){
+//				up = 0;
+//			}
+//			dummy++;
+//		}else{
+//			if(dummy<0){
+//				up = 1;
+//			}
+//			dummy--;
+//		}
 			
-			uint8_t roll = dummy;
-			Roll_Update(roll);
+			Roll_Update(rollAngle);
 			
-			uint8_t pitch = dummy +2;
-			Pitch_Update(pitch);
+			Pitch_Update(pitchAngle);
+
+			Temp_Update(temperature);
 			
-			uint8_t temp = dummy +4;
-			Temp_Update(temp);
-			
-			
+
+	
     }
  // }
 }
