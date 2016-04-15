@@ -34,6 +34,8 @@ public class SampleGattAttributes {
     public static String TEMP_SERV =    "00000000-0000-0000-0000-000000000006";
     public static String LED_SERV =     "00000000-0000-0000-0000-000000000010";
     public static String BRI_VALUE =    "00000000-0000-0000-0000-000000000013";
+    public static String CLIENT_CHARACTERISTIC_CONFIG = "00002902-0000-1000-8000-00805f9b34fb";
+    public static String TAP_SERV =      "00000000-0000-0000-0000-000000000008";
 
     static {
 

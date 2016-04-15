@@ -367,13 +367,15 @@ fail:
 tBleStatus DT_Update(uint8_t doubleTap)
 {  
   tBleStatus ret;    
-	if (doubleTap == 1 && doubleTapLock == 0){
-	doubleTapLock = 1;
-  ret = aci_gatt_update_char_value(tempServHandle, tempCharHandle, 0, 1, doubleTapByte);
-	}
-	else if (doubleTap == 0){
-		doubleTapLock = 0;
-	}
+//	if (doubleTap == 1 && doubleTapLock == 0){
+//	doubleTapLock = 1;
+//  ret = aci_gatt_update_char_value(tapServHandle, tapCharHandle, 0, 1, doubleTapByte);
+//	}
+//	else if (doubleTap == 0){
+//		doubleTapLock = 0;
+//	}
+	
+	ret = aci_gatt_update_char_value(tapServHandle, tapCharHandle, 0, 1, doubleTapByte);
   if (ret != BLE_STATUS_SUCCESS){
     PRINTF("Error while updating DT characteristic.\n") ;
     return BLE_STATUS_ERROR ;

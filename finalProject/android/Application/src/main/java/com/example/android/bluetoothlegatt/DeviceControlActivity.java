@@ -61,15 +61,6 @@ import java.util.concurrent.TimeUnit;
  */
 
 
-//TODO create an object ScheduledExecutorService
-    //TODO create a function that call mBluetoothLeService.readCharacteristic(characteristic) on all the characteristic that are read
-    // using    for (BluetoothGattService gattService : gattServices) {
-        //TODO update value depending on the characteristic in  broadcastUpdate()
-            //TODO create function that updates each specific graph
-
-//TODO create a listener on the slider to calls mBluetoothLeService.writeCharacteristic(characteristic, data);
-
-
 public class DeviceControlActivity extends Activity implements View.OnClickListener {
     private final static String TAG = DeviceControlActivity.class.getSimpleName();
 
@@ -90,6 +81,8 @@ public class DeviceControlActivity extends Activity implements View.OnClickListe
     private final String LIST_NAME = "NAME";
     private final String LIST_UUID = "UUID";
 
+
+    // Init the graph
     static float[] timeTemp = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
     static float[] pointsTemp = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
     GraphView graph_temp;
@@ -105,20 +98,14 @@ public class DeviceControlActivity extends Activity implements View.OnClickListe
     GraphView graph_roll;
     public static LineGraphSeries<DataPoint> series_roll;
 
-
-    boolean up1 = true;
-    boolean up2 = true;
-    boolean up3 = true;
-    public int dummy1;
-    public int dummy2;
-    public int dummy3;
-    int selector = 1;
-    int update = 0;
+    // keep track if the leds are on
     boolean on = false;
 
+    // view
     private SeekBar brightness;
     private SeekBar speed;
     private Button onOff;
+    public int notifySet = 1;
 
     // Code to manage Service lifecycle.
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
@@ -132,6 +119,9 @@ public class DeviceControlActivity extends Activity implements View.OnClickListe
             }
             // Automatically connects to the device upon successful start-up initialization.
             mBluetoothLeService.connect(mDeviceAddress);
+
+
+
         }
 
         @Override
@@ -149,6 +139,8 @@ public class DeviceControlActivity extends Activity implements View.OnClickListe
     private final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+
+
             final String action = intent.getAction();
             if (BluetoothLeService.ACTION_GATT_CONNECTED.equals(action)) {
                 mConnected = true;
@@ -165,6 +157,23 @@ public class DeviceControlActivity extends Activity implements View.OnClickListe
             } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
                 displayData(intent.getStringExtra(BluetoothLeService.EXTRA_DATA));
             }
+
+            if(notifySet == 1) {
+                List<BluetoothGattService> gattServices = mBluetoothLeService.getSupportedGattServices();
+
+                for (BluetoothGattService gattService : gattServices) {
+                    for (final BluetoothGattCharacteristic gattCharacteristic : gattService.getCharacteristics()) {
+                        if (BluetoothLeService.UUID_TAP_VALUE.equals(gattCharacteristic.getUuid())) {
+                            mBluetoothLeService.setCharacteristicNotification(gattCharacteristic, true);
+                            notifySet = 0;
+                        }
+                    }
+
+                }
+
+            }
+
+
         }
     };
 
@@ -234,22 +243,19 @@ public class DeviceControlActivity extends Activity implements View.OnClickListe
         Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
         bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
 
+
 //        List<BluetoothGattService> gattServices = mBluetoothLeService.getSupportedGattServices();
 //
 //        for (BluetoothGattService gattService : gattServices) {
 //            for (final BluetoothGattCharacteristic gattCharacteristic : gattService.getCharacteristics()) {
 //                if (BluetoothLeService.UUID_TAP_VALUE.equals(gattCharacteristic.getUuid())) {
-//                        //TODO set notify
-//                }
-//                if (BluetoothLeService.UUID_DIR_VALUE.equals(gattCharacteristic.getUuid())) {
-//
+//                    mBluetoothLeService.setCharacteristicNotification(gattCharacteristic, true);
 //                }
 //            }
 //
 //        }
 
-
-
+        // init graph
         graph_temp = (GraphView) findViewById(R.id.graph_temp);
 
         graph_temp.removeAllSeries();
@@ -274,6 +280,7 @@ public class DeviceControlActivity extends Activity implements View.OnClickListe
         graph_pitch.getViewport().setMinY(0);
         graph_pitch.getViewport().setMaxY(180);
 
+        // init seek brightness bar listener
         this.brightness = (SeekBar) findViewById(R.id.brightness_seekBar);
         brightness.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
@@ -296,6 +303,7 @@ public class DeviceControlActivity extends Activity implements View.OnClickListe
 
         });
 
+        //init seek bar speed listener
         this.speed = (SeekBar) findViewById(R.id.speed_seekBar);
         speed.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
@@ -318,7 +326,8 @@ public class DeviceControlActivity extends Activity implements View.OnClickListe
 
         });
 
-        ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(10);
+        // scheduled task to pool for characteristic values
+        ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(8);
 
         Runnable ReadTask = new ReadRollCharacteristicTask();
 
@@ -343,6 +352,14 @@ public class DeviceControlActivity extends Activity implements View.OnClickListe
                 5010,
                 20,
                 TimeUnit.MILLISECONDS);
+
+        Runnable ReadTapTask = new ReadTapCharacteristicTask();
+
+        scheduledExecutorService.scheduleAtFixedRate(ReadTapTask,
+                5015,
+                40,
+                TimeUnit.MILLISECONDS);
+
     }
 
     @Override
@@ -489,6 +506,7 @@ public class DeviceControlActivity extends Activity implements View.OnClickListe
     }
 
 
+    // function that read the roll characteristic and update the graph
     private final class ReadRollCharacteristicTask implements Runnable {
         @Override public void run() {
 
@@ -516,6 +534,7 @@ public class DeviceControlActivity extends Activity implements View.OnClickListe
         }
     }
 
+    //function that read pitch characteristic and update the graph
     private final class ReadPitchCharacteristicTask implements Runnable {
         @Override public void run() {
 
@@ -543,6 +562,7 @@ public class DeviceControlActivity extends Activity implements View.OnClickListe
         }
     }
 
+    // function that read temp characteristic and update the graph
     private final class ReadTempCharacteristicTask implements Runnable {
         @Override public void run() {
 
@@ -571,7 +591,27 @@ public class DeviceControlActivity extends Activity implements View.OnClickListe
     }
 
 
+    // function that read temp characteristic and update the graph
+    private final class ReadTapCharacteristicTask implements Runnable {
+        @Override public void run() {
 
+            List<BluetoothGattService> gattServices = mBluetoothLeService.getSupportedGattServices();
+
+            for (BluetoothGattService gattService : gattServices) {
+                if(BluetoothLeService.UUID_TAP_SERV.equals(gattService.getUuid())) {
+                    for (final BluetoothGattCharacteristic gattCharacteristic : gattService.getCharacteristics()) {
+                        if (BluetoothLeService.UUID_TAP_VALUE.equals(gattCharacteristic.getUuid())) {
+                            mBluetoothLeService.readCharacteristic(gattCharacteristic);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+
+    // update the roll graph
     public static void updatePointsRoll(float newPoint) {
         //System.out.println("ROLL:  "+newPoint);
 
@@ -611,6 +651,7 @@ public class DeviceControlActivity extends Activity implements View.OnClickListe
         });
     }
 
+    //update the pitch graph
     public static void updatePointsPitch(float newPoint) {
         //System.out.println("PITCH:  "+newPoint);
 
@@ -651,6 +692,7 @@ public class DeviceControlActivity extends Activity implements View.OnClickListe
 
     }
 
+    // update temp graph
     public static void updatePointsTemp(float newPoint) {
         //System.out.println("TEMP:  "+newPoint);
         int i;
@@ -688,6 +730,7 @@ public class DeviceControlActivity extends Activity implements View.OnClickListe
         });
     }
 
+    // toggle the led on and off
     public void onOff(View v){
 
         this.onOff = (Button) findViewById(R.id.onOff_button);
@@ -710,6 +753,7 @@ public class DeviceControlActivity extends Activity implements View.OnClickListe
             if(BluetoothLeService.UUID_LED_SERV.equals(gattService.getUuid())) {
                 for (final BluetoothGattCharacteristic gattCharacteristic : gattService.getCharacteristics()) {
                     if (BluetoothLeService.UUID_ON_VALUE.equals(gattCharacteristic.getUuid())) {
+                        System.out.println("LEDONOFF");
                         mBluetoothLeService.writeCharacteristic(gattCharacteristic, data);
                     }
                 }
@@ -717,25 +761,30 @@ public class DeviceControlActivity extends Activity implements View.OnClickListe
         }
     }
 
+    //update the brightness characteristic
     public void updateBrightness(int value) {
 
         System.out.println("new brightness");
 
         byte[] bytes = ByteBuffer.allocate(4).putInt(value).array();
 
-        List<BluetoothGattService> gattServices = mBluetoothLeService.getSupportedGattServices();
+        if(mBluetoothLeService.getSupportedGattServices() != null) {
+            List<BluetoothGattService> gattServices = mBluetoothLeService.getSupportedGattServices();
 
-        for (BluetoothGattService gattService : gattServices) {
-            if(BluetoothLeService.UUID_LED_SERV.equals(gattService.getUuid())) {
-                for (final BluetoothGattCharacteristic gattCharacteristic : gattService.getCharacteristics()) {
-                    if (BluetoothLeService.UUID_BRI_VALUE.equals(gattCharacteristic.getUuid())) {
-                        mBluetoothLeService.writeCharacteristic(gattCharacteristic, bytes);
+            for (BluetoothGattService gattService : gattServices) {
+                if (BluetoothLeService.UUID_LED_SERV.equals(gattService.getUuid())) {
+                    for (final BluetoothGattCharacteristic gattCharacteristic : gattService.getCharacteristics()) {
+                        if (BluetoothLeService.UUID_BRI_VALUE.equals(gattCharacteristic.getUuid())) {
+                            mBluetoothLeService.writeCharacteristic(gattCharacteristic, bytes);
+                        }
                     }
                 }
             }
         }
     }
 
+
+    // update the speed characteristic
     public void updateSpeed(int value) {
 
         System.out.println("new speed");
@@ -755,20 +804,5 @@ public class DeviceControlActivity extends Activity implements View.OnClickListe
         }
     }
 
-    public void notifyTap(View V) {
-        android.support.v4.app.NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.tile)
-                        .setContentTitle("My notification")
-                        .setContentText("Hello World!");
-
-        // Sets an ID for the notification
-        int mNotificationId = 001;
-        // Gets an instance of the NotificationManager service
-        NotificationManager mNotifyMgr =
-                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        // Builds the notification and issues it.
-        mNotifyMgr.notify(mNotificationId, mBuilder.build());
-    }
 
 }

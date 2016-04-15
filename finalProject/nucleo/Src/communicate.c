@@ -42,6 +42,8 @@ void communicate(void) {
 	Exchange_Byte((uint8_t) LED_brightness);
 	Exchange_Byte((uint8_t) LED_speed);
 	
+	printf("LED %i\n", LED_pattern);
+	
 	printf("t: %f, p: %f, r: %f, d: %d\n", temperature, pitchAngle, rollAngle, doubleTap);
 }
 

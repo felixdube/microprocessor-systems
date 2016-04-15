@@ -16,6 +16,7 @@
 
 package com.example.android.bluetoothlegatt;
 
+import android.app.NotificationManager;
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -28,8 +29,11 @@ import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
 import android.content.Context;
 import android.content.Intent;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Binder;
 import android.os.IBinder;
+import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
 
@@ -93,6 +97,8 @@ public class BluetoothLeService extends Service {
             UUID.fromString(SampleGattAttributes.DIR_VALUE);
     public final static UUID UUID_TAP_VALUE =
             UUID.fromString(SampleGattAttributes.TAP_VALUE);
+    public final static UUID UUID_TAP_SERV =
+            UUID.fromString(SampleGattAttributes.TAP_SERV);
 
     byte[] led_on_value = new byte[1];
 
@@ -255,8 +261,7 @@ public class BluetoothLeService extends Service {
                 Log.e(TAG, "lost connection");
             }
 
-
-
+            notifyTap();
         }
 
         else {
@@ -425,16 +430,14 @@ public class BluetoothLeService extends Service {
             Log.w(TAG, "BluetoothAdapter not initialized");
             return;
         }
+
+        System.out.println("TAPTAP NOTIFY-----------------------------------");
         mBluetoothGatt.setCharacteristicNotification(characteristic, enabled);
+        BluetoothGattDescriptor descriptor = characteristic.getDescriptor(UUID.fromString(SampleGattAttributes.CLIENT_CHARACTERISTIC_CONFIG));
+        descriptor.setValue((enabled) ? BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
+                : BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE);
+        mBluetoothGatt.writeDescriptor(descriptor);
 
-
-        // This is specific to Heart Rate Measurement.
-//        if (UUID_HEART_RATE_MEASUREMENT.equals(characteristic.getUuid())) {
-//            BluetoothGattDescriptor descriptor = characteristic.getDescriptor(
-//                    UUID.fromString(SampleGattAttributes.CLIENT_CHARACTERISTIC_CONFIG));
-//            descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
-//            mBluetoothGatt.writeDescriptor(descriptor);
-//        }
     }
 
     /**
@@ -449,6 +452,24 @@ public class BluetoothLeService extends Service {
         return mBluetoothGatt.getServices();
     }
 
+    Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+    //notify the phone if a taptap event occurs
+    public void notifyTap() {
+        android.support.v4.app.NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.ic_launcher)
+                        .setContentTitle("TapTap")
+                        .setContentText("Hello World!")
+                .setSound(alarmSound);
+
+        // Sets an ID for the notification
+        int mNotificationId = 001;
+        // Gets an instance of the NotificationManager service
+        NotificationManager mNotifyMgr =
+                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        // Builds the notification and issues it.
+        mNotifyMgr.notify(mNotificationId, mBuilder.build());
+    }
 
 
 }

@@ -342,6 +342,10 @@ void User_Process(AxesRaw_t* p_axes)
 
 			Temp_Update(temperature);
 			
+			if(doubleTap == 1){
+				DT_Update(1);
+			}
+			
 
 	
     }
