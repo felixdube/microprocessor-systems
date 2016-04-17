@@ -158,20 +158,7 @@ public class DeviceControlActivity extends Activity implements View.OnClickListe
                 displayData(intent.getStringExtra(BluetoothLeService.EXTRA_DATA));
             }
 
-            if(notifySet == 1) {
-                List<BluetoothGattService> gattServices = mBluetoothLeService.getSupportedGattServices();
 
-                for (BluetoothGattService gattService : gattServices) {
-                    for (final BluetoothGattCharacteristic gattCharacteristic : gattService.getCharacteristics()) {
-                        if (BluetoothLeService.UUID_TAP_VALUE.equals(gattCharacteristic.getUuid())) {
-                            mBluetoothLeService.setCharacteristicNotification(gattCharacteristic, true);
-                            notifySet = 0;
-                        }
-                    }
-
-                }
-
-            }
 
 
         }
@@ -327,14 +314,14 @@ public class DeviceControlActivity extends Activity implements View.OnClickListe
         });
 
         // scheduled task to pool for characteristic values
-        ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(8);
+        ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(5);
 
         Runnable ReadTask = new ReadRollCharacteristicTask();
 
 
         scheduledExecutorService.scheduleAtFixedRate(ReadTask,
                 5000,
-                20,
+                40,
                 TimeUnit.MILLISECONDS);
 
         Runnable ReadPitchTask = new ReadPitchCharacteristicTask();
@@ -342,7 +329,7 @@ public class DeviceControlActivity extends Activity implements View.OnClickListe
 
         scheduledExecutorService.scheduleAtFixedRate(ReadPitchTask,
                 5005,
-                20,
+                40,
                 TimeUnit.MILLISECONDS);
 
         Runnable ReadTempTask = new ReadTempCharacteristicTask();
@@ -350,14 +337,14 @@ public class DeviceControlActivity extends Activity implements View.OnClickListe
 
         scheduledExecutorService.scheduleAtFixedRate(ReadTempTask,
                 5010,
-                20,
+                40,
                 TimeUnit.MILLISECONDS);
 
         Runnable ReadTapTask = new ReadTapCharacteristicTask();
 
         scheduledExecutorService.scheduleAtFixedRate(ReadTapTask,
                 5015,
-                40,
+                20,
                 TimeUnit.MILLISECONDS);
 
     }
@@ -595,6 +582,21 @@ public class DeviceControlActivity extends Activity implements View.OnClickListe
     private final class ReadTapCharacteristicTask implements Runnable {
         @Override public void run() {
 
+            if(notifySet == 1) {
+                List<BluetoothGattService> gattServices = mBluetoothLeService.getSupportedGattServices();
+
+                for (BluetoothGattService gattService : gattServices) {
+                    for (final BluetoothGattCharacteristic gattCharacteristic : gattService.getCharacteristics()) {
+                        if (BluetoothLeService.UUID_TAP_VALUE.equals(gattCharacteristic.getUuid())) {
+                            mBluetoothLeService.setCharacteristicNotification(gattCharacteristic, true);
+                            notifySet = 0;
+                        }
+                    }
+
+                }
+
+            }
+
             List<BluetoothGattService> gattServices = mBluetoothLeService.getSupportedGattServices();
 
             for (BluetoothGattService gattService : gattServices) {
@@ -755,6 +757,7 @@ public class DeviceControlActivity extends Activity implements View.OnClickListe
                     if (BluetoothLeService.UUID_ON_VALUE.equals(gattCharacteristic.getUuid())) {
                         System.out.println("LEDONOFF");
                         mBluetoothLeService.writeCharacteristic(gattCharacteristic, data);
+
                     }
                 }
             }

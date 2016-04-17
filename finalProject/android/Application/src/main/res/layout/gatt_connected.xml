@@ -19,7 +19,6 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/back"
     android:layout_margin="0dp"
     android:scrollIndicators="right">
     <LinearLayout android:orientation="horizontal"
