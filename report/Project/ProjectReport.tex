@@ -25,9 +25,9 @@
 
 \section{Theory and Hypothesis}
 \subsection{Bluetooth Low Energy}
-Bluetooth Low Energy allows the wireless communication between different devices. The Generic Attribute Profile (GATT) is the protocol used to exchange data over BLE connection. First of all, GATT defines the different roles that the connected devices can adopt. On one hand, a device can be Client. In this role, the device sends request to a server and receives responses from it. On the other hand, a device can be a Server. In this role, the device receives and sends responses to the clients. It is also repsonsable for storing and making the data available to the client.
+Bluetooth Low Energy allows the wireless communication between different devices. The Generic Attribute Profile (GATT) is the protocol used to exchange data over BLE connection. First of all, GATT defines the different roles that the connected devices can adopt. On one hand, a device can be Client. In this role, the device sends request to a server and receives responses from it. On the other hand, a device can be a Server. In this role, the device receives and sends responses to the clients. It is also responsible for storing and making the data available to the client.
 
-Moreover, GATT uses the Attribute Protocol (ATT) as its transport protocol. The ATT defines how the data is organised. In the GATT server data are seperated in different section called services. Each services holds one to many characteristics, and these characteristics are what contains the user data. Figure \ref{fig:gatt} illustrate the data structure instroduced by GATT.
+Moreover, GATT uses the Attribute Protocol (ATT) as its transport protocol. The ATT defines how the data is organised. In the GATT server data are separated in different section called services. Each services holds one to many characteristics, and these characteristics are what contains the user data. Figure \ref{fig:gatt} illustrate the data structure introduced by GATT.
 
 \begin{figure}[!htb]
  \centering
@@ -39,7 +39,10 @@ Moreover, GATT uses the Attribute Protocol (ATT) as its transport protocol. The 
 Each characteristics can have different properties. A characteristic can have Read property, which means that a client can read the data that it contains. It can also have Write property where the user can modify the data that the characteristic holds. Moreover, a characteristic can have the notify property, which allow the server to do a notification operation on it.
 
 \subsection{Android}
-An Android phone is a good devide to use as a user interface since the view can be change for each application. It also allow to communicate with other devices using many different wireless communication protocol, including BLE which was used for this lab. Additionnaly, Android application can be easily build using Android Studio.
+An Android phone is a good device to use as a user interface since the view can be change for each application. It also allow to communicate with other devices using many different wireless communication protocol, including BLE which was used for this lab. Additionally, Android application can be easily build using Android Studio.
+
+\subsection{SPI Communication}
+The serial peripheral interface (SPI) protocol is a four wire, full duplex, serial interface specification ideal for short range communication between embedded devices. The implementation uses two data lines, one clock line, and one slave select line. The data lines are divided into the master in slave out (MISO) which is driven my the slave and the master out slave in (MOSI) which is driven by the master. All communication is synced to the master's clock which is set on the clock line (SCLK). Finally the slave select line (SSL) is used by the master to indicate which slave it is communicating with. In the case where there is only one slave the line can be kept permanently high.
 
 \section{Implementation}
 \subsection{Bluetooth Low Energy}
@@ -70,6 +73,10 @@ Secondly, the view contains two sliders, which control the speed and brightness 
 
 Lastly, when the double tap characteristic is being notified an Android notification is being displayed on the screen. If the phone is sleeping, the screen wakes up to display the notification.
 
+\subsection{SPI Communication}
+SPI communication was used to transfer data between the discovery board and the Nucleo board. It was important for the two boards to be able to communicate because only the Nucleo board was equipped with Bluetooth capabilities while the discovery board was used to acquire data.
+
+Although HAL drivers were available which already implemented SPI communication, these were found to be difficult to use. Therefore the communication was implemented without the use of said drivers. A simple protocol was implemented whereby the Nucleo board would wait for a START\_BYTE indicating the beginning of communication, after which all data was transferred between the boards one byte at a time. In the case where the data to be communicated was a float, the discovery board would first convert the IEEE 754 number into a byte array which could then be transferred and converted back to a float by the Nucleo board.
 
 \section{Testing and Observations}
 
