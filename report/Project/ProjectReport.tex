@@ -20,24 +20,33 @@
 \clearpage
 
 \section{Abstract}
-
+An android application was designed to interact with an embedded system using Bluetooth Low Energy. The goal of this system was the monitoring of sensor readings and transmission of control signals to the embedded side. The resulting low resource system is responsive and equipped with a polished UI. Phone applications that interact with embedded systems are proved accessible and useful for consumer electronics.
 \section{Problem Statement}
-This project consisted in establishing full duplex communication between a cellphone and an embedded system through Bluetooth. For this purpose, an STM32F407 micro controller mounted on an STMF4Discovery PCB is to be used on the embedded side to gather information from sensors and control LEDS. Furthermore,  the STM32F4xx Cube HAL drivers are to be used to facilitate software development. On the cellphone side, an Android device is to be used for the user interface. Since the STMF4Discovery board is not equipped with any bluetooth functionalities, an intermediate STM32F401RE Nucleo Board with a DB04A1 BLE Shield is to be used. The functionalities to be implemented are listed below:
+This project consisted of establishing full duplex communication between a cellphone and an embedded system through Bluetooth. For this purpose, a STM32F407 micro-controller mounted on a STMF4Discovery PCB was to be used on the embedded side to gather information from sensors and control LEDS. Furthermore,  the STM32F4xx Cube HAL drivers can facilitate software development. On the cellphone side, an Android device was to be used for the user interface (UI). Since the STMF4Discovery board is not equipped with any Bluetooth functionalities, an intermediate STM32F401RE Nucleo Board with a DB04A1 BLE Shield was required. The functionalities to be implemented on this triple unit system are listed below:
 
 \begin{enumerate}
-\item Temperature monitoring of the STM32F407 micro controller on the android device
-\item 3D filtered accelerometer values from the Discovery board to the android device
+\item Temperature monitoring of the STM32F407 micro-controller on the android device
+\item Transmission of filtered 3D accelerometer values from the Discovery board to the android device
 \item Double tap on the discovery board to wake up the phone
-\item Control over 4 LED on the Discovery board from the phone.
-\item A user interface on an android application must be developed for efficient visualization of the sensor readings as well as flexible control over the LEDs. 
+\item Control over four LEDs on the Discovery board from the phone
+\item Efficient wired communication protocol between the discovery board and the nucleo board as well as a wireless protocol between the nucleo board and the android phone 
+\item A user interface on an android application must be developed for efficient visualization of the sensor readings as well as flexible control over the LEDs 
 \end{enumerate}
 \section{Theory and Hypothesis}
 \subsection{Pulse Width Modulation}
-Pulse Width Modulation (PWM) is a modulation technique that allows the control of the power transferred to a load. As the name states, it consist in using a high switching frequency (much higher than what would affect the load) to control the length of pulses and the time period between them. PWM can be used to control brightness of an LED by letting current flow only a certain percentage of a time period. This percentage is called the duty cycle. If the complete cycle frequency is much faster our eyes can perceive, then no flickering is perceivable and the LED simply appears dimmer. Thus, the duty cycle allows the precise control over the brightness of an LED. 
+Pulse Width Modulation (PWM) is a modulation technique that allows the control of the power transferred to a load. As the name states, it consist in using a high-frequency clock (much higher than what would affect the load) to control the length of pulses and the time period between them. PWM can be used to control brightness of a LED by letting current flow only a certain percentage of a time period. This percentage is called the duty cycle and is easily visualize in figure \ref{fig:pwm}. If the complete cycle frequency is much faster than the human eye can perceive, then no flickering is apparent and the LED simply appears dimmer. Thus, PWM allows the precise control over the brightness of a LED.
+
+\begin{figure}[!htb]
+  \centering
+  \includegraphics[scale=0.65]{images/PWM.png}
+  \caption{Pulse Width Modulation Graphical Explanation}
+  \label{fig:pwm}
+ \end{figure}
+ 
 \subsection{Double Tap Feature}
-Double tap was a recently introduced on the android platform to wake up cellphones without any hardware button by simply double tapping on the screen. The only sensor required for this feature is an 3D accelerometer. Taps can easily be detected as spikes in the raw value of the acceleration input. By filtering out low frequency noise from other movements, a tap can be detected without any false positives. controlling the delay between taps and other timing parameters can also help improve the filtering of taps. With the right filtering algorithm even light double taps can be detected and this with minimum ressources. 
+Double tap (DT) was a recently introduced on the android platform to easily wake up cellphones without any hardware button by simply double tapping on the screen. The only sensor required for this feature is a 3D accelerometer, which most smartphones already come equipped with. Taps can easily be detected as spikes in the raw value of the acceleration input. By filtering out low-frequency noise from phone movements, a tap can be detected without any false positives. Controlling the delay between taps and other timing parameters can also help improve the filtering of taps. With the right filtering algorithm even light double taps can be detected from any initial position and this with minimum resources. 
 \subsection{SPI Communication}
-The serial peripheral interface (SPI) protocol is a four wire, full duplex, serial interface specification ideal for short range communication between embedded devices. As seen in figure \ref{fig:spi}, the implementation uses two data lines, one clock line, and one slave select line. The data lines are divided into the master in slave out (MISO) which is driven my the slave and the master out slave in (MOSI) which is driven by the master. All communication is synced to the master's clock which is set on the clock line (SCLK). Finally the slave select line (SSL) is used by the master to indicate which slave it is communicating with. In the case where there is only one slave the line can be kept permanently high.
+The serial peripheral interface (SPI) protocol is a four wire, full duplex, serial interface specification ideal for short range communication between embedded devices. As seen in figure \ref{fig:spi}, the implementation uses two data lines, one clock line, and one slave select line. The data lines are divided into the master in slave out (MISO) for which data travels from slave to master and the master out slave in (MOSI) for which data travels from master to slave. All communication is synced to the master's clock which is set on the clock line (SCLK). Finally, the active high slave select line (SSL) is used by the master to indicate which slave it is communicating with. In the case where there is only one slave the line can be kept permanently high.
 
 \begin{figure}[!htb]
   \centering
@@ -47,9 +56,9 @@ The serial peripheral interface (SPI) protocol is a four wire, full duplex, seri
  \end{figure}
 
 \subsection{Bluetooth Low Energy}
-Bluetooth Low Energy allows the wireless communication between different devices. The Generic Attribute Profile (GATT) is the protocol used to exchange data over BLE connection. First of all, GATT defines the different roles that the connected devices can adopt. On one hand, a device can be Client. In this role, the device sends request to a server and receives responses from it. On the other hand, a device can be a Server. In this role, the device receives and sends responses to the clients. It is also repsonsable for storing and making the data available to the client.
-
-Moreover, GATT uses the Attribute Protocol (ATT) as its transport protocol. The ATT defines how the data is organised. In the GATT server data are seperated in different section called services. Each services holds one to many characteristics, and these characteristics are what contains the user data. Figure \ref{fig:gatt} illustrate the data structure instroduced by GATT.
+Bluetooth Low Energy (BLE) allows wireless communication between different compliant devices. The Generic Attribute Profile (GATT) is the protocol used to exchange data over BLE connection. First of all, GATT requires the definition of the different roles of the connected devices. On one hand, a device can be client. In this role, the device sends request to a server and receives responses from it. On the other hand, a device can be a Server. In this role, the device receives and sends responses to the clients. It is also responsible for storing and making the data available to the client.
+\paragraph{}
+Moreover, GATT uses the Attribute Protocol (ATT) as its transport protocol. The ATT defines how the data is organized. In the GATT server, data is separated in different sections called services. Each service holds one to many characteristics, and these characteristics are what contains the user data. Figure \ref{fig:gatt} illustrates the data structure introduced by GATT.
 
 \begin{figure}[!htb]
  \centering
@@ -58,35 +67,41 @@ Moreover, GATT uses the Attribute Protocol (ATT) as its transport protocol. The 
  \label{fig:gatt}
 \end{figure}
 
-Each characteristics can have different properties. A characteristic can have Read property, which means that a client can read the data that it contains. It can also have Write property where the user can modify the data that the characteristic holds. Moreover, a characteristic can have the notify property, which allow the server to do a notification operation on it.
+Each characteristic can have different properties:
+\begin{itemize}
+\item Read property: the client can read the data that it contains
+\item Write property: the client can modify the data that the characteristic holds
+\item Notify property: the server can send notifications to different characteristics
+\end{itemize}
 
 \subsection{Android}
-An Android phone is a good device to use as a user interface since the view can be change for each application. It also allow to communicate with other devices using many different wireless communication protocol, including BLE which was used for this lab. Additionally, Android application can be easily build using Android Studio.
+An Android phone is a good device for designing user interface because of its flexibility and availability. Connection with other devices can be realized using many different wireless communication protocol, including BLE. Additionally, Android application can be easily built using a highly documented development environment called Android Studio.
 
 \section{Implementation}
-The implementation of the software on the discovery board was done by recycling the concepts used in previous experiments (\cite{Lab2report}, \cite{Lab4report}) A multi thread operating system was used to simplify The reader can refer to previous
+The implementation of the software on the discovery board is done by recycling the concepts employed in previous experiments (\cite{Lab2report}, \cite{Lab4report}) A multithreaded operating system is used to simplify the software. The reader can refer to these previous reports for more information. The new features implemented in this project are described in the following sections.
 
-\subsection{LED control}
-Four LEDs were used on the nucleo board for feedback. These were hardwired to PWM compliant ports on the microcontroller. Three active LED modes were implemented and can be chosen from the android application:
+\subsection{LED Control}
+Four LEDs are used on the nucleo board for visual feedback. These are hard-wired to PWM compliant ports on the micro-controller. Three LED modes are implemented and can be selected from the android application:
 \begin{enumerate}
-\item All 4 LEDs on mode
-\item All 4 LEDs off mode
-\item Rotating mode where the LEDs take turn being lit in a rotating manner. The speed and direction of the rotation can also be controlled from the Android side. 
+\item All four LEDs ON mode
+\item All four LEDs OFF mode
+\item Rotating LED mode where the LEDs take turn being lit in a rotating manner. The speed and direction of the rotation can also be controlled from the Android side. 
 \end{enumerate}
-Independent to the mode selected, the brightness of each LED could be tuned by the use of PWM. A hardware timer at 10 MHz frequency was used for the control of the PWM. By controlling the duty cycle with the timer, precise regulation of the brightness was achieved.
-\subsection{Double Tap (DT) wake up}
-Th DT feature was successfully implemented to notify the android device if a double tap was detected. Important filtering was necessary to avoid triggering DT by simply moving the discovery board. The FSM diagram presented in figure \ref{fig:FSMDT} in the appendix gives an overview of the different methods used. To understand why filtering was implemented this way, please refer to the testing section. The acceleromter used for this feature was calibrated using the method from \cite{Lab4report}. The raw values of the accelerometer were used for this algorithm as opposed to the filtered values from the kalman filter described in \cite{Lab2report} to detect spikes. First the algorithm waited for the acceleration value to have an increase followed by a major decrease or vice versa and recorded this as a spike. The amplitude of the increase or decrease was set to 10 mg for detection of the smallest taps. Then a small delay of 20 ms was introduced as a relaxation time for the accelerometer to settle down to avoid reading multiple spikes from one tap. In the following time period of 40 ms, no spikes are to be detected otherwise the first tap is not counted. This acts as a mechanism to avoid DT detection from vibration. If 40 ms pass without any other variation, the spike is recorded as a clean spike. The algorithm then waits for a second tap the same way it did for the first one. If a second clean tap is not detected before 250 ms, then the algorithm starts over by waiting for a first tap.
-The resulting DT detection was very accurate and could consistently detect small double taps even on the table on which the discovery board was placed. False positives from sliding the board on the table or from moving the board in the air were rare, happening less than 1\% of the time.
-Double tap was implemented independently for x,y and z detection using this technique, except for the fact that when the second tap was not in the same direction as the first one, it was not considered a double tap.
-
-Refer to the code or the FSM ( figure \ref{fig:FSMDT}) for more detailed information on our algorithm.
+Independent to the mode selected, the brightness of each LED can be tuned by the use of PWM. A hardware timer at 10 MHz frequency is used to adjust the PWM duty cycle. As a result, precise individual LED brightness is achieved.
+\subsection{Double Tap feature}
+The DT feature is successfully implemented to notify the android device. Important filtering was necessary to avoid triggering DT by simply moving the discovery board. The FSM diagram presented in figure \ref{fig:FSMDT} in the appendix gives an overview of the different methods used to avoid false positives. To understand why filtering is implemented this way, please refer to the testing section. The accelerometer used for this feature was calibrated using the method from \cite{Lab4report}. The raw values of the accelerometer are used for this algorithm to detect spikes as opposed to the filtered values from the kalman filter described in \cite{Lab2report} which would filter out fast variations. Next is a brief description of the mechanisms elaborated with the goal of detecting double taps efficiently.
+\paragraph{}
+First the algorithm waits for the acceleration value to have an increase followed by a decrease or vice versa and recorded this as a spike. The amplitude of the increase or decrease is set to 10 mg for detection of even the smallest taps. Then a small delay of 20 ms is introduced as a relaxation time for the accelerometer to settle down in order to avoid reading multiple spikes from a single tap. In the following time period of 40 ms, if a spike is detected, the first tap is neglected. This acts as an apparatus to avoid DT detection from vibration which happens when sliding the board on the table. If 40 ms pass without any other variation, the spike is recorded as a clean spike. The algorithm then waits for a second tap the same way it did for the first one. If a second clean tap is not detected before 250 ms, then the algorithm starts over by waiting for a first tap.
+\paragraph{}
+The resulting DT detection is very accurate and can consistently detect small double taps even on the table on which the discovery board is placed. False positives from sliding the board on the table or from moving the board in the air were rare, happening fewer than 1\% of the time.
+Double tap is implemented independently for x, y and z detection using this technique, which allows the software to determine in what direction the DT was recorded. For 3D DT, a final filtering mechanism is implemented in which if the second tap was not in the same direction as the first one, both taps are neglected. Refer to the code or the FSM ( figure \ref{fig:FSMDT}) for more detailed information on our algorithm.
 \subsection{SPI Communication}
-SPI communication was used to transfer data between the discovery board and the Nucleo board. It was important for the two boards to be able to communicate because only the Nucleo board was equipped with Bluetooth capabilities while the discovery board was used to acquire data.
- 
-Although HAL drivers were available which already implemented SPI communication, these were found to be difficult to use. Therefore the communication was implemented without the use of said drivers. A simple protocol was implemented whereby the Nucleo board would wait for a START\_BYTE indicating the beginning of communication, after which all data was transferred between the boards one byte at a time. In the case where the data to be communicated was a float, the discovery board would first convert the IEEE 754 number into a byte array which could then be transferred and converted back to a float by the Nucleo board.
+SPI communication is used to transfer data between the discovery board and the Nucleo board. It is important for the two boards to be able to communicate because only the Nucleo board was equipped with Bluetooth capabilities while the discovery board was used to acquire data.
+\paragraph{}
+Although HAL drivers were available which already implemented SPI communication, these were found to be difficult to use. Therefore the communication is implemented without the use of said drivers whereby the Nucleo board expects a START\_BYTE to indicate the beginning of communication, after which all data is transferred between the boards one byte at a time. In the case where the data to be communicated is a float, the discovery board will first convert the IEEE 754 number into a byte array which can then be transferred and converted back to a float by the Nucleo board.
 
 \subsection{Bluetooth Low Energy}
-For this lab, the GATT server was managed by the Nucleo board using the X-NUCLEO-IDB04A1 Bluetooth shield and only one client, the Android phone, was interacting with the server. An overview of the GATT server can be seen in figure \ref{fig:gattimp}.
+For this project, the GATT server is managed by the Nucleo board using the X-NUCLEO-IDB04A1 Bluetooth shield and only one client, the Android phone, is interacting with the server. An overview of the GATT server is presented in figure \ref{fig:gattimp}.
 
 \begin{figure}[!htb]
  \centering
@@ -95,10 +110,10 @@ For this lab, the GATT server was managed by the Nucleo board using the X-NUCLEO
  \label{fig:gattimp}
 \end{figure}
 
-The accelerometer service allowed the phone to read the roll and pitch values, which were updated by the Nucleo board. Similarly, the phone would receive information about the temperature of the CPU. The GATT server also holds an LED service, which contains characteristic for which the value would be updated by the phone. Lastly the Nucleo board can notify the phone using the double tap service, which contains only one characteristic.
+The accelerometer service allows the phone to read the roll and pitch values of the discovery board. Similarly, the phone receives information about the temperature of the STM32F407 CPU in the temperature service. The GATT server also holds an LED service, which contains characteristics for which the value would be updated by the phone. Lastly, the Nucleo board can notify the phone using the double tap service, which contains only one characteristic.
 
 \subsection{Android}
-The user interface have been implemented using Android Studio, and tested on a Samsung Galaxy S6 phone. Using the phone the user can control different behavior of the discovery board, and receive data from it. An overview of the application can be seen in figure \ref{fig:android}.
+The user interface was implemented using Android Studio, and tested on a Samsung Galaxy S6 phone. Using the phone, the user can control different behaviours of the discovery board, and receive data from it. An overview of the application can be seen in figure \ref{fig:android}.
 
 \begin{figure}[!htb]
  \centering
@@ -107,21 +122,22 @@ The user interface have been implemented using Android Studio, and tested on a S
  \label{fig:android}
 \end{figure}
 
-First of all, the temperature, roll, and pitch data are presented to the user using graph from the Graph View library. For each of the values, a tread have been setup to read the Bluetooth characteristic and update the data points that are displayed on the graph every 20 milliseconds. The main thread would then update the view with the new data points.
-
-Secondly, the view contains two sliders, which control the speed and brightness of the LEDs on the Discovery board. A listener has been instantiated for each of the sliders. When the user moves a slider the listener call a function that write the new value to the specific characteristic. The view also contains a button. When it is pressed the function that writes to the on/off characteristic is being called. This allows the user to change the state of the LEDs.
-
+First of all, the temperature, roll, and pitch data are presented to the user using graph from the Graph View library. For each of the values, a thread has been set up to read the Bluetooth characteristic and update the data points that are displayed on the graph every 20 milliseconds. The main thread would then update the graphs with the new data points.
+\paragraph{}
+Secondly, the UI contains two sliders, which control the speed and brightness of the LEDs on the Discovery board. A listener has been instantiated for each of the sliders. When the user moves a slider the listener call a function that writes the new value to the specific characteristic. The UI also contains a button. When it is pressed the function that writes to the on/off characteristic is being called. This allows the user to change the state of the LEDs.
+\paragraph{}
 Lastly, when the double tap characteristic is being notified an Android notification is being displayed on the screen. If the phone is sleeping, the screen wakes up to display the notification.
 
 
 \section{Testing and Observations}
+When the system was fully functional, formal testing was kept to a minimal because this system is simply designed to demonstrate the communication functionalities with an embedded system and is not meant for commercialization. For example, testing of the communication between the board and over the Bluetooth connection was judged unnecessary because of the robustness of our SPI and BLE protocols. Also, from the multiple times the system was tried, the communication never appeared to fail regardless of the order of booting of the 3 devices. Testing of the android application was done on a Samsung Galaxy S6 phone as mentioned previously. The only feature of our system that required extensive testing was Double Tap, which is explained in the next section. 
 \subsection{Double Tap}
-First graphs of the raw acceleration value of when a double tap and other undesirable event happened were analysed ( figure \ref{fig:DTCAL1}, \ref{fig:DTCAL2}, \ref{fig:DTCAL3}). From these results, the filtering algorithm described above was implemented. The following observations guided the design of the algorithm:
+First graphs of the raw acceleration value of when a double tap and other undesirable event happened were analyzed ( figure \ref{fig:DTCAL1}, \ref{fig:DTCAL2}, \ref{fig:DTCAL3}). From these results, the filtering algorithm described above was implemented. The following observations guided the design of the algorithm:
 
 \begin{figure}[!htb]
  \centering
  \includegraphics[scale=0.45]{images/DTcalibration1.png}
- \caption{Raw Acceleration Measurements from 3 Succesive Double Taps}
+ \caption{Raw Acceleration Measurements from 3 Successive Double Taps}
  \label{fig:DTCAL1}
 \end{figure}
 
@@ -140,16 +156,17 @@ First graphs of the raw acceleration value of when a double tap and other undesi
 \end{figure}
 
 \begin{itemize}
-\item From figure \ref{fig:DTCAL1}, it was noted that a simple detection of a significant positive variation immediatly followed by a significant negative variation could be used to detect a spike. The polling frequency of the accelerometer had to be increased from 25 Hz to 400 Hz in order to capture all the spikes without fail.
-\item From figure \ref{fig:DTCAL1} again, some ringing was noticed after a tap. To avoid detecting multiple spikes from one tap while maintaining a low threshold value for the amplitude of the spike, a delay where no spikes are detected was added. 
-\item From figure \ref{fig:DTCAL3}, we can see that the variation when moving the board in the air is not as fast as a spike. Hence having a high frequency polling and a high enough amplitude can filter this out. 
-\item From figure \ref{fig:DTCAL2}, we see that just sliding the board on the table generates multiple spikes. To make sure these vibrations would not trigger a double tap detection, a condition was implemented where if too much spikes were detected in the interval of time of the double tap, the double tap would not be counted.
-\end{itemize}
-After multiple hours of testing and adjusting of the parameter such as the amplitude and the time delays, a great DT detection algorithm was achieved. False positive from vibration and random movements for 5 minutes occured only twice.
- 
-\subsection{SPI}
+\item From figure \ref{fig:DTCAL1}, it was noted that a simple detection of a significant positive variation immediately followed by a significant negative variation could be used to detect a spike. The polling frequency of the accelerometer had to be increased from 25 Hz to 400 Hz in order to capture all the spikes without fail.
+\item From figure \ref{fig:DTCAL1} again, some ringing was noticed after a tap. To avoid detecting multiple spikes from one tap while maintaining a low threshold value for the amplitude of the spike, a delay where no spikes are detected was added.
+\item From figure \ref{fig:DTCAL2},  it can be noticed that just sliding the board on the table generates multiple spikes. To make sure these vibrations would not trigger a DT, a condition was implemented where if too many spikes were detected in the interval of time of a tap, the DT would not be counted.
+\item From figure \ref{fig:DTCAL3}, it can be seen that the variation when moving the board in the air is not as fast as a spike. Hence having a high frequency polling and a high enough amplitude can filter this out. 
 
-\section{Timeline and Work Breakdown Between Team Members}
+\end{itemize}
+\paragraph{}
+After multiple hours of testing and adjusting of the parameter such as the amplitude and the time delays, a great DT detection algorithm was achieved. False positive from vibration and random movements for three minutes occurred 1.75 time (mean value from 4 three minute iteration).
+
+\section{Timeline and Work Breakdown Between Team Member}
+Work was heavily divided such for best use of our time for this project. Félix Dubé mostly worked designed the whole android application with its elegant UI and took care of the Bluetooth communication protocol. Auguste Lalande took care of the SPI communication between the boards. Juan Morency Trudel developed the filtering algorithm for double tap detection and implemented the different LED modes with PWM. This segregation of the task was very efficient and allowed the project to be completed with an average of 10 hours of work per member. An overview of the time flow of the project is given in figure \ref{fig:Gantt} where 28, 29, 30 and 31 are for the month of March and the following dates are for the month of April.
 \begin{figure}[!htb]
  \centering
  \includegraphics[scale=0.38]{images/gantt.png}
@@ -157,6 +174,8 @@ After multiple hours of testing and adjusting of the parameter such as the ampli
  \label{fig:Gantt}
 \end{figure}
 \section{Conclusion}
+Wireless data acquisition and control of an embedded micro-controller with an android application was successfully implemented on a three device system. Results show that the robustness and flexibility of the BLE and SPI communication protocols justified their use. The appealing UI of the android application allowed easy monitoring of the temperature, pitch and roll angles of the discovery board with graphs as well as easy control of the brightness and rotation speed of the LED with sliders. Furthermore, the DT algorithm demonstrated a responsive and sensitive wake up feature of the phone. The control and monitoring of the embedded system with cellphone applications is rapidly becoming important in many fields in consumer electronics, such as routers, printers and Bluetooth speakers to name a few. The system presented in this report offers an easy and elegant approach to the communication required for such devices and should be considered for the many smartphone application projects to come.
+
 
 \newpage
 \section{Bibliography}
